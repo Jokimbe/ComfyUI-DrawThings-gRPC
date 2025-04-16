@@ -11,26 +11,33 @@ function doesInputWithNameExist(node, name) {
     return node.inputs ? node.inputs.some((input) => input.name === name) : false;
 }
 
-function showWidget(node, widget, show = false, suffix = "") {
-    if (!widget || !doesInputWithNameExist(node, widget.name)) return;
-    if (!origProps[widget.name]) {
-        origProps[widget.name] = {
-            origType: widget.type,
-            origComputeSize: widget.computeSize,
-            origComputedHeight: widget.computedHeight,
-        };
-    }
-    const origSize = node.size;
+// function showWidgetx(node, widget, show = false, suffix = "") {
+//     if (!widget || !doesInputWithNameExist(node, widget.name)) return;
+//     if (!origProps[widget.name]) {
+//         origProps[widget.name] = {
+//             origType: widget.type,
+//             origComputeSize: widget.computeSize,
+//             origComputedHeight: widget.computedHeight,
+//         };
+//     }
+//     const origSize = node.size;
 
-    widget.type = show ? origProps[widget.name].origType : "hidden" + suffix;
-    widget.computeSize = show ? origProps[widget.name].origComputeSize : () => [0, -4];
-    widget.computedHeight = show ? origProps[widget.name].origComputedHeight : 0;
+//     widget.type = show ? origProps[widget.name].origType : "hidden" + suffix;
+//     widget.computeSize = show ? origProps[widget.name].origComputeSize : () => [0, -4];
+//     widget.computedHeight = show ? origProps[widget.name].origComputedHeight : 0;
 
-    widget.linkedWidgets?.forEach((w) => showWidget(node, w, ":" + widget.name, show));
+//     widget.linkedWidgets?.forEach((w) => showWidget(node, w, ":" + widget.name, show));
 
-    const height = show ? Math.max(node.computeSize()[1], origSize[1]) : node.size[1];
-    node.setSize([node.size[0], height]);
-    app.canvas.dirty_canvas = true;
+//     const height = show ? Math.max(node.computeSize()[1], origSize[1]) : node.size[1];
+//     node.setSize([node.size[0], height]);
+//     app.canvas.dirty_canvas = true;
+// }
+
+/** @param {import("@comfyorg/litegraph").LGraphNode} node, @param {string} widgetName, @param {boolean} show */
+function showWidget(node, widget, show) {
+    // const widget = node.widgets.find((w) => w.name === widgetName);
+    if (widget) widget.hidden = !show;
+    node.setSize([node.width, node.computeSize()[1]]);
 }
 
 function widgetLogic(node, widget) {
@@ -159,27 +166,27 @@ function getSetters(node) {
         for (const w of node.widgets) {
             if (getSetWidgets.includes(w.name)) {
                 widgetLogic(node, w);
-                let widgetValue = w.value;
+                // let widgetValue = w.value;
 
                 // Define getters and setters for widget values
-                Object.defineProperty(w, "value", {
-                    get() {
-                        return widgetValue;
-                    },
-                    set(newVal) {
-                        if (newVal !== widgetValue) {
-                            widgetValue = newVal;
-                            widgetLogic(node, w);
-                        }
-                    },
-                });
+                // Object.defineProperty(w, "value", {
+                //     get() {
+                //         return widgetValue;
+                //     },
+                //     set(newVal) {
+                //         if (newVal !== widgetValue) {
+                //             widgetValue = newVal;
+                //             widgetLogic(node, w);
+                //         }
+                //     },
+                // });
 
                 // changing the built-in properties might have unexpected results
                 // but you can use the widget callback, which fires any time the value changes
 
-                // w.callback = function (value, canvas, node, pos, event) {
-                //     widgetLogic(node, w);
-                // });
+                w.callback = function (value, canvas, node, pos, event) {
+                    widgetLogic(node, w);
+                };
             }
         }
     }
@@ -188,19 +195,27 @@ function getSetters(node) {
 app.registerExtension({
     name: "ComfyUI-DrawThings-gRPC-Widgets",
 
-    async nodeCreated(node) {
-        const nodeType = node.constructor.type;
-        if (getSetTypes.includes(nodeType)) {
-            getSetters(node);
-        }
-    },
-    async afterConfigureGraph() {
-        app.graph._nodes.forEach(listNodes);
-        function listNodes(node) {
-            const nodeType = node.constructor.type;
-            if (getSetTypes.includes(nodeType)) {
-                getSetters(node);
-            }
+    // async nodeCreated(node) {
+    //     const nodeType = node.constructor.type;
+    //     if (getSetTypes.includes(nodeType)) {
+    //         getSetters(node);
+    //     }
+    // },
+    // async afterConfigureGraph() {
+    //     app.graph._nodes.forEach(listNodes);
+    //     function listNodes(node) {
+    //         const nodeType = node.constructor.type;
+    //         if (getSetTypes.includes(nodeType)) {
+    //             getSetters(node);
+    //         }
+    //     }
+    // },
+
+    beforeRegisterNodeDef(nodeType, nodeData, app) {
+        if (getSetTypes.includes(nodeType.comfyClass)) {
+            setCallback(nodeType.prototype, "onAdded", function (graph) {
+                getSetters(this);
+            });
         }
     },
 });
