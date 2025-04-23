@@ -50,44 +50,21 @@ app.registerExtension({
         if (DrawThingsNodeTypes.includes(node?.comfyClass) && node?.isDtServerNode) {
             updateNodeModels(node);
         }
+        for (const widget of node.widgets.filter((w) => w.options?.modelType)) {
+            if (widget.value?.toString() === "[object Object]") {
+                const value = {
+                    ...widget.value,
+                    toString() {
+                        return this.value.name;
+                    },
+                };
+                widget.setValue(value);
+            }
+        }
     },
+
     async beforeRegisterNodeDef(nodeType, nodeData, app) {
         if (DrawThingsNodeTypes.includes(nodeType.comfyClass)) {
-            // is this a 'root' node (ie - it has a server and port)
-            if ("server" in nodeData.input.required && "port" in nodeData.input.required) {
-                nodeType.prototype.isDtServerNode = true;
-                nodeType.prototype.getServer = function () {
-                    const server = this.widgets.find((w) => w.name === "server")?.value;
-                    const port = this.widgets.find((w) => w.name === "port")?.value;
-                    return { server, port };
-
-                    // todo - update proto instead of adding listeners to each new instance
-                };
-
-                nodeType.prototype.getModelVersion = function () {
-                    return this.widgets.find((w) => w.options?.modelType === "models")?.value?.value?.version;
-                };
-            }
-            // support or stacker nodes
-            else {
-                nodeType.prototype.isDtServerNode = false;
-                // check if uses the dynamic DT_MODEL type
-                const allInputs = Object.values({
-                    ...nodeData.input.required,
-                    ...nodeData.input.optional,
-                });
-                if (allInputs.some(([type]) => type === "DT_MODEL")) {
-                    const originalOnConnectionsChange = nodeType.prototype.onConnectionsChange;
-
-                    nodeType.prototype.onConnectionsChange = function (...args) {
-                        const r = originalOnConnectionsChange?.apply(this, args);
-                        const isConnected = args[2];
-                        if (isConnected) updateNodeModels(this);
-                        return r;
-                    };
-                }
-            }
-
             if (nodeType.comfyClass === "DrawThingsSampler") {
                 setCallback(nodeType.prototype, "getExtraMenuOptions", function (canvas, options) {
                     const keepNodeShrunk = app.extensionManager.setting.get("drawthings.node.keep_shrunk");
@@ -143,6 +120,18 @@ app.registerExtension({
         for (const type of DrawThingsNodeTypes) {
             for (const node of app.graph.findNodesByType(type)) {
                 if (node.widgets.some((w) => w.options.values === "DT_MODEL")) updateNodeModels(node, true);
+            }
+        }
+    },
+    beforeConfigureGraph(graphData, missingNodeTypes) {
+        const ctNodes = graphData.nodes.filter((n) => DrawThingsNodeTypes.includes(n.type));
+        for (const node of ctNodes) {
+            for (const wv of node.widgets_values) {
+                if (typeof wv === "object" && "content" in wv && "value" in wv && "name" in wv.value) {
+                    Object.prototype.toString = function () {
+                        return this.value.name;
+                    };
+                }
             }
         }
     },
