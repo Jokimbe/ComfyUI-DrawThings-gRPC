@@ -1,16 +1,3 @@
-/** @param node {LGraphNode} */
-export function addServerListeners(node) {
-    const serverWidget = node.widgets.find((w) => w.name === "server");
-    serverWidget.callback = function (value, graph, node) {
-        updateNodeModels(node);
-    };
-
-    const portWidget = node.widgets.find((w) => w.name === "port");
-    portWidget.callback = function (value, graph, node) {
-        updateNodeModels(node);
-    };
-}
-
 /**
  * @param node {LGraphNode}
  * @param inputName {string}
@@ -61,20 +48,28 @@ const modelInfoRequests = new Map();
 const modelInfoStoreKey = (server, port) => `${server}:${port}`;
 
 // yes this is kind of hacky :)
-const failedConnectionOptions = [{ name: "No connection. Check server and try again" }, { name: "Click to retry" }];
+const failedConnectionOptions = ["No connection. Check server and try again", "Click to retry"].map((c) => ({
+    name: c,
+    version: "fail",
+}));
+const notConnectedOptions = ["Not connected", "Connect to a sampler node to load models"].map((c) => ({
+    name: c,
+    version: "fail",
+}));
 
 const failedConnectionInfo = {
     models: failedConnectionOptions,
-    controlNets: failedConnectionOptions,
-    loras: failedConnectionOptions,
-    upscalers: failedConnectionOptions,
+    controlNets: notConnectedOptions,
+    loras: notConnectedOptions,
+    upscalers: notConnectedOptions,
 };
 
 modelInfoStore.set(modelInfoStoreKey(), failedConnectionInfo);
 let fetches = 0;
-
+let updaates = 0;
 /** @param node {LGraphNode} */
 export async function updateNodeModels(node, updateDisconnected = false) {
+    console.log(`updateNodeModels ${++updaates}`);
     // find the sampler node
     let root = findRoot(node);
     if (!root) {

@@ -1,64 +1,20 @@
 import { app } from "../../scripts/app.js";
-import { addServerListeners, DtModelTypeHandler, updateNodeModels } from "./models.js";
+import { setCallback } from "./dynamicInputs.js";
+import { updateNodeModels } from "./models.js";
 
 const dtModelNodeTypes = ["DrawThingsSampler", "DrawThingsControlNet", "DrawThingsLoRA", "DrawThingsUpscaler"];
+const dtServerNodeTypes = ["DrawThingsSampler"];
 
 app.registerExtension({
     name: "ComfyUI-DrawThings-gRPC-DtModelNodes",
     beforeRegisterNodeDef: (nodeType, nodeData, app) => {
         if (dtModelNodeTypes.includes(nodeType.comfyClass)) {
-            if ("server" in nodeData.input.required && "port" in nodeData.input.required) {
-                nodeType.prototype.isDtServerNode = true;
-                nodeType.prototype.getServer = function () {
-                    const server = this.widgets.find((w) => w.name === "server")?.value;
-                    const port = this.widgets.find((w) => w.name === "port")?.value;
-                    return { server, port };
-
-                    // todo - update proto instead of adding listeners to each new instance
-                };
-
-                nodeType.prototype.getModelVersion = function () {
-                    return this.widgets.find((w) => w.options?.modelType === "models")?.value?.value?.version;
-                };
-            }
-            // support or stacker nodes
-            else {
-                nodeType.prototype.isDtServerNode = false;
-                // check if uses the dynamic DT_MODEL type
-                const allInputs = Object.values({
-                    ...nodeData.input.required,
-                    ...nodeData.input.optional,
-                });
-                if (allInputs.some(([type]) => type === "DT_MODEL")) {
-                    const originalOnConnectionsChange = nodeType.prototype.onConnectionsChange;
-
-                    nodeType.prototype.onConnectionsChange = function (...args) {
-                        const r = originalOnConnectionsChange?.apply(this, args);
-                        const isConnected = args[2];
-                        if (isConnected) updateNodeModels(this);
-                        return r;
-                    };
-                }
-            }
-
-            // Object.defineProperty(nodeType.prototype, "lastSelectedModel", {
-            //     get() {
-            //         return this._lastSelectedModel;
-            //     },
-            //     enumerable: true,
-            // });
-
-            // nodeType.prototype.saveSelectedModels = function () {
-            //     const modelWidgets = this.widgets.filter((w) => w.options?.modelType);
-            //     const selections = modelWidgets.reduce((acc, w) => {
-            //         acc[w.name] = w.value;
-            //         return acc;
-            //     }, {});
-
-            //     this._lastSelectedModel = selections;
-            // };
-
             updateProto(nodeType, dtModelNodeProto);
+            if (dtServerNodeTypes.includes(nodeType.comfyClass)) {
+                updateProto(nodeType, dtServerNodeProto);
+            } else {
+                updateProto(nodeType, dtExtraNodeProto);
+            }
         }
     },
 
@@ -90,6 +46,48 @@ const dtModelNodeProto = {
             return this._lastSelectedModel;
         },
         enumerable: true,
+    },
+    isDtServerNode: {
+        get() {
+            return dtServerNodeTypes.includes(this?.comfyClass);
+        },
+        enumerable: true,
+    },
+};
+
+/** @type {import("@comfyorg/litegraph").LGraphNode} */
+const dtServerNodeProto = {
+    onNodeCreated() {
+        // update when server or port changes
+        const serverWidget = this.widgets.find((w) => w.name === "server");
+        if (serverWidget) setCallback(serverWidget, "callback", () => updateNodeModels(this));
+
+        const portWidget = this.widgets.find((w) => w.name === "port");
+        if (portWidget) setCallback(portWidget, "callback", () => updateNodeModels(this));
+
+        console.log("added with " + serverWidget.value);
+    },
+
+    onConfigure() {
+        updateNodeModels(this);
+    },
+
+    getServer() {
+        const server = this.widgets.find((w) => w.name === "server")?.value;
+        const port = this.widgets.find((w) => w.name === "port")?.value;
+        return { server, port };
+    },
+
+    getModelVersion() {
+        return this.widgets.find((w) => w.options?.modelType === "models")?.value?.value?.version;
+    },
+};
+
+/** @type {import("@comfyorg/litegraph").LGraphNode} */
+const dtExtraNodeProto = {
+    onConnectionsChange(...args) {
+        const isConnected = args[2];
+        if (isConnected) updateNodeModels(this);
     },
 };
 
