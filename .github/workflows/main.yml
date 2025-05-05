@@ -1,0 +1,11 @@
+name: Update proto and generate code
+run-name: ${{ github.actor }} is trying something...
+on: 
+  workflow_dispatch
+jobs:
+  generate-code:
+    runs-on: ubuntu-latest
+    steps:
+    - run: echo "Hello"...
+    # - name: Setup gRPC
+    #   uses: eWaterCycle/setup-grpc@v5
