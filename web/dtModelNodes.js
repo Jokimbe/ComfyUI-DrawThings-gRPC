@@ -53,6 +53,15 @@ const dtModelNodeProto = {
         },
         enumerable: true,
     },
+    onSerialize(serialised) {
+        try {
+            serialised._lastSelectedModel = JSON.parse(JSON.stringify(this._lastSelectedModel))
+        }
+        catch (e) { }
+    },
+    onConfigure(serialised) {
+        this._lastSelectedModel = serialised._lastSelectedModel;
+    }
 };
 
 /** @type {import("@comfyorg/litegraph").LGraphNode} */
