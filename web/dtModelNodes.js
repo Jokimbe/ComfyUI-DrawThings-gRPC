@@ -18,8 +18,6 @@ app.registerExtension({
         }
     },
 
-    nodeCreated: (node) => {},
-
     loadedGraphNode: (node) => {
         if (dtModelNodeTypes.includes(node?.comfyClass)) {
             node?.saveSelectedModels();
