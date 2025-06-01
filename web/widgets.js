@@ -251,8 +251,10 @@ function widgetLogic(node, widget) {
 
             if (isSD3 === false && isFlux === false) {
                 showWidget(node, "res_dpt_shift", false);
+                findWidgetByName(node, "shift").disabled = false;
             } else {
                 showWidget(node, "res_dpt_shift", true);
+                findWidgetByName(node, "shift").disabled = findWidgetByName(node, "res_dpt_shift")?.value;
             }
 
             showWidget(node, "speed_up", isFlux);
@@ -279,7 +281,7 @@ function widgetLogic(node, widget) {
                 const width = findWidgetByName(node, "width").value;
                 findWidgetByName(node, "shift").value = calcShift(height, width);
             }
-            findWidgetByName(node, "shift").disabled = widget.value;
+            findWidgetByName(node, "shift").disabled = widget.value
             break;
 
         case "speed_up":

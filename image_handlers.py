@@ -2,6 +2,7 @@
 
 import os
 import sys
+import math
 import numpy as np
 from PIL import Image
 import torch
@@ -32,6 +33,9 @@ CCV_64F  = 0x10000
 CCV_16F  = 0x20000
 CCV_QX   = 0x40000 # QX is a catch-all for quantized models (anything less than or equal to 1-byte). We can still squeeze in 1 more primitive type, which probably will be 8F or BF16. (0xFF000 are for data types).
 CCV_16BF = 0x80000
+
+def clamp(value):
+    return max(min(int(value if np.isfinite(value) else 0), 255), 0)
 
 def prepare_callback(step, total_steps, x0=None):
     pbar = comfy.utils.ProgressBar(step)
@@ -92,12 +96,7 @@ def decode_preview(preview, version):
             g = 41.1373 * v0 + 42.4951 * v1 + 24.7349 * v2 - 50.8279 * v3 + 99.8421
             b = 40.2919 * v0 + 18.9304 * v1 + 30.0236 * v2 - 81.9976 * v3 + 99.5384
 
-            bytes_array[i // image_width, i % image_width] = [
-                min(max(int(r if np.isfinite(r) else 0), 0), 255),
-                min(max(int(g if np.isfinite(g) else 0), 0), 255),
-                min(max(int(b if np.isfinite(b) else 0), 0), 255),
-                255
-            ]
+            bytes_array[i // image_width, i % image_width] = [ clamp(r), clamp(g), clamp(b), 255 ]
         image = Image.fromarray(bytes_array, 'RGBA')
 
     if version[:3] == 'sd3':
@@ -166,9 +165,9 @@ def decode_preview(preview, version):
                     - 0.2925 * v6 + 0.1975 * v7 - 0.1364 * v8 + 0.1636 * v9 + 0.1128 * v10 + 0.0639
                     * v11 + 0.1699 * v12 + 0.0005 * v13 + 0.2950 * v14 + 0.1861 * v15 - 0.336) * 127.5 + 127.5
 
-            bytes_array[i*4] = max(0, min(255, int(r)))
-            bytes_array[i*4+1] = max(0, min(255, int(g)))
-            bytes_array[i*4+2] = max(0, min(255, int(b)))
+            bytes_array[i*4] = clamp(r)
+            bytes_array[i*4+1] = clamp(g)
+            bytes_array[i*4+2] = clamp(b)
             bytes_array[i*4+3] = 255
         image = Image.frombytes('RGBA', (image_width, image_height), bytes_array)
 
