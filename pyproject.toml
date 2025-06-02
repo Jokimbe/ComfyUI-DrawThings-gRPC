@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "DrawThings-gRPC"
-version = "0.0.10"
+version = "0.0.11"
 description = "Connect to a Draw Things gRPC server"
 authors = [
   {name = "Jokimbe"},
@@ -39,7 +39,7 @@ homepage = "https://github.com/Jokimbe/ComfyUI-DrawThings-gRPC"
 
 
 [tool.comfy]
-PublisherId = "Jokimbe"
+PublisherId = "kcjerrell"
 DisplayName = "ComfyUI-DrawThings-gRPC"
 Icon = ""
 
