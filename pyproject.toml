@@ -39,7 +39,7 @@ homepage = "https://github.com/Jokimbe/ComfyUI-DrawThings-gRPC"
 
 
 [tool.comfy]
-PublisherId = "kcjerrell"
+PublisherId = "jokimbe"
 DisplayName = "ComfyUI-DrawThings-gRPC"
 Icon = ""
 
