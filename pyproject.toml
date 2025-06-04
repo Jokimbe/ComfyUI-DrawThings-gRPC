@@ -3,7 +3,7 @@ requires = ["setuptools>=70.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "DrawThings-gRPC"
+name = "ComfyUI-to-DrawThings-gRPC"
 version = "0.0.13"
 description = "Connect to a Draw Things gRPC server"
 authors = [
@@ -40,7 +40,7 @@ homepage = "https://github.com/Jokimbe/ComfyUI-DrawThings-gRPC"
 
 [tool.comfy]
 PublisherId = "jokimbe"
-DisplayName = "ComfyUI-DrawThings-gRPC"
+DisplayName = "ComfyUI-to-DrawThings-gRPC"
 Icon = ""
 
 [tool.setuptools.package-data]
