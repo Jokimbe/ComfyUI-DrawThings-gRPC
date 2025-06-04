@@ -35,12 +35,12 @@ Discuss this project on [Discord](https://discord.com/channels/10385163036668764
 1. Look up this extension in ComfyUI-Manager. If you are installing manually, clone this repository under `ComfyUI/custom_nodes`.
 1. Restart ComfyUI.
 
-> [!NOTE]
-> This projected was created with a [cookiecutter](https://github.com/Comfy-Org/cookiecutter-comfy-extension) template. It helps you start writing custom nodes without worrying about the Python setup.
-
 # Thanks to
 
 - https://github.com/drawthingsai/draw-things-community
 - https://github.com/JosephThomasParker/ComfyUI-DrawThingsWrapper for starting me off looking into what's possible connecting ComfyUI to Draw Things.
 - https://github.com/kcjerrell/dt-grpc-ts
 - https://github.com/TinyTerra/ComfyUI_tinyterraNodes for collapsing widgets.
+
+> [!NOTE]
+> This projected was created with a [cookiecutter](https://github.com/Comfy-Org/cookiecutter-comfy-extension) template. It helps you start writing custom nodes without worrying about the Python setup.
