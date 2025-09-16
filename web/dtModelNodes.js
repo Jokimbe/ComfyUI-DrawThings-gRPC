@@ -121,7 +121,7 @@ const dtServerNodeProto = {
             if (models === null) {
                 widget.options.values = ["Not connected", "Click to retry"]
                 widget.value = "Not connected"
-                return
+                continue
             }
 
             widget.options.values = ["(None selected)", ...models.models.map(m => getMenuItem(m)).sort((a, b) => a.content.localeCompare(b.content))]
@@ -166,7 +166,7 @@ const dtModelStandardNodeProto = {
             if (!models[type]) {
                 widget.options.values = ["Not connected", "Click to retry"]
                 widget.value = "Not connected"
-                return
+                continue
             }
 
             widget.options.values = ["(None selected)", ...models[type]
@@ -180,6 +180,16 @@ const dtModelStandardNodeProto = {
             if (widget.value === "Click to retry" || widget.value === "Not connected") {
                 if (this._lastSelectedModel?.[widget.name]) widget.value = fixLabel(this._lastSelectedModel[widget.name])
                 else widget.value = "(None selected)"
+            }
+
+            if (widget.value?.toString() === "[object Object]") {
+                const value = {
+                    ...widget.value,
+                    toString() {
+                        return this.value.name
+                    },
+                }
+                widget.value = value
             }
         }
     }

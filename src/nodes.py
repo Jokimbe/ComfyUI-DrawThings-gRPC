@@ -8,7 +8,7 @@ import grpc
 from torchvision.transforms import v2
 
 from .. import cancel_request
-from .draw_things import dt_sampler
+from .draw_things import dt_sampler, get_files
 from .data_types import *
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), "comfy"))
@@ -163,7 +163,11 @@ class DrawThingsSampler:
         return hash(items)
 
     @classmethod
-    def VALIDATE_INPUTS(cls):
+    async def VALIDATE_INPUTS(cls, server, port, use_tls):
+        try:
+            await get_files(server, port, use_tls)
+        except:
+            raise Exception("No connection to Draw Things gRPC. Double check your settings and server, and try again.")
         # PromptServer.instance.send_sync("dt-grpc-validate", dict({"hello": "js"}))
         # if model.get("value") is None or model.get("value").get("file") is None:
         #     raise Exception("Please select a model")

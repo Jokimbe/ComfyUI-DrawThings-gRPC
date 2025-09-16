@@ -139,7 +139,7 @@ function showWidgets(node, show, ...widgetNames) {
 
 function updateSamplerWidgets(node) {
     const selectedModel = findWidgetByName(node, "model")?.value;
-    const version = selectedModel?.value?.version ?? "none";
+    const version = selectedModel?.value?.version ?? node?._lastSelectedModel?.model?.value?.version;
 
     const settings = findWidgetByName(node, "settings")?.value;
     const isBasic = settings === "Basic" || settings === "All";
