@@ -132,6 +132,19 @@ async def dt_sampler(inputs: dict):
 
             # hint images might be batched, so check for multiple images and add each
             for i in range(hint_images.size(dim=0)):
+                if config.hiresFix:
+                    hint_tensor = convert_image_for_request(
+                        hint_images,
+                        hint_type,
+                        batch_index=i,
+                        width=config.hiresFixStartWidth,
+                        height=config.hiresFixStartHeight,
+                    )
+                    taw = imageService_pb2.TensorAndWeight()
+                    taw.weight = 1
+                    taw.tensor = hint_tensor
+                    taws.append(taw)
+
                 hint_tensor = convert_image_for_request(
                     hint_images,
                     hint_type,
@@ -143,6 +156,7 @@ async def dt_sampler(inputs: dict):
                 taw.weight = 1
                 taw.tensor = hint_tensor
                 taws.append(taw)
+
 
         hp = imageService_pb2.HintProto()
         hp.hintType = hint_type
