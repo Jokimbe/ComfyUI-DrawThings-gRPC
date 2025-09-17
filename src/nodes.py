@@ -129,6 +129,11 @@ class DrawThingsSampler:
     CATEGORY = "DrawThings"
 
     async def sample(self, **kwargs):
+        try:
+            await get_files(kwargs["server"], kwargs["port"], kwargs["use_tls"])
+        except:
+            raise Exception("Couldn't connect to Draw Things gRPC server. Check your server and settings, and try again.")
+
         DrawThingsSampler.last_gen_canceled = False
         model_input = kwargs.get("model")
         if type(model_input) is not dict:
@@ -163,15 +168,7 @@ class DrawThingsSampler:
         return hash(items)
 
     @classmethod
-    async def VALIDATE_INPUTS(cls, server, port, use_tls):
-        try:
-            await get_files(server, port, use_tls)
-        except:
-            raise Exception("No connection to Draw Things gRPC. Double check your settings and server, and try again.")
-        # PromptServer.instance.send_sync("dt-grpc-validate", dict({"hello": "js"}))
-        # if model.get("value") is None or model.get("value").get("file") is None:
-        #     raise Exception("Please select a model")
-        # print(model)
+    async def VALIDATE_INPUTS(cls):
         return True
 
 
