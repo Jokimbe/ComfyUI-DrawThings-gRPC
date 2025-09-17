@@ -137,8 +137,8 @@ async def dt_sampler(inputs: dict):
                         hint_images,
                         hint_type,
                         batch_index=i,
-                        width=config.hiresFixStartWidth,
-                        height=config.hiresFixStartHeight,
+                        width=config.hiresFixStartWidth * 64,
+                        height=config.hiresFixStartHeight * 64,
                     )
                     taw = imageService_pb2.TensorAndWeight()
                     taw.weight = 1
@@ -157,11 +157,11 @@ async def dt_sampler(inputs: dict):
                 taw.tensor = hint_tensor
                 taws.append(taw)
 
-
-        hp = imageService_pb2.HintProto()
-        hp.hintType = hint_type
-        hp.tensors.extend(taws)
-        req_hints.append(hp)
+        if len(taws) > 0:
+            hp = imageService_pb2.HintProto()
+            hp.hintType = hint_type
+            hp.tensors.extend(taws)
+            req_hints.append(hp)
 
     progress = comfy.utils.ProgressBar(config.steps, inputs["unique_id"])
 
