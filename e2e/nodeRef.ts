@@ -246,7 +246,7 @@ export class NodeRef {
         await wait(400)
     }
 
-    async addOutputNode(outputName: string, nodePath: string[]) {
+    async addOutputNode(outputName: string, nodeName: string) {
         const { view, pos, outputBox, size } = await this.page.evaluate(
             ([nodeId, outputName]) => {
                 const view: [number, number, number, number] =
@@ -296,12 +296,12 @@ export class NodeRef {
             .hover({ position: { x: clickX + 50, y: clickY } });
         await this.page.mouse.up()
 
-        await this.page.getByRole("menuitem", { name: "Add node" }).first().click();
+        await this.page.keyboard.type(nodeName)
 
-        for (const p of nodePath) {
-            const menu = await this.page.locator(".litecontextmenu").last()
-            await menu.getByText(p, { exact: true }).click();
-        }
+        await this.page
+            .getByLabel("Option List")
+            .getByText(nodeName)
+            .click();
     }
 }
 

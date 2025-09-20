@@ -298,6 +298,11 @@ function testHack(models) {
                     "version": "qwen_image",
                     "name": "Qwen Image Fake"
                 })
+                models.models.push({
+                    "file": "fake_wan.ckpt",
+                    "version": "wan_v2.1_14b",
+                    "name": "Wan Fake"
+                })
             }
         }
     } catch { }

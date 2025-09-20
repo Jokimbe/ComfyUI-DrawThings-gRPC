@@ -59,10 +59,7 @@ test("Widget values serialization", async ({ page, comfy }) => {
     await node.centerNode();
 
     // we need a sampler node for models to appear
-    await node.addOutputNode("CONTROL_NET", [
-        "DrawThings",
-        "Draw Things Sampler",
-    ]);
+    await node.addOutputNode("CONTROL_NET", "Draw Things Sampler");
     await page.waitForTimeout(2000);
 
     await node.selectWidgetOption(
@@ -108,10 +105,7 @@ test("controlnet dynamic widgets", async ({ page, comfy }) => {
     await node.centerNode();
 
     // we need a sampler node for models to appear
-    await node.addOutputNode("CONTROL_NET", [
-        "DrawThings",
-        "Draw Things Sampler",
-    ]);
+    await node.addOutputNode("CONTROL_NET", "Draw Things Sampler");
     await page.waitForTimeout(2000);
 
     expect(
@@ -124,30 +118,33 @@ test("controlnet dynamic widgets", async ({ page, comfy }) => {
     ).toMatchObject([false, false, false, false]);
 
     // control_input_type, model: Xinsir Union ProMax (SDXL, ControlNet)
-    await node.selectWidgetOption(
-        "control_name",
-        "Xinsir Union ProMax"
-    );
+    await node.selectWidgetOption("control_name", "Xinsir Union ProMax");
     expect(await node?.isWidgetVisible("control_input_type")).toBeTruthy();
 
     // check down sampling rate with union cnet
-    await node.selectWidgetOption('control_input_type', 'Tile');
+    await node.selectWidgetOption("control_input_type", "Tile");
     expect(await node?.isWidgetVisible("down_sampling_rate")).toBeTruthy();
-    await node.selectWidgetOption('control_input_type', 'Inpaint');
+    await node.selectWidgetOption("control_input_type", "Inpaint");
     expect(await node?.isWidgetVisible("down_sampling_rate")).toBeFalsy();
 
     // global_average_pooling, model: Shuffle (SD v1.x, ControlNet 1.1)
-    await node.selectWidgetOption('control_name', 'Shuffle (SD v1.x, ControlNet 1.1)');
-    expect(await node?.isWidgetVisible('control_input_type')).toBeFalsy();
+    await node.selectWidgetOption(
+        "control_name",
+        "Shuffle (SD v1.x, ControlNet 1.1)"
+    );
+    expect(await node?.isWidgetVisible("control_input_type")).toBeFalsy();
     expect(await node?.isWidgetVisible("global_average_pooling")).toBeTruthy();
 
     // target_blocks, model: IP Adapter Plus (SD v1.x)
-    await node.selectWidgetOption('control_name', 'IP Adapter Plus (SD v1.x)');
-    expect(await node?.isWidgetVisible('global_average_pooling')).toBeFalsy();
+    await node.selectWidgetOption("control_name", "IP Adapter Plus (SD v1.x)");
+    expect(await node?.isWidgetVisible("global_average_pooling")).toBeFalsy();
     expect(await node?.isWidgetVisible("target_blocks")).toBeTruthy();
 
     // down_sampling_rate, model: Tile (SD v1.x, ControlNet 1.1)
-    await node.selectWidgetOption('control_name', 'Tile (SD v1.x, ControlNet 1.1)');
-    expect(await node?.isWidgetVisible('target_blocks')).toBeFalsy();
+    await node.selectWidgetOption(
+        "control_name",
+        "Tile (SD v1.x, ControlNet 1.1)"
+    );
+    expect(await node?.isWidgetVisible("target_blocks")).toBeFalsy();
     expect(await node?.isWidgetVisible("down_sampling_rate")).toBeTruthy();
 });
