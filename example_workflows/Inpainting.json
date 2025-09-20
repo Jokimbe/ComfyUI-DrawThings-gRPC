@@ -837,7 +837,7 @@
                 "Node name for S&R": "LoadImage"
             },
             "widgets_values": [
-                "http://www.what.com/Inpainting.jpg",
+                "",
                 "image"
             ]
         },
