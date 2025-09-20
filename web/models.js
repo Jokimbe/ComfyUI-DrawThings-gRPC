@@ -188,6 +188,7 @@ async function getModels(server, port, useTls) {
                     modelInfoStore.set(key, null)
                 } else {
                     const data = await response.json()
+                    testHack(data)
                     modelInfoStore.set(key, data)
                 }
                 modelInfoRequests.delete(key)
@@ -285,6 +286,26 @@ const versionNames = {
 
 function getVersionAbbrev(version) {
     return versionNames[version] ?? version
+}
+
+function testHack(models) {
+    // horrible hacky test assist
+    try {
+        if (new URL(document.location).searchParams.has("dtgrpctesthack")) {
+            if (Array.isArray(models?.models)) {
+                models.models.push({
+                    "file": "fake_qwen.ckpt",
+                    "version": "qwen_image",
+                    "name": "Qwen Image Fake"
+                })
+                models.models.push({
+                    "file": "fake_wan.ckpt",
+                    "version": "wan_v2.1_14b",
+                    "name": "Wan Fake"
+                })
+            }
+        }
+    } catch { }
 }
 
 

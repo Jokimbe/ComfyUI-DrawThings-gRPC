@@ -27,13 +27,93 @@
       ],
       "outputs": [],
       "properties": {
+        "Node name for S&R": "SaveImage",
         "cnr_id": "comfy-core",
-        "ver": "0.3.38",
-        "Node name for S&R": "SaveImage"
+        "ver": "0.3.38"
       },
       "widgets_values": [
         "ComfyUI"
       ]
+    },
+    {
+      "id": 17,
+      "type": "LoadImage",
+      "pos": [
+        1410,
+        740
+      ],
+      "size": [
+        274.080078125,
+        314.0000305175781
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            32
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": [
+            34
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage",
+        "cnr_id": "comfy-core",
+        "ver": "0.3.41"
+      },
+      "widgets_values": [
+        "inpaint_cnet.png",
+        "image"
+      ]
+    },
+    {
+      "id": 11,
+      "type": "DrawThingsPrompt",
+      "pos": [
+        1290,
+        490
+      ],
+      "size": [
+        400,
+        200
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "color_off": "#EF5350",
+          "color_on": "#EF5350",
+          "name": "PROMPT",
+          "type": "STRING",
+          "links": [
+            26
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "DrawThingsPrompt",
+        "cnr_id": "drawthings-grpc",
+        "ver": "23beb75773a8b4f880f7f470ad28ef2d7bccd257"
+      },
+      "widgets_values": [
+        "...",
+        "woman with laser goggles and fangs"
+      ],
+      "color": "#232",
+      "bgcolor": "#353",
+      "_lastSelectedModel": {}
     },
     {
       "id": 15,
@@ -44,7 +124,7 @@
       ],
       "size": [
         312.08984375,
-        750
+        1442
       ],
       "flags": {},
       "order": 2,
@@ -101,6 +181,12 @@
           "shape": 7,
           "type": "DT_REFINER",
           "link": null
+        },
+        {
+          "name": "hints",
+          "shape": 7,
+          "type": "DT_HINTS",
+          "link": null
         }
       ],
       "outputs": [
@@ -113,9 +199,9 @@
         }
       ],
       "properties": {
+        "Node name for S&R": "DrawThingsSampler",
         "cnr_id": "drawthings-grpc",
-        "ver": "3663115d699768a923ebd9cff7e2fb9f7b461033",
-        "Node name for S&R": "DrawThingsSampler"
+        "ver": "3663115d699768a923ebd9cff7e2fb9f7b461033"
       },
       "widgets_values": [
         "All",
@@ -124,18 +210,18 @@
         true,
         {
           "value": {
-            "modifier": "inpainting",
+            "clip_encoder": "clip_vit_l14_f16.ckpt",
             "prefix": "",
-            "version": "sdxl_base_v0.9",
-            "upcast_attention": false,
             "autoencoder": "sdxl_vae_v1.0_f16.ckpt",
-            "file": "fooocus_inpaint_sd_xl_v2.6_f16.ckpt",
+            "version": "sdxl_base_v0.9",
             "default_scale": 16,
-            "text_encoder": "open_clip_vit_bigg14_f16.ckpt",
-            "name": "Fooocus Inpaint SDXL v2.6",
-            "clip_encoder": "clip_vit_l14_f16.ckpt"
+            "upcast_attention": false,
+            "file": "fooocus_inpaint_sd_xl_v2.6_q6p_q8p.ckpt",
+            "modifier": "inpainting",
+            "name": "Fooocus Inpaint SDXL v2.6 (8-bit)",
+            "text_encoder": "open_clip_vit_bigg14_f16.ckpt"
           },
-          "content": "Fooocus Inpaint SDXL v2.6 (SDXL)"
+          "content": "Fooocus Inpaint SDXL v2.6 (8-bit) (SDXL)"
         },
         1,
         1127051144,
@@ -148,7 +234,10 @@
         5,
         true,
         4.5,
+        true,
+        4.5,
         "Euler A",
+        1,
         false,
         1,
         1,
@@ -157,6 +246,7 @@
         0.02,
         1,
         0,
+        5,
         1,
         0,
         5,
@@ -184,7 +274,7 @@
         false,
         ""
       ],
-      "nodePackVersion": "1.3.1",
+      "nodePackVersion": "1.7.0",
       "widget_values_keyed": {
         "settings": "All",
         "server": "localhost",
@@ -192,18 +282,18 @@
         "use_tls": true,
         "model": {
           "value": {
-            "modifier": "inpainting",
+            "clip_encoder": "clip_vit_l14_f16.ckpt",
             "prefix": "",
-            "version": "sdxl_base_v0.9",
-            "upcast_attention": false,
             "autoencoder": "sdxl_vae_v1.0_f16.ckpt",
-            "file": "fooocus_inpaint_sd_xl_v2.6_f16.ckpt",
+            "version": "sdxl_base_v0.9",
             "default_scale": 16,
-            "text_encoder": "open_clip_vit_bigg14_f16.ckpt",
-            "name": "Fooocus Inpaint SDXL v2.6",
-            "clip_encoder": "clip_vit_l14_f16.ckpt"
+            "upcast_attention": false,
+            "file": "fooocus_inpaint_sd_xl_v2.6_q6p_q8p.ckpt",
+            "modifier": "inpainting",
+            "name": "Fooocus Inpaint SDXL v2.6 (8-bit)",
+            "text_encoder": "open_clip_vit_bigg14_f16.ckpt"
           },
-          "content": "Fooocus Inpaint SDXL v2.6 (SDXL)"
+          "content": "Fooocus Inpaint SDXL v2.6 (8-bit) (SDXL)"
         },
         "strength": 1,
         "seed": 1127051144,
@@ -214,9 +304,12 @@
         "steps": 20,
         "num_frames": 14,
         "cfg": 5,
+        "cfg_zero_star": true,
+        "cfg_zero_star_init_steps": 4.5,
         "speed_up": true,
         "guidance_embed": 4.5,
         "sampler_name": "Euler A",
+        "stochastic_sampling_gamma": 1,
         "res_dpt_shift": false,
         "shift": 1,
         "batch_size": 1,
@@ -225,6 +318,7 @@
         "guiding_frame_noise": 0.02,
         "start_frame_guidance": 1,
         "causal_inference": 0,
+        "causal_inference_pad": 5,
         "clip_skip": 1,
         "sharpness": 0,
         "mask_blur": 5,
@@ -255,100 +349,20 @@
       "_lastSelectedModel": {
         "model": {
           "value": {
-            "modifier": "inpainting",
+            "clip_encoder": "clip_vit_l14_f16.ckpt",
             "prefix": "",
-            "version": "sdxl_base_v0.9",
-            "upcast_attention": false,
             "autoencoder": "sdxl_vae_v1.0_f16.ckpt",
-            "file": "fooocus_inpaint_sd_xl_v2.6_f16.ckpt",
+            "version": "sdxl_base_v0.9",
             "default_scale": 16,
-            "text_encoder": "open_clip_vit_bigg14_f16.ckpt",
-            "name": "Fooocus Inpaint SDXL v2.6",
-            "clip_encoder": "clip_vit_l14_f16.ckpt"
+            "upcast_attention": false,
+            "file": "fooocus_inpaint_sd_xl_v2.6_q6p_q8p.ckpt",
+            "modifier": "inpainting",
+            "name": "Fooocus Inpaint SDXL v2.6 (8-bit)",
+            "text_encoder": "open_clip_vit_bigg14_f16.ckpt"
           },
-          "content": "Fooocus Inpaint SDXL v2.6 (SDXL)"
+          "content": "Fooocus Inpaint SDXL v2.6 (8-bit) (SDXL)"
         }
       }
-    },
-    {
-      "id": 17,
-      "type": "LoadImage",
-      "pos": [
-        1410,
-        740
-      ],
-      "size": [
-        274.080078125,
-        314.0000305175781
-      ],
-      "flags": {},
-      "order": 0,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [
-            32
-          ]
-        },
-        {
-          "name": "MASK",
-          "type": "MASK",
-          "links": [
-            34
-          ]
-        }
-      ],
-      "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.3.41",
-        "Node name for S&R": "LoadImage"
-      },
-      "widgets_values": [
-        "inpaint_cnet.png",
-        "image"
-      ]
-    },
-    {
-      "id": 11,
-      "type": "DrawThingsPrompt",
-      "pos": [
-        1290,
-        490
-      ],
-      "size": [
-        400,
-        200
-      ],
-      "flags": {},
-      "order": 1,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "color_off": "#EF5350",
-          "color_on": "#EF5350",
-          "name": "PROMPT",
-          "type": "STRING",
-          "links": [
-            26
-          ]
-        }
-      ],
-      "properties": {
-        "cnr_id": "drawthings-grpc",
-        "ver": "23beb75773a8b4f880f7f470ad28ef2d7bccd257",
-        "Node name for S&R": "DrawThingsPrompt"
-      },
-      "widgets_values": [
-        "...",
-        "woman with laser goggles and fangs"
-      ],
-      "color": "#232",
-      "bgcolor": "#353",
-      "_lastSelectedModel": {}
     }
   ],
   "links": [
@@ -395,7 +409,7 @@
         -260.2820716201759
       ]
     },
-    "frontendVersion": "1.23.4",
+    "frontendVersion": "1.26.13",
     "VHS_latentpreview": false,
     "VHS_latentpreviewrate": 0,
     "VHS_MetadataImage": true,

@@ -10,6 +10,7 @@ import torchvision
 from torchvision.transforms import v2 as transforms
 import struct
 from .data_types import *
+import fpzip
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), "comfy"))
 
@@ -36,19 +37,27 @@ def clamp(value):
     return max(min(int(value if np.isfinite(value) else 0), 255), 0)
 
 
+def get_image_data(response_image: bytes):
+    int_buffer = np.frombuffer(response_image, dtype=np.uint32, count=17)
+    height, width, channels = int_buffer[6:9]
+    length = width * height * channels * 2
+    is_compressed = int_buffer[0] == 1012247
+
+    if is_compressed:
+        uncompressed: np.ndarray = fpzip.decompress(response_image[68:], order="C")
+        buffer = uncompressed.astype(np.float16).tobytes()
+    else:
+        buffer = response_image[68:]
+
+    return np.frombuffer(buffer, dtype=np.float16, count=length // 2)
+
+
 def convert_response_image(response_image: bytes):
     int_buffer = np.frombuffer(response_image, dtype=np.uint32, count=17)
     height, width, channels = int_buffer[6:9]
 
-    offset = 68
-    length = width * height * channels * 2
+    data = get_image_data(response_image)
 
-    # print(f"Received image is {width}x{height} with {channels} channels")
-    # print(f"Input size: {len(response_image)} (Expected: {length + 68})")
-
-    data = np.frombuffer(
-        response_image, dtype=np.float16, count=length // 2, offset=offset
-    )
     if np.isnan(data[0]):
         print("NaN detected in data")
         return None
@@ -70,7 +79,7 @@ def decode_preview(preview, version):
         return None
 
     offset = 68
-    fp16 = np.frombuffer(preview, dtype=np.float16, offset=offset)
+    fp16 = get_image_data(preview)
 
     image = None
     version = version.lower() if type(version) == str else version
@@ -434,12 +443,13 @@ def resize_crop(image, width, height):
 
 
 def convert_image_for_request(
-    image_tensor: torch.Tensor,
+    image: torch.Tensor,
     control_type=None,
     batch_index=0,
     width=None,
     height=None,
 ):
+    image_tensor = image.clone()
     # Draw Things: C header + the Float16 blob of -1 to 1 values that represents the image (in RGB order and HWC format, meaning r(0, 0), g(0, 0), b(0, 0), r(1, 0), g(1, 0), b(1, 0) .... (r(x, y) represents the value of red at that particular coordinate). The actual header is a bit more complex, here is the reference: https://github.com/liuliu/s4nnc/blob/main/nnc/Tensor.swift#L1750 the ccv_nnc_tensor_param_t is here: https://github.com/liuliu/ccv/blob/unstable/lib/nnc/ccv_nnc_tfb.h#L79 The type is CCV_TENSOR_CPU_MEMORY, format is CCV_TENSOR_FORMAT_NHWC, datatype is CCV_16F (for Float16), dim is the dimension in N, H, W, C order (in the case it should be 1, actual height, actual width, 3).
 
     # ComfyUI: An IMAGE is a torch.Tensor with shape [B,H,W,C], C=3. If you are going to save or load images, you will need to convert to and from PIL.Image format - see the code snippets below! Note that some pytorch operations offer (or expect) [B,C,H,W], known as ‘channel first’, for reasons of computational efficiency. Just be careful.
@@ -455,6 +465,15 @@ def convert_image_for_request(
     if width != orig_width or height != orig_height:
         image_tensor = resize_crop(image_tensor, width, height)
 
+    if control_type == 'pose':
+        channels = 3
+        # I think we want pose values to be from 0.5 to 1
+        minimum = image_tensor.min()
+        maximum = image_tensor.max()
+        image_tensor = (image_tensor - minimum) / (maximum - minimum)
+        image_tensor = image_tensor / 2 + 0.5
+        print('pose before', minimum, maximum, 'pose after', image_tensor.min(), image_tensor.max())
+
     pil_image = torchvision.transforms.ToPILImage()(
         image_tensor[batch_index].permute(2, 0, 1)
     )
@@ -464,8 +483,6 @@ def convert_image_for_request(
             transform = torchvision.transforms.Grayscale(num_output_channels=1)
             pil_image = transform(pil_image)
             channels = 1
-        case "pose":
-            channels = 3
 
     image_bytes = bytearray(68 + width * height * channels * 2)
     struct.pack_into(
@@ -493,6 +510,7 @@ def convert_image_for_request(
                 else:
                     v = pixel[c] / 255 * 2 - 1
                 struct.pack_into("<e", image_bytes, offset + c * 2, v)
+
 
     return bytes(image_bytes)
 

@@ -4,8 +4,9 @@ import sharp from "sharp";
 import { join } from "node:path";
 import { createHash } from "node:crypto";
 import { createReadStream } from "node:fs";
-import { ComfyPage } from './fixtures';
-import { test } from './fixtures';
+import { ComfyPage } from "./fixtures";
+import { test } from "./fixtures";
+import fse from "fs-extra";
 
 const comfyUrl = process.env.PLAYWRIGHT_TEST_URL || "";
 if (!comfyUrl) throw new Error("PLAYWRIGHT_TEST_URL is not set");
@@ -15,6 +16,7 @@ const comfyFolder = process.env.TEST_COMFYUI_DIR || "";
 if (!comfyFolder) throw new Error("TEST_COMFYUI_DIR is not set");
 
 const outputFolder = join(comfyFolder, "output");
+const inputFolder = join(comfyFolder, "input");
 
 test.beforeEach(async () => {
     test.setTimeout(300000);
@@ -120,7 +122,7 @@ test("test output: inpaint_sdxl", async ({ page, comfy }) => {
         page,
         comfy,
         "inpaint_sdxl",
-        "eMhwU2fDdyY+06gUcOmQBbQ9mU3NTTAJ2DZksZx2TLHFjxsz5+wYM9z2ZChsmIxYZ81MTGvBSWJpwUm3ZQFTO2UDhjkhAw5MAYY4TA+WuTcfmh0TP5iZE7sYXEvfGIYD3TDRA13D2BKdjmwDn5Zmx7/Gc2R74WFo33Dg1P4O4NI="
+        "eMhwU2fDdyY+06gUcOmQBbQ9mU3NTTAJ2DZksZx2TLHFjxsz5+wYM9z2ZChsmIxYZ81MTGvBSWJpwUm3ZQFTO2UBhjklAw5MAYZ5TA+WuTcfmh8TP5iZE7sYXEvfGI4D3TDRA13D2BKdjmwDn4Zmx7/Hc2R74WFo33Dg1P4O4NI="
     );
 });
 
@@ -160,7 +162,31 @@ test("test output: shuffle cnet with hints input", async ({ page, comfy }) => {
     );
 });
 
-async function compareOutput(page: Page, comfy: ComfyPage, workflow: string, hash?: string) {
+test("test output: pose with hiresfix", async ({ page, comfy }) => {
+    await compareOutput(
+        page,
+        comfy,
+        "pose_hires",
+        "ApFMWECUAUKJohBRAnkEMQA4lJKAuKgQgDzcEIA8vDCANX4jgDzmEkIs5jFBPs4RQTKOQxB2NksgR7ALmBu8E4QTpAPhJZgB8EPcBX7DzBSLweQUYcDkEPjv5BD8+eFMzkPnVBwkd5gMMD3PABCexwAgf3YHpi7zDjCf+W+A17A="
+    );
+});
+
+async function compareOutput(
+    page: Page,
+    comfy: ComfyPage,
+    workflow: string,
+    hash?: string
+) {
+    const wf = await fse.readJSON(join(workflowFolder, `${workflow}.json`));
+    const loadImageNodes = wf.nodes.filter((n) => n.type === "LoadImage");
+    const images = loadImageNodes.map((n) => n.widgets_values[0]);
+
+    for (const image of images) {
+        const src = join(workflowFolder, image)
+        const dst = join(inputFolder, image)
+        await fse.copy(src, dst, { overwrite: true })
+    }
+
     await comfy.openWorkflow(join(workflowFolder, `${workflow}.json`));
 
     await page.waitForTimeout(1000);

@@ -8,7 +8,7 @@ import grpc
 from torchvision.transforms import v2
 
 from .. import cancel_request
-from .draw_things import dt_sampler
+from .draw_things import dt_sampler, get_files
 from .data_types import *
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), "comfy"))
@@ -129,6 +129,11 @@ class DrawThingsSampler:
     CATEGORY = "DrawThings"
 
     async def sample(self, **kwargs):
+        try:
+            await get_files(kwargs["server"], kwargs["port"], kwargs["use_tls"])
+        except:
+            raise Exception("Couldn't connect to Draw Things gRPC server. Check your server and settings, and try again.")
+
         DrawThingsSampler.last_gen_canceled = False
         model_input = kwargs.get("model")
         if type(model_input) is not dict:
@@ -163,11 +168,7 @@ class DrawThingsSampler:
         return hash(items)
 
     @classmethod
-    def VALIDATE_INPUTS(cls):
-        # PromptServer.instance.send_sync("dt-grpc-validate", dict({"hello": "js"}))
-        # if model.get("value") is None or model.get("value").get("file") is None:
-        #     raise Exception("Please select a model")
-        # print(model)
+    async def VALIDATE_INPUTS(cls):
         return True
 
 

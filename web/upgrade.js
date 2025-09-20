@@ -5,32 +5,35 @@ const app = App.app
 
 const dataPath = "./drawthings-grpc/data.json"
 
-export async function checkVersion(currentVersion) {
-    const lastVersion = await getLastUsedVersion()
-    if (lastVersion === null || lastVersion !== currentVersion) {
-        await setLastUsedVersion(currentVersion)
+export async function checkVersion() {
+    // instead of doing it like this, we're going to...
+    // - only consider the latest version
+    // - record the version numbers that have been announced
+    // - if the latest announcement isn't in the lsit of versions, show it and record
+    const announced = await getAnnounced()
+    const latestAnnouncement = announcements[announcements.length - 1]
+    if (!announced.includes(latestAnnouncement.version)) {
+        await saveAnnounced(latestAnnouncement.version)
 
-        for (const announcement of announcements) {
-            if (compareVersions(currentVersion, announcement.version) < 0) continue
-            app.extensionManager.toast.add({
-                summary: announcement.title,
-                detail: announcement.detail,
-                severity: 'success',
-                life: 0
-            })
-        }
-
+        app.extensionManager.toast.add({
+            summary: latestAnnouncement.title,
+            detail: latestAnnouncement.detail,
+            severity: 'success',
+            life: 0
+        })
     }
 }
 
-async function getLastUsedVersion() {
+async function getAnnounced() {
     const data = await getUserData()
-    return data.lastUsedVersion
+    return data?.announced ?? []
 }
 
-async function setLastUsedVersion(version) {
+async function saveAnnounced(version) {
     const data = await getUserData()
-    data.lastUsedVersion = version
+    if (!data?.announced || !Array.isArray(data?.announced))
+        data.announced = []
+    data.announced.push(version)
     await app.api.storeUserData(dataPath, data)
 }
 
@@ -47,7 +50,7 @@ async function getUserData() {
     }
 
     const data = {
-        lastUsedVersion: null,
+        announced: []
     }
     await app.api.storeUserData(dataPath, data)
     return data
@@ -67,6 +70,20 @@ const announcements = [
             `"Shuffle (Moodboard)" as the hint type.`,
             `\n\nNote: Currently pose or scribble images are not working correctly, but depth or`,
             `moodboard images should work as expected.`].join(' ')
+    },
+    {
+        version: "1.7.0",
+        title: "DrawThings-gRPC 1.7.0",
+        detail: [
+            `• Response compression is now supported! It's no longer necessary to disable this option in Draw Things or the gRPC CLI.`,
+            `• Added hi res fix support for hint images`,
+            `• Add support for pose hint images`,
+            `• Fix: Model widgets should no longer show[object Object] when loading a workflow while disconnected`,
+            `• Fix: The Draw Things Sampler Node now shows the correct error when running a workflow while not connected.`,
+            `• Fix: Hint images are provided in both sizes when HiResFix is enabled`,
+            `• Fix: When loading a workflow while disconnected, the widgets for the last selected model version will be shown.`,
+            `• Fix: Update notes messages should only appear once`,
+        ].join('\n')
     }
 ]
 

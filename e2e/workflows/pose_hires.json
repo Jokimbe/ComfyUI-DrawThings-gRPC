@@ -1,0 +1,515 @@
+{
+  "id": "faed9b3f-ec74-4735-9c74-74ef2144ee39",
+  "revision": 0,
+  "last_node_id": 8,
+  "last_link_id": 7,
+  "nodes": [
+    {
+      "id": 7,
+      "type": "LoadImage",
+      "pos": [
+        70,
+        620
+      ],
+      "size": [
+        274.080078125,
+        314
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            6
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.59",
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "pose.png",
+        "image"
+      ]
+    },
+    {
+      "id": 2,
+      "type": "DrawThingsControlNet",
+      "pos": [
+        380,
+        580
+      ],
+      "size": [
+        291.44140625,
+        198
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "control_net",
+          "shape": 7,
+          "type": "DT_CNET",
+          "link": null
+        },
+        {
+          "name": "image",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 6
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONTROL_NET",
+          "type": "DT_CNET",
+          "links": [
+            5
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "drawthings-grpc",
+        "ver": "b62b4a14551d328c10478bdd1c271e78e5b4cfba",
+        "Node name for S&R": "DrawThingsControlNet"
+      },
+      "widgets_values": [
+        {
+          "value": {
+            "version": "v1",
+            "type": "controlnet",
+            "global_average_pooling": false,
+            "file": "controlnet_openpose_1.x_v1.1_f16.ckpt",
+            "modifier": "pose",
+            "name": "Pose (SD v1.x, ControlNet 1.1)"
+          },
+          "content": "Pose (SD v1.x, ControlNet 1.1) (SD)",
+          "disabled": false
+        },
+        "Pose",
+        "Balanced",
+        1,
+        0,
+        1,
+        false,
+        1,
+        "All",
+        false
+      ],
+      "_lastSelectedModel": {
+        "control_name": {
+          "value": {
+            "version": "v1",
+            "type": "controlnet",
+            "global_average_pooling": false,
+            "file": "controlnet_openpose_1.x_v1.1_f16.ckpt",
+            "modifier": "pose",
+            "name": "Pose (SD v1.x, ControlNet 1.1)"
+          },
+          "content": "Pose (SD v1.x, ControlNet 1.1) (SD)",
+          "disabled": false
+        }
+      },
+      "nodePackVersion": "1.7.0",
+      "widget_values_keyed": {
+        "control_name": {
+          "value": {
+            "version": "v1",
+            "type": "controlnet",
+            "global_average_pooling": false,
+            "file": "controlnet_openpose_1.x_v1.1_f16.ckpt",
+            "modifier": "pose",
+            "name": "Pose (SD v1.x, ControlNet 1.1)"
+          },
+          "content": "Pose (SD v1.x, ControlNet 1.1) (SD)",
+          "disabled": false
+        },
+        "control_input_type": "Pose",
+        "control_mode": "Balanced",
+        "control_weight": 1,
+        "control_start": 0,
+        "control_end": 1,
+        "global_average_pooling": false,
+        "down_sampling_rate": 1,
+        "target_blocks": "All",
+        "invert_image": false
+      }
+    },
+    {
+      "id": 8,
+      "type": "SaveImage",
+      "pos": [
+        1060,
+        290
+      ],
+      "size": [
+        270,
+        270
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 7
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.59"
+      },
+      "widgets_values": [
+        "ComfyUI"
+      ]
+    },
+    {
+      "id": 6,
+      "type": "DrawThingsPrompt",
+      "pos": [
+        260,
+        330
+      ],
+      "size": [
+        400,
+        200
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "color_off": "#EF5350",
+          "color_on": "#EF5350",
+          "name": "PROMPT",
+          "type": "STRING",
+          "links": [
+            2
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "drawthings-grpc",
+        "ver": "b62b4a14551d328c10478bdd1c271e78e5b4cfba",
+        "Node name for S&R": "DrawThingsPrompt"
+      },
+      "widgets_values": [
+        "...",
+        "man"
+      ],
+      "color": "#232",
+      "bgcolor": "#353",
+      "_lastSelectedModel": {}
+    },
+    {
+      "id": 1,
+      "type": "DrawThingsSampler",
+      "pos": [
+        720,
+        290
+      ],
+      "size": [
+        318.740234375,
+        1054
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "mask",
+          "shape": 7,
+          "type": "MASK",
+          "link": null
+        },
+        {
+          "color_off": "#EF5350",
+          "color_on": "#EF5350",
+          "name": "positive",
+          "shape": 7,
+          "type": "STRING",
+          "link": 2
+        },
+        {
+          "color_off": "#EF5350",
+          "color_on": "#EF5350",
+          "name": "negative",
+          "shape": 7,
+          "type": "STRING",
+          "link": null
+        },
+        {
+          "name": "lora",
+          "shape": 7,
+          "type": "DT_LORA",
+          "link": null
+        },
+        {
+          "name": "control_net",
+          "shape": 7,
+          "type": "DT_CNET",
+          "link": 5
+        },
+        {
+          "name": "upscaler",
+          "shape": 7,
+          "type": "DT_UPSCALER",
+          "link": null
+        },
+        {
+          "name": "refiner",
+          "shape": 7,
+          "type": "DT_REFINER",
+          "link": null
+        },
+        {
+          "name": "hints",
+          "shape": 7,
+          "type": "DT_HINTS",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            7
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "drawthings-grpc",
+        "ver": "b62b4a14551d328c10478bdd1c271e78e5b4cfba",
+        "Node name for S&R": "DrawThingsSampler"
+      },
+      "widgets_values": [
+        "All",
+        "localhost",
+        "7859",
+        true,
+        {
+          "value": {
+            "name": "Juggernaut Reborn (8-bit)",
+            "default_scale": 12,
+            "prefix": "",
+            "upcast_attention": false,
+            "file": "juggernaut_reborn_q6p_q8p.ckpt",
+            "version": "v1",
+            "text_encoder": "juggernaut_reborn_clip_vit_l14_f16.ckpt",
+            "modifier": "none"
+          },
+          "content": "Juggernaut Reborn (8-bit) (SD)"
+        },
+        1,
+        2188567530,
+        "fixed",
+        "ScaleAlike",
+        768,
+        768,
+        20,
+        14,
+        4.5,
+        false,
+        0,
+        true,
+        4.5,
+        "DPM++ 2M Karras",
+        0.3,
+        true,
+        1,
+        1,
+        5,
+        127,
+        0.02,
+        1,
+        0,
+        0,
+        1,
+        0.6,
+        1.5,
+        0,
+        true,
+        true,
+        512,
+        512,
+        0.7,
+        false,
+        640,
+        640,
+        128,
+        false,
+        512,
+        512,
+        64,
+        false,
+        5,
+        2,
+        0.2,
+        3,
+        false,
+        "",
+        false,
+        ""
+      ],
+      "nodePackVersion": "1.7.0",
+      "widget_values_keyed": {
+        "settings": "All",
+        "server": "localhost",
+        "port": "7859",
+        "use_tls": true,
+        "model": {
+          "value": {
+            "name": "Juggernaut Reborn (8-bit)",
+            "default_scale": 12,
+            "prefix": "",
+            "upcast_attention": false,
+            "file": "juggernaut_reborn_q6p_q8p.ckpt",
+            "version": "v1",
+            "text_encoder": "juggernaut_reborn_clip_vit_l14_f16.ckpt",
+            "modifier": "none"
+          },
+          "content": "Juggernaut Reborn (8-bit) (SD)"
+        },
+        "strength": 1,
+        "seed": 2188567530,
+        "control_after_generate": "fixed",
+        "seed_mode": "ScaleAlike",
+        "width": 768,
+        "height": 768,
+        "steps": 20,
+        "num_frames": 14,
+        "cfg": 4.5,
+        "cfg_zero_star": false,
+        "cfg_zero_star_init_steps": 0,
+        "speed_up": true,
+        "guidance_embed": 4.5,
+        "sampler_name": "DPM++ 2M Karras",
+        "stochastic_sampling_gamma": 0.3,
+        "res_dpt_shift": true,
+        "shift": 1,
+        "batch_size": 1,
+        "fps": 5,
+        "motion_scale": 127,
+        "guiding_frame_noise": 0.02,
+        "start_frame_guidance": 1,
+        "causal_inference": 0,
+        "causal_inference_pad": 0,
+        "clip_skip": 1,
+        "sharpness": 0.6,
+        "mask_blur": 1.5,
+        "mask_blur_outset": 0,
+        "preserve_original": true,
+        "high_res_fix": true,
+        "high_res_fix_start_width": 512,
+        "high_res_fix_start_height": 512,
+        "high_res_fix_strength": 0.7,
+        "tiled_decoding": false,
+        "decoding_tile_width": 640,
+        "decoding_tile_height": 640,
+        "decoding_tile_overlap": 128,
+        "tiled_diffusion": false,
+        "diffusion_tile_width": 512,
+        "diffusion_tile_height": 512,
+        "diffusion_tile_overlap": 64,
+        "tea_cache": false,
+        "tea_cache_start": 5,
+        "tea_cache_end": 2,
+        "tea_cache_threshold": 0.2,
+        "tea_cache_max_skip_steps": 3,
+        "separate_clip_l": false,
+        "clip_l_text": "",
+        "separate_open_clip_g": false,
+        "open_clip_g_text": "",
+        "$$canvas-image-preview": ""
+      },
+      "_lastSelectedModel": {
+        "model": {
+          "value": {
+            "name": "Juggernaut Reborn (8-bit)",
+            "default_scale": 12,
+            "prefix": "",
+            "upcast_attention": false,
+            "file": "juggernaut_reborn_q6p_q8p.ckpt",
+            "version": "v1",
+            "text_encoder": "juggernaut_reborn_clip_vit_l14_f16.ckpt",
+            "modifier": "none"
+          },
+          "content": "Juggernaut Reborn (8-bit) (SD)"
+        }
+      }
+    }
+  ],
+  "links": [
+    [
+      2,
+      6,
+      0,
+      1,
+      2,
+      "STRING"
+    ],
+    [
+      5,
+      2,
+      0,
+      1,
+      5,
+      "DT_CNET"
+    ],
+    [
+      6,
+      7,
+      0,
+      2,
+      1,
+      "IMAGE"
+    ],
+    [
+      7,
+      1,
+      0,
+      8,
+      0,
+      "IMAGE"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.9437430413511083,
+      "offset": [
+        -25.560497141615183,
+        -298.9660452479011
+      ]
+    },
+    "frontendVersion": "1.25.11",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}

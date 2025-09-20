@@ -50,7 +50,7 @@ test('Widget values serialization', async ({ page, comfy }) => {
     expect(await node?.isWidgetVisible(["lora", "lora_2", "lora_3"])).toMatchObject([true, true, true])
 
     // we need a sampler node for models to appear
-    await node.addOutputNode('lora_stack', ["DrawThings", "Draw Things Sampler"])
+    await node.addOutputNode('lora_stack', "Draw Things Sampler")
     await page.waitForTimeout(2000)
 
     // choose 2 models, weights, modes, leave third unset
