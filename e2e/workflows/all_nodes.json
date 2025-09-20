@@ -1,0 +1,905 @@
+{
+  "id": "faed9b3f-ec74-4735-9c74-74ef2144ee39",
+  "revision": 0,
+  "last_node_id": 6,
+  "last_link_id": 5,
+  "nodes": [
+    {
+      "id": 6,
+      "type": "DrawThingsPrompt",
+      "pos": [
+        260,
+        330
+      ],
+      "size": [
+        400,
+        200
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "color_off": "#EF5350",
+          "color_on": "#EF5350",
+          "name": "PROMPT",
+          "type": "STRING",
+          "links": [
+            2
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "drawthings-grpc",
+        "ver": "b62b4a14551d328c10478bdd1c271e78e5b4cfba",
+        "Node name for S&R": "DrawThingsPrompt"
+      },
+      "widgets_values": [
+        "...",
+        "a lovely cat"
+      ],
+      "color": "#232",
+      "bgcolor": "#353",
+      "_lastSelectedModel": {}
+    },
+    {
+      "id": 5,
+      "type": "DrawThingsUpscaler",
+      "pos": [
+        380,
+        580
+      ],
+      "size": [
+        280.73046875,
+        82
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "UPSCALER",
+          "type": "DT_UPSCALER",
+          "links": [
+            3
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "drawthings-grpc",
+        "ver": "b62b4a14551d328c10478bdd1c271e78e5b4cfba",
+        "Node name for S&R": "DrawThingsUpscaler"
+      },
+      "widgets_values": [
+        {
+          "value": {
+            "blocks": 23,
+            "name": "Remacri",
+            "file": "remacri_4x_f16.ckpt",
+            "scale_factor": 4
+          },
+          "content": "Remacri"
+        },
+        2
+      ],
+      "_lastSelectedModel": {
+        "upscaler_model": {
+          "value": {
+            "blocks": 23,
+            "name": "Remacri",
+            "file": "remacri_4x_f16.ckpt",
+            "scale_factor": 4
+          },
+          "content": "Remacri"
+        }
+      }
+    },
+    {
+      "id": 4,
+      "type": "DrawThingsRefiner",
+      "pos": [
+        390,
+        710
+      ],
+      "size": [
+        270,
+        82
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "REFINER",
+          "type": "DT_REFINER",
+          "links": [
+            4
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "drawthings-grpc",
+        "ver": "b62b4a14551d328c10478bdd1c271e78e5b4cfba",
+        "Node name for S&R": "DrawThingsRefiner"
+      },
+      "widgets_values": [
+        {
+          "value": {
+            "upcast_attention": false,
+            "version": "v1",
+            "name": "Juggernaut Reborn (8-bit)",
+            "text_encoder": "juggernaut_reborn_clip_vit_l14_f16.ckpt",
+            "prefix": "",
+            "modifier": "none",
+            "default_scale": 12,
+            "file": "juggernaut_reborn_q6p_q8p.ckpt"
+          },
+          "content": "Juggernaut Reborn (8-bit) (SD)",
+          "disabled": false
+        },
+        0.85
+      ],
+      "_lastSelectedModel": {
+        "refiner_model": {
+          "value": {
+            "upcast_attention": false,
+            "version": "v1",
+            "name": "Juggernaut Reborn (8-bit)",
+            "text_encoder": "juggernaut_reborn_clip_vit_l14_f16.ckpt",
+            "prefix": "",
+            "modifier": "none",
+            "default_scale": 12,
+            "file": "juggernaut_reborn_q6p_q8p.ckpt"
+          },
+          "content": "Juggernaut Reborn (8-bit) (SD)",
+          "disabled": false
+        }
+      }
+    },
+    {
+      "id": 2,
+      "type": "DrawThingsControlNet",
+      "pos": [
+        370,
+        840
+      ],
+      "size": [
+        291.44140625,
+        198
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "control_net",
+          "shape": 7,
+          "type": "DT_CNET",
+          "link": null
+        },
+        {
+          "name": "image",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONTROL_NET",
+          "type": "DT_CNET",
+          "links": [
+            5
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "drawthings-grpc",
+        "ver": "b62b4a14551d328c10478bdd1c271e78e5b4cfba",
+        "Node name for S&R": "DrawThingsControlNet"
+      },
+      "widgets_values": [
+        {
+          "value": {
+            "name": "Inpainting (SD v1.x, ControlNet 1.1)",
+            "type": "controlnet",
+            "global_average_pooling": false,
+            "file": "controlnet_inpaint_1.x_v1.1_f16.ckpt",
+            "version": "v1",
+            "modifier": "inpaint"
+          },
+          "content": "Inpainting (SD v1.x, ControlNet 1.1) (SD)",
+          "disabled": false
+        },
+        "Inpaint",
+        "Balanced",
+        1,
+        0,
+        1,
+        false,
+        1,
+        "All",
+        false
+      ],
+      "_lastSelectedModel": {
+        "control_name": {
+          "value": {
+            "name": "Inpainting (SD v1.x, ControlNet 1.1)",
+            "type": "controlnet",
+            "global_average_pooling": false,
+            "file": "controlnet_inpaint_1.x_v1.1_f16.ckpt",
+            "version": "v1",
+            "modifier": "inpaint"
+          },
+          "content": "Inpainting (SD v1.x, ControlNet 1.1) (SD)",
+          "disabled": false
+        }
+      },
+      "nodePackVersion": "1.6.3",
+      "widget_values_keyed": {
+        "control_name": {
+          "value": {
+            "name": "Inpainting (SD v1.x, ControlNet 1.1)",
+            "type": "controlnet",
+            "global_average_pooling": false,
+            "file": "controlnet_inpaint_1.x_v1.1_f16.ckpt",
+            "version": "v1",
+            "modifier": "inpaint"
+          },
+          "content": "Inpainting (SD v1.x, ControlNet 1.1) (SD)",
+          "disabled": false
+        },
+        "control_input_type": "Inpaint",
+        "control_mode": "Balanced",
+        "control_weight": 1,
+        "control_start": 0,
+        "control_end": 1,
+        "global_average_pooling": false,
+        "down_sampling_rate": 1,
+        "target_blocks": "All",
+        "invert_image": false
+      }
+    },
+    {
+      "id": 3,
+      "type": "DrawThingsLoRA",
+      "pos": [
+        680,
+        330
+      ],
+      "size": [
+        270,
+        458
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "lora_stack",
+          "shape": 7,
+          "type": "DT_LORA",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "lora_stack",
+          "type": "DT_LORA",
+          "links": [
+            1
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "drawthings-grpc",
+        "ver": "b62b4a14551d328c10478bdd1c271e78e5b4cfba",
+        "Node name for S&R": "DrawThingsLoRA"
+      },
+      "widgets_values": [
+        "",
+        {
+          "value": {
+            "is_consistency_model": true,
+            "file": "lcm_sd_v1.5_lora_f16.ckpt",
+            "name": "LCM Stable Diffusion v1.5",
+            "prefix": "",
+            "version": "v1"
+          },
+          "content": "LCM Stable Diffusion v1.5 (SD)",
+          "disabled": false
+        },
+        1,
+        "All",
+        {
+          "value": {
+            "file": "lcm_sd_v1.5_lora_f16.ckpt",
+            "prefix": "",
+            "version": "v1",
+            "is_consistency_model": true,
+            "name": "LCM Stable Diffusion v1.5"
+          },
+          "content": "LCM Stable Diffusion v1.5 (SD)",
+          "disabled": false
+        },
+        1,
+        "All",
+        {
+          "value": {
+            "is_consistency_model": true,
+            "prefix": "",
+            "file": "lcm_sd_v1.5_lora_f16.ckpt",
+            "name": "LCM Stable Diffusion v1.5",
+            "version": "v1"
+          },
+          "content": "LCM Stable Diffusion v1.5 (SD)",
+          "disabled": false
+        },
+        1,
+        "All",
+        {
+          "value": {
+            "prefix": "",
+            "file": "lcm_sd_v1.5_lora_f16.ckpt",
+            "is_consistency_model": true,
+            "version": "v1",
+            "name": "LCM Stable Diffusion v1.5"
+          },
+          "content": "LCM Stable Diffusion v1.5 (SD)",
+          "disabled": false
+        },
+        1,
+        "All",
+        {
+          "value": {
+            "is_consistency_model": true,
+            "version": "v1",
+            "file": "lcm_sd_v1.5_lora_f16.ckpt",
+            "name": "LCM Stable Diffusion v1.5",
+            "prefix": ""
+          },
+          "content": "LCM Stable Diffusion v1.5 (SD)",
+          "disabled": false
+        },
+        1,
+        "All",
+        {
+          "value": {
+            "prefix": "",
+            "file": "lcm_sd_v1.5_lora_f16.ckpt",
+            "name": "LCM Stable Diffusion v1.5",
+            "version": "v1",
+            "is_consistency_model": true
+          },
+          "content": "LCM Stable Diffusion v1.5 (SD)",
+          "disabled": false
+        },
+        1,
+        "All",
+        {
+          "value": {
+            "is_consistency_model": true,
+            "prefix": "",
+            "version": "v1",
+            "name": "LCM Stable Diffusion v1.5",
+            "file": "lcm_sd_v1.5_lora_f16.ckpt"
+          },
+          "content": "LCM Stable Diffusion v1.5 (SD)",
+          "disabled": false
+        },
+        1,
+        "All",
+        {
+          "value": {
+            "file": "lcm_sd_v1.5_lora_f16.ckpt",
+            "prefix": "",
+            "is_consistency_model": true,
+            "name": "LCM Stable Diffusion v1.5",
+            "version": "v1"
+          },
+          "content": "LCM Stable Diffusion v1.5 (SD)",
+          "disabled": false
+        },
+        1,
+        "All"
+      ],
+      "_lastSelectedModel": {
+        "lora": {
+          "value": {
+            "is_consistency_model": true,
+            "file": "lcm_sd_v1.5_lora_f16.ckpt",
+            "name": "LCM Stable Diffusion v1.5",
+            "prefix": "",
+            "version": "v1"
+          },
+          "content": "LCM Stable Diffusion v1.5 (SD)",
+          "disabled": false
+        },
+        "lora_2": {
+          "value": {
+            "file": "lcm_sd_v1.5_lora_f16.ckpt",
+            "prefix": "",
+            "version": "v1",
+            "is_consistency_model": true,
+            "name": "LCM Stable Diffusion v1.5"
+          },
+          "content": "LCM Stable Diffusion v1.5 (SD)",
+          "disabled": false
+        },
+        "lora_3": {
+          "value": {
+            "is_consistency_model": true,
+            "prefix": "",
+            "file": "lcm_sd_v1.5_lora_f16.ckpt",
+            "name": "LCM Stable Diffusion v1.5",
+            "version": "v1"
+          },
+          "content": "LCM Stable Diffusion v1.5 (SD)",
+          "disabled": false
+        },
+        "lora_4": {
+          "value": {
+            "prefix": "",
+            "file": "lcm_sd_v1.5_lora_f16.ckpt",
+            "is_consistency_model": true,
+            "version": "v1",
+            "name": "LCM Stable Diffusion v1.5"
+          },
+          "content": "LCM Stable Diffusion v1.5 (SD)",
+          "disabled": false
+        },
+        "lora_5": {
+          "value": {
+            "is_consistency_model": true,
+            "version": "v1",
+            "file": "lcm_sd_v1.5_lora_f16.ckpt",
+            "name": "LCM Stable Diffusion v1.5",
+            "prefix": ""
+          },
+          "content": "LCM Stable Diffusion v1.5 (SD)",
+          "disabled": false
+        },
+        "lora_6": {
+          "value": {
+            "prefix": "",
+            "file": "lcm_sd_v1.5_lora_f16.ckpt",
+            "name": "LCM Stable Diffusion v1.5",
+            "version": "v1",
+            "is_consistency_model": true
+          },
+          "content": "LCM Stable Diffusion v1.5 (SD)",
+          "disabled": false
+        },
+        "lora_7": {
+          "value": {
+            "is_consistency_model": true,
+            "prefix": "",
+            "version": "v1",
+            "name": "LCM Stable Diffusion v1.5",
+            "file": "lcm_sd_v1.5_lora_f16.ckpt"
+          },
+          "content": "LCM Stable Diffusion v1.5 (SD)",
+          "disabled": false
+        },
+        "lora_8": {
+          "value": {
+            "file": "lcm_sd_v1.5_lora_f16.ckpt",
+            "prefix": "",
+            "is_consistency_model": true,
+            "name": "LCM Stable Diffusion v1.5",
+            "version": "v1"
+          },
+          "content": "LCM Stable Diffusion v1.5 (SD)",
+          "disabled": false
+        }
+      },
+      "loraCount": 8,
+      "showMode": false,
+      "nodePackVersion": "1.6.3",
+      "widget_values_keyed": {
+        "buttons": "",
+        "lora": {
+          "value": {
+            "is_consistency_model": true,
+            "file": "lcm_sd_v1.5_lora_f16.ckpt",
+            "name": "LCM Stable Diffusion v1.5",
+            "prefix": "",
+            "version": "v1"
+          },
+          "content": "LCM Stable Diffusion v1.5 (SD)",
+          "disabled": false
+        },
+        "weight": 1,
+        "mode": "All",
+        "lora_2": {
+          "value": {
+            "file": "lcm_sd_v1.5_lora_f16.ckpt",
+            "prefix": "",
+            "version": "v1",
+            "is_consistency_model": true,
+            "name": "LCM Stable Diffusion v1.5"
+          },
+          "content": "LCM Stable Diffusion v1.5 (SD)",
+          "disabled": false
+        },
+        "weight_2": 1,
+        "mode_2": "All",
+        "lora_3": {
+          "value": {
+            "is_consistency_model": true,
+            "prefix": "",
+            "file": "lcm_sd_v1.5_lora_f16.ckpt",
+            "name": "LCM Stable Diffusion v1.5",
+            "version": "v1"
+          },
+          "content": "LCM Stable Diffusion v1.5 (SD)",
+          "disabled": false
+        },
+        "weight_3": 1,
+        "mode_3": "All",
+        "lora_4": {
+          "value": {
+            "prefix": "",
+            "file": "lcm_sd_v1.5_lora_f16.ckpt",
+            "is_consistency_model": true,
+            "version": "v1",
+            "name": "LCM Stable Diffusion v1.5"
+          },
+          "content": "LCM Stable Diffusion v1.5 (SD)",
+          "disabled": false
+        },
+        "weight_4": 1,
+        "mode_4": "All",
+        "lora_5": {
+          "value": {
+            "is_consistency_model": true,
+            "version": "v1",
+            "file": "lcm_sd_v1.5_lora_f16.ckpt",
+            "name": "LCM Stable Diffusion v1.5",
+            "prefix": ""
+          },
+          "content": "LCM Stable Diffusion v1.5 (SD)",
+          "disabled": false
+        },
+        "weight_5": 1,
+        "mode_5": "All",
+        "lora_6": {
+          "value": {
+            "prefix": "",
+            "file": "lcm_sd_v1.5_lora_f16.ckpt",
+            "name": "LCM Stable Diffusion v1.5",
+            "version": "v1",
+            "is_consistency_model": true
+          },
+          "content": "LCM Stable Diffusion v1.5 (SD)",
+          "disabled": false
+        },
+        "weight_6": 1,
+        "mode_6": "All",
+        "lora_7": {
+          "value": {
+            "is_consistency_model": true,
+            "prefix": "",
+            "version": "v1",
+            "name": "LCM Stable Diffusion v1.5",
+            "file": "lcm_sd_v1.5_lora_f16.ckpt"
+          },
+          "content": "LCM Stable Diffusion v1.5 (SD)",
+          "disabled": false
+        },
+        "weight_7": 1,
+        "mode_7": "All",
+        "lora_8": {
+          "value": {
+            "file": "lcm_sd_v1.5_lora_f16.ckpt",
+            "prefix": "",
+            "is_consistency_model": true,
+            "name": "LCM Stable Diffusion v1.5",
+            "version": "v1"
+          },
+          "content": "LCM Stable Diffusion v1.5 (SD)",
+          "disabled": false
+        },
+        "weight_8": 1,
+        "mode_8": "All"
+      }
+    },
+    {
+      "id": 1,
+      "type": "DrawThingsSampler",
+      "pos": [
+        970,
+        330
+      ],
+      "size": [
+        318.740234375,
+        578
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "mask",
+          "shape": 7,
+          "type": "MASK",
+          "link": null
+        },
+        {
+          "color_off": "#EF5350",
+          "color_on": "#EF5350",
+          "name": "positive",
+          "shape": 7,
+          "type": "STRING",
+          "link": 2
+        },
+        {
+          "color_off": "#EF5350",
+          "color_on": "#EF5350",
+          "name": "negative",
+          "shape": 7,
+          "type": "STRING",
+          "link": null
+        },
+        {
+          "name": "lora",
+          "shape": 7,
+          "type": "DT_LORA",
+          "link": 1
+        },
+        {
+          "name": "control_net",
+          "shape": 7,
+          "type": "DT_CNET",
+          "link": 5
+        },
+        {
+          "name": "upscaler",
+          "shape": 7,
+          "type": "DT_UPSCALER",
+          "link": 3
+        },
+        {
+          "name": "refiner",
+          "shape": 7,
+          "type": "DT_REFINER",
+          "link": 4
+        },
+        {
+          "name": "hints",
+          "shape": 7,
+          "type": "DT_HINTS",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "drawthings-grpc",
+        "ver": "b62b4a14551d328c10478bdd1c271e78e5b4cfba",
+        "Node name for S&R": "DrawThingsSampler"
+      },
+      "widgets_values": [
+        "Basic",
+        "localhost",
+        "7859",
+        true,
+        {
+          "value": {
+            "prefix": "",
+            "default_scale": 8,
+            "version": "v1",
+            "file": "sd_v1.5_f16.ckpt",
+            "name": "Stable Diffusion v1.5",
+            "upcast_attention": false
+          },
+          "content": "Stable Diffusion v1.5 (SD)"
+        },
+        1,
+        0,
+        "randomize",
+        "ScaleAlike",
+        512,
+        512,
+        20,
+        14,
+        4.5,
+        false,
+        0,
+        true,
+        4.5,
+        "DPM++ 2M AYS",
+        0.3,
+        true,
+        1,
+        1,
+        5,
+        127,
+        0.02,
+        1,
+        0,
+        0,
+        1,
+        0.6,
+        1.5,
+        0,
+        true,
+        false,
+        448,
+        448,
+        0.7,
+        false,
+        640,
+        640,
+        128,
+        false,
+        512,
+        512,
+        64,
+        false,
+        5,
+        2,
+        0.2,
+        3,
+        false,
+        "",
+        false,
+        ""
+      ],
+      "nodePackVersion": "1.6.3",
+      "widget_values_keyed": {
+        "settings": "Basic",
+        "server": "localhost",
+        "port": "7859",
+        "use_tls": true,
+        "model": {
+          "value": {
+            "prefix": "",
+            "default_scale": 8,
+            "version": "v1",
+            "file": "sd_v1.5_f16.ckpt",
+            "name": "Stable Diffusion v1.5",
+            "upcast_attention": false
+          },
+          "content": "Stable Diffusion v1.5 (SD)"
+        },
+        "strength": 1,
+        "seed": 0,
+        "control_after_generate": "randomize",
+        "seed_mode": "ScaleAlike",
+        "width": 512,
+        "height": 512,
+        "steps": 20,
+        "num_frames": 14,
+        "cfg": 4.5,
+        "cfg_zero_star": false,
+        "cfg_zero_star_init_steps": 0,
+        "speed_up": true,
+        "guidance_embed": 4.5,
+        "sampler_name": "DPM++ 2M AYS",
+        "stochastic_sampling_gamma": 0.3,
+        "res_dpt_shift": true,
+        "shift": 1,
+        "batch_size": 1,
+        "fps": 5,
+        "motion_scale": 127,
+        "guiding_frame_noise": 0.02,
+        "start_frame_guidance": 1,
+        "causal_inference": 0,
+        "causal_inference_pad": 0,
+        "clip_skip": 1,
+        "sharpness": 0.6,
+        "mask_blur": 1.5,
+        "mask_blur_outset": 0,
+        "preserve_original": true,
+        "high_res_fix": false,
+        "high_res_fix_start_width": 448,
+        "high_res_fix_start_height": 448,
+        "high_res_fix_strength": 0.7,
+        "tiled_decoding": false,
+        "decoding_tile_width": 640,
+        "decoding_tile_height": 640,
+        "decoding_tile_overlap": 128,
+        "tiled_diffusion": false,
+        "diffusion_tile_width": 512,
+        "diffusion_tile_height": 512,
+        "diffusion_tile_overlap": 64,
+        "tea_cache": false,
+        "tea_cache_start": 5,
+        "tea_cache_end": 2,
+        "tea_cache_threshold": 0.2,
+        "tea_cache_max_skip_steps": 3,
+        "separate_clip_l": false,
+        "clip_l_text": "",
+        "separate_open_clip_g": false,
+        "open_clip_g_text": ""
+      },
+      "_lastSelectedModel": {
+        "model": {
+          "value": {
+            "prefix": "",
+            "default_scale": 8,
+            "version": "v1",
+            "file": "sd_v1.5_f16.ckpt",
+            "name": "Stable Diffusion v1.5",
+            "upcast_attention": false
+          },
+          "content": "Stable Diffusion v1.5 (SD)"
+        }
+      }
+    }
+  ],
+  "links": [
+    [
+      1,
+      3,
+      0,
+      1,
+      4,
+      "DT_LORA"
+    ],
+    [
+      2,
+      6,
+      0,
+      1,
+      2,
+      "STRING"
+    ],
+    [
+      3,
+      5,
+      0,
+      1,
+      6,
+      "DT_UPSCALER"
+    ],
+    [
+      4,
+      4,
+      0,
+      1,
+      7,
+      "DT_REFINER"
+    ],
+    [
+      5,
+      2,
+      0,
+      1,
+      5,
+      "DT_CNET"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.8381096667150697,
+      "offset": [
+        198.66971957123292,
+        -140.99984229165747
+      ]
+    },
+    "frontendVersion": "1.25.11",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}

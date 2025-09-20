@@ -198,6 +198,7 @@ export class NodeRef {
         const item = await this.page.getByRole("menuitem", { name: option }).first()
         await item.scrollIntoViewIfNeeded()
         await item.click({position: { x: 2, y: 2 } });
+        await this.page.waitForTimeout(this.delay)
     }
 
     async setWidgetValue(widget: string, value: number) {

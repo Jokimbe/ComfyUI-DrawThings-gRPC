@@ -160,6 +160,15 @@ test("test output: shuffle cnet with hints input", async ({ page, comfy }) => {
     );
 });
 
+test("test output: pose with hiresfix", async ({ page, comfy }) => {
+    await compareOutput(
+        page,
+        comfy,
+        "pose_hires",
+        "ApFMWECUAUKJohBRAnkEMQA4lJKAuKgQgDzcEIA8vDCANX4jgDzmEkIs5jFBPs4RQTKOQxB2NksgR7ALmBu8E4QTpAPhJZgB8EPcBX7DzBSLweQUYcDkEPjv5BD8+eFMzkPnVBwkd5gMMD3PABCexwAgf3YHpi7zDjCf+W+A17A="
+    );
+});
+
 async function compareOutput(page: Page, comfy: ComfyPage, workflow: string, hash?: string) {
     await comfy.openWorkflow(join(workflowFolder, `${workflow}.json`));
 

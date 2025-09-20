@@ -88,7 +88,10 @@ test("tcd sampler", async ({ page, comfy }) => {
     expect(await node.isWidgetVisible("stochastic_sampling_gamma")).toBeFalsy();
 });
 
-test("hires, tiled diffusion, tiled decoding widgets", async ({ page, comfy }) => {
+test("hires, tiled diffusion, tiled decoding widgets", async ({
+    page,
+    comfy,
+}) => {
     await comfy.openWorkflow(join(workflowFolder, "node.json"));
 
     const nodeRef = await getNodeRef(page, "DrawThingsSampler");
@@ -138,11 +141,7 @@ test("flux settings widgets", async ({ page, comfy }) => {
 
     await node.selectWidgetOption("settings", "Advanced");
     expect(
-        await node.isWidgetVisible([
-            "tea_cache",
-            "speed_up",
-            "separate_clip_l",
-        ])
+        await node.isWidgetVisible(["tea_cache", "speed_up", "separate_clip_l"])
     ).toMatchObject([false, false, false]);
 
     // select flux model
@@ -150,11 +149,7 @@ test("flux settings widgets", async ({ page, comfy }) => {
 
     await node.selectWidgetOption("settings", "Advanced");
     expect(
-        await node.isWidgetVisible([
-            "tea_cache",
-            "speed_up",
-            "separate_clip_l",
-        ])
+        await node.isWidgetVisible(["tea_cache", "speed_up", "separate_clip_l"])
     ).toMatchObject([true, true, true]);
 
     // test tea_cache
@@ -166,12 +161,7 @@ test("flux settings widgets", async ({ page, comfy }) => {
     ]);
 
     // test speed_up
-    await testDependentOptions(
-        node,
-        "speed_up",
-        ["guidance_embed"],
-        "invert"
-    );
+    await testDependentOptions(node, "speed_up", ["guidance_embed"], "invert");
 
     // test separate_clip_l
     await testDependentOptions(node, "separate_clip_l", ["clip_l_text"]);
@@ -180,10 +170,44 @@ test("flux settings widgets", async ({ page, comfy }) => {
 
     await testDependentOptions(node, "res_dpt_shift", ["shift"], "disable");
 
-    await testDependentOptions(node, "cfg_zero_star", ["cfg_zero_star_init_steps"]);
+    await testDependentOptions(node, "cfg_zero_star", [
+        "cfg_zero_star_init_steps",
+    ]);
 });
 
-test("svd options", async ({ page, comfy }) => { });
+test("qwen settings widgets", async ({ page, comfy }) => {
+    comfy.addUrlQuery("dtgrpctesthack", "true");
+    await comfy.openWorkflow(join(workflowFolder, "node.json"));
+
+    const node = await getNodeRef(page, "DrawThingsSampler");
+    if (!node) throw new Error("Node ref not found");
+
+    // go to basic
+    await node.clickWidget("settings");
+    await page.getByRole("menuitem", { name: "Basic" }).click();
+
+    // select an sd model
+    await node.clickWidget("model");
+    await page
+        .getByRole("menuitem", { name: /\(SD\)/ })
+        .first()
+        .click();
+
+    // make sure flux widgets are not visible
+    expect(await node.isWidgetVisible("res_dpt_shift")).toBeFalsy();
+    expect(await node.isWidgetVisible("cfg_zero_star")).toBeFalsy();
+
+    // select qwen model
+    await node.selectWidgetOption("model", /\(Qwen\)/);
+
+    await testDependentOptions(node, "res_dpt_shift", ["shift"], "disable");
+
+    await testDependentOptions(node, "cfg_zero_star", [
+        "cfg_zero_star_init_steps",
+    ]);
+});
+
+test("svd options", async ({ page, comfy }) => {});
 
 test("wan options", async ({ page, comfy }) => {
     await comfy.openWorkflow(join(workflowFolder, "node.json"));
@@ -234,8 +258,101 @@ test("wan options", async ({ page, comfy }) => {
         "tea_cache_max_skip_steps",
     ]);
 
-    await node.selectWidgetOption("settings", "Basic")
-    await testDependentOptions(node, "cfg_zero_star", ["cfg_zero_star_init_steps"]);
+    await node.selectWidgetOption("settings", "Basic");
+    await testDependentOptions(node, "cfg_zero_star", [
+        "cfg_zero_star_init_steps",
+    ]);
+});
+
+test("no widget shows [object Object]", async ({ page, comfy }) => {
+    await comfy.openWorkflow(join(workflowFolder, "all_nodes.json"));
+
+    // assert connected
+    const sampler = await comfy.getNodeRef("DrawThingsSampler");
+    const modelValue = (await sampler?.getWidgetValue("model")) as string;
+    await expect(modelValue?.value?.name).toBe("Stable Diffusion v1.5");
+
+    const allValues = await page.evaluate(() => {
+        return window.graph.nodes
+            .flatMap((n) => n.widgets)
+            .map((w) => w.value.toString());
+    });
+
+    // make sure we actually got some values
+    expect(allValues.length).toBeGreaterThan(20);
+    // assert no [object Object]
+    expect(allValues).not.toContain("[object Object]");
+
+    // disconnect and assert
+    await sampler?.clickWidget("use_tls");
+    await page.waitForTimeout(1000);
+    await expect(await sampler?.getWidgetValue("model")).toBe("Not connected");
+
+    // refresh
+    await page.reload();
+    await page.waitForLoadState("domcontentloaded");
+    await page.waitForTimeout(2000);
+
+    // assert no widget says [object Object]
+    const allValues2 = await page.evaluate(() => {
+        return window.graph.nodes
+            .flatMap((n) => n.widgets)
+            .map((w) => w.value.toString());
+    });
+
+    // make sure we actually got some values
+    expect(allValues2.length).toBeGreaterThan(20);
+    // assert no [object Object]
+    expect(allValues2).not.toContain("[object Object]");
+});
+
+test("version specific settings appear when loaded with disconnected server", async ({
+    page,
+    comfy,
+}) => {
+    // this is mostly copied from flux test above
+    await comfy.openWorkflow(join(workflowFolder, "node.json"));
+
+    const sampler = await getNodeRef(page, "DrawThingsSampler");
+    if (!sampler) throw new Error("Node ref not found");
+
+    // go to advanced settings
+    await sampler.selectWidgetOption("settings", "Advanced");
+    // await page.waitForTimeout(1000);
+
+    // select flux model and assert options appear
+    await sampler.selectWidgetOption("model", /\(F1\)/);
+    expect(
+        await sampler.isWidgetVisible([
+            "tea_cache",
+            "speed_up",
+            "separate_clip_l",
+        ])
+    ).toMatchObject([true, true, true]);
+
+    // toggle tls to disconnect
+    await sampler.selectWidgetOption("settings", "Basic");
+    await sampler?.clickWidget("use_tls");
+    await page.waitForTimeout(1000);
+    await expect(await sampler?.getWidgetValue("model")).toBe("Not connected");
+
+    // refresh
+    await page.reload();
+    await page.waitForLoadState("domcontentloaded");
+    await page.waitForTimeout(2000);
+
+    // assert not connect
+    await expect(await sampler?.getWidgetValue("model")).toBe("Not connected");
+
+    // assert flux specific settings are still listed
+    await sampler.selectWidgetOption("settings", "Advanced");
+    expect(
+        await sampler.isWidgetVisible([
+            "tea_cache",
+            "speed_up",
+            "separate_clip_l",
+        ])
+    ).toMatchObject([true, true, true]);
 });
 
 async function testDependentOptions(
@@ -250,9 +367,9 @@ async function testDependentOptions(
     const check =
         mode === "disable"
             ? (...args: Parameters<NodeRef["isWidgetDisabled"]>) =>
-                node.isWidgetDisabled(...args)
+                  node.isWidgetDisabled(...args)
             : (...args: Parameters<NodeRef["isWidgetVisible"]>) =>
-                node.isWidgetVisible(...args);
+                  node.isWidgetVisible(...args);
 
     expect(await node.isWidgetVisible(primary)).toBeTruthy();
 

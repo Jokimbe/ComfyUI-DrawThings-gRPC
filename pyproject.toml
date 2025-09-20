@@ -1,6 +1,6 @@
 [project]
 name = "drawthings-grpc"
-version = "1.6.3"
+version = "1.7.0"
 description = "Connect to any Draw Things gRPCServer and let ComfyUI generate and provide DT with images for ControlNet without needing to set them in DT itself."
 authors = [
   {name = "Jokimbe"},

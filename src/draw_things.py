@@ -21,7 +21,7 @@ from .image_handlers import (
     convert_image_for_request,
     convert_mask_for_request,
     convert_response_image,
-    decode_preview
+    decode_preview,
 )
 
 
@@ -185,6 +185,12 @@ async def dt_sampler(inputs: dict):
 
         cancel_request.reset()
         response_images = []
+        estimated_steps = (
+            config.steps * (1 + config.hiresFixStrength)
+            if config.hiresFix
+            else config.steps
+        )
+        current_step = 0
 
         while True:
             response = await generate_stream.read()
@@ -195,7 +201,12 @@ async def dt_sampler(inputs: dict):
                 await channel.close()
                 raise Exception("canceled")
 
-            current_step = response.currentSignpost.sampling.step
+            signpost = response.currentSignpost
+            if "sampling" in signpost:
+                current_step = signpost.sampling.step
+            elif "secondPassSampling" in signpost:
+                current_step = signpost.secondPassSampling.step + config.steps
+
             preview_image = response.previewImage
             generated_images = response.generatedImages
 
@@ -205,7 +216,9 @@ async def dt_sampler(inputs: dict):
                     if preview_image and version and settings.show_preview:
                         decoded_preview = decode_preview(preview_image, version)
                         preview = ("PNG", decoded_preview, MAX_PREVIEW_RESOLUTION)
-                    progress.update_absolute(current_step, total=config.steps, preview=preview)
+                    progress.update_absolute(
+                        current_step, total=estimated_steps, preview=preview
+                    )
                 except Exception as e:
                     print("DrawThings-gRPC had an error decoding the preview image:", e)
 

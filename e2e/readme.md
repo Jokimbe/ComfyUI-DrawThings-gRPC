@@ -31,3 +31,23 @@ New tests for 1.6.0:
             - Correct widgets are shown depending on cnet model
     - Image Hints node
         - doesn't need ui tests, gen tests cover
+
+
+Tests for 1.7.0
+- I'm not sure I will have tests for response compression because it requires changing DT settings and I don't have that set up yet
+- hi-res hint images
+- pose images (put those together duh)
+x Not connect error appears when running workflow without connecting to grpc server
+x No model widget shows [object Object] when loading a workflow
+x No model widget shows [object Object] when loading a workflow with disconnected server
+x Correct model version widgets are shown when loading a workflow with disconnected server
+    - create a new workflow with sampler node
+    - pick flux, assert widgets
+    - toggle tls, refresh
+    - assert model shows "not connected" but flux widgets are still listed
+    - and might as well hit tls again and assert the model updtes to flux
+x new version announcement only appears once
+    - not sure I have a set up for clearing user data yet, but if I do
+    - clear user data
+    - load, assert message, clear message, refresh, assert no message
+x qwen model version widgets

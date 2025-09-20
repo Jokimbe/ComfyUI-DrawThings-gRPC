@@ -50,7 +50,6 @@ async function getUserData() {
     }
 
     const data = {
-        lastUsedVersion: null,
         announced: []
     }
     await app.api.storeUserData(dataPath, data)
@@ -73,17 +72,17 @@ const announcements = [
             `moodboard images should work as expected.`].join(' ')
     },
     {
-        version: "1.6.4",
-        title: "DrawThings-gRPC 1.6.4",
+        version: "1.7.0",
+        title: "DrawThings-gRPC 1.7.0",
         detail: [
-            `- Response compression is now supported! It's no longer necessary to disable this option in Draw Things or the gRPC CLI.`,
-            `- Added hi res fix support for hint images`,
-            `- Add support for pose hint images`,
-            `- Fix: Model widgets should no longer show[object Object] when loading a workflow while disconnected`,
-            `- Fix: The Draw Things Sampler Node now shows the correct error when running a workflow while not connected.`,
-            `- Fix: Hint images are provided in both sizes when HiResFix is enabled`,
-            `- Fix: When loading a workflow while disconnected, the widgets for the last selected model version will be shown.`,
-            `- Fix: Update notes messages should only appear once`,
+            `• Response compression is now supported! It's no longer necessary to disable this option in Draw Things or the gRPC CLI.`,
+            `• Added hi res fix support for hint images`,
+            `• Add support for pose hint images`,
+            `• Fix: Model widgets should no longer show[object Object] when loading a workflow while disconnected`,
+            `• Fix: The Draw Things Sampler Node now shows the correct error when running a workflow while not connected.`,
+            `• Fix: Hint images are provided in both sizes when HiResFix is enabled`,
+            `• Fix: When loading a workflow while disconnected, the widgets for the last selected model version will be shown.`,
+            `• Fix: Update notes messages should only appear once`,
         ].join('\n')
     }
 ]
