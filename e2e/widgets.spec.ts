@@ -210,6 +210,7 @@ test("qwen settings widgets", async ({ page, comfy }) => {
 test("svd options", async ({ page, comfy }) => {});
 
 test("wan options", async ({ page, comfy }) => {
+    comfy.addUrlQuery("dtgrpctesthack", "true");
     await comfy.openWorkflow(join(workflowFolder, "node.json"));
 
     const node = await getNodeRef(page, "DrawThingsSampler");
@@ -239,7 +240,7 @@ test("wan options", async ({ page, comfy }) => {
     ).toMatchObject([false, false, false]);
 
     // select wan model
-    await node.selectWidgetOption("model", /Wan 2.1/);
+    await node.selectWidgetOption("model", /Wan/);
 
     // assert widgets appear
     expect(
