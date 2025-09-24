@@ -225,6 +225,9 @@ async def dt_sampler(inputs: dict):
             if generated_images:
                 response_images.extend(generated_images)
 
+        if len(response_images) == 0:
+            raise Exception("The Draw Things gRPC server returned no images")
+
         images = []
         for img_data in response_images:
             result = convert_response_image(img_data)
@@ -233,12 +236,13 @@ async def dt_sampler(inputs: dict):
                 width = result["width"]
                 height = result["height"]
                 channels = result["channels"]
-                mode = "RGB"
-                if channels >= 4:
-                    mode = "RGBA"
+                mode = "RGBA" if channels == 4 else "RGB"
                 img = Image.frombytes(mode, (width, height), data)
                 image_np = np.array(img)
                 tensor_image = torch.from_numpy(image_np.astype(np.float32) / 255.0)
                 images.append(tensor_image)
+
+        if len(images) == 0:
+            raise Exception("There was an error converting the response image")
 
         return (torch.stack(images),)
