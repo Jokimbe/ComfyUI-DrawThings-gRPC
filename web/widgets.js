@@ -32,6 +32,7 @@ const advancedWidgets = [
     "guiding_frame_noise",
     "start_frame_guidance",
     "causal_inference",
+    "causal_inference_pad",
     // zero neg
     // sep clip
     "clip_skip",
