@@ -12,3 +12,10 @@ class CancelRequest:
 class Settings:
     def __init__(self):
         self.show_preview = True
+
+
+def try_parse_int(value, default=0):
+    try:
+        return int(value)
+    except ValueError:
+        return default

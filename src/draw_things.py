@@ -5,6 +5,8 @@ import grpc
 import grpc.aio
 import torch
 import flatbuffers
+
+from .util import try_parse_int
 from .. import cancel_request, settings
 from .config import build_config
 import numpy as np
@@ -15,7 +17,7 @@ from .generated import imageService_pb2, imageService_pb2_grpc
 import comfy.utils
 from comfy.cli_args import args
 
-MAX_PREVIEW_RESOLUTION = args.preview_size
+MAX_PREVIEW_RESOLUTION = try_parse_int(args.preview_size) or 512
 
 from .image_handlers import (
     convert_image_for_request,
@@ -215,7 +217,8 @@ async def dt_sampler(inputs: dict):
                     preview = None
                     if preview_image and version and settings.show_preview:
                         decoded_preview = decode_preview(preview_image, version)
-                        preview = ("PNG", decoded_preview, MAX_PREVIEW_RESOLUTION)
+                        if decoded_preview is not None:
+                            preview = ("PNG", decoded_preview, MAX_PREVIEW_RESOLUTION)
                     progress.update_absolute(
                         current_step, total=estimated_steps, preview=preview
                     )
