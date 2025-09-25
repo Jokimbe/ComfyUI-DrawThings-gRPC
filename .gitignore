@@ -117,3 +117,4 @@ notes.md
 /playwright/.cache/
 .env
 /comfyui-dt-grpc-test-data-*/
+fpzip_test.py

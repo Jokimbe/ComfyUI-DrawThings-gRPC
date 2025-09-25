@@ -5,6 +5,8 @@ import grpc
 import grpc.aio
 import torch
 import flatbuffers
+
+from .util import try_parse_int
 from .. import cancel_request, settings
 from .config import build_config
 import numpy as np
@@ -15,7 +17,7 @@ from .generated import imageService_pb2, imageService_pb2_grpc
 import comfy.utils
 from comfy.cli_args import args
 
-MAX_PREVIEW_RESOLUTION = args.preview_size
+MAX_PREVIEW_RESOLUTION = try_parse_int(args.preview_size) or 512
 
 from .image_handlers import (
     convert_image_for_request,
@@ -215,7 +217,8 @@ async def dt_sampler(inputs: dict):
                     preview = None
                     if preview_image and version and settings.show_preview:
                         decoded_preview = decode_preview(preview_image, version)
-                        preview = ("PNG", decoded_preview, MAX_PREVIEW_RESOLUTION)
+                        if decoded_preview is not None:
+                            preview = ("PNG", decoded_preview, MAX_PREVIEW_RESOLUTION)
                     progress.update_absolute(
                         current_step, total=estimated_steps, preview=preview
                     )
@@ -225,6 +228,9 @@ async def dt_sampler(inputs: dict):
             if generated_images:
                 response_images.extend(generated_images)
 
+        if len(response_images) == 0:
+            raise Exception("The Draw Things gRPC server returned no images")
+
         images = []
         for img_data in response_images:
             result = convert_response_image(img_data)
@@ -233,12 +239,13 @@ async def dt_sampler(inputs: dict):
                 width = result["width"]
                 height = result["height"]
                 channels = result["channels"]
-                mode = "RGB"
-                if channels >= 4:
-                    mode = "RGBA"
+                mode = "RGBA" if channels == 4 else "RGB"
                 img = Image.frombytes(mode, (width, height), data)
                 image_np = np.array(img)
                 tensor_image = torch.from_numpy(image_np.astype(np.float32) / 255.0)
                 images.append(tensor_image)
+
+        if len(images) == 0:
+            raise Exception("There was an error converting the response image")
 
         return (torch.stack(images),)
