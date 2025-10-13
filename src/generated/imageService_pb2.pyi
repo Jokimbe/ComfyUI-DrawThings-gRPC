@@ -41,18 +41,20 @@ class ComputeUnitThreshold(_message.Message):
     def __init__(self, community: _Optional[float] = ..., plus: _Optional[float] = ..., expireAt: _Optional[int] = ...) -> None: ...
 
 class EchoReply(_message.Message):
-    __slots__ = ("message", "files", "override", "sharedSecretMissing", "thresholds")
+    __slots__ = ("message", "files", "override", "sharedSecretMissing", "thresholds", "serverIdentifier")
     MESSAGE_FIELD_NUMBER: _ClassVar[int]
     FILES_FIELD_NUMBER: _ClassVar[int]
     OVERRIDE_FIELD_NUMBER: _ClassVar[int]
     SHAREDSECRETMISSING_FIELD_NUMBER: _ClassVar[int]
     THRESHOLDS_FIELD_NUMBER: _ClassVar[int]
+    SERVERIDENTIFIER_FIELD_NUMBER: _ClassVar[int]
     message: str
     files: _containers.RepeatedScalarFieldContainer[str]
     override: MetadataOverride
     sharedSecretMissing: bool
     thresholds: ComputeUnitThreshold
-    def __init__(self, message: _Optional[str] = ..., files: _Optional[_Iterable[str]] = ..., override: _Optional[_Union[MetadataOverride, _Mapping]] = ..., sharedSecretMissing: bool = ..., thresholds: _Optional[_Union[ComputeUnitThreshold, _Mapping]] = ...) -> None: ...
+    serverIdentifier: int
+    def __init__(self, message: _Optional[str] = ..., files: _Optional[_Iterable[str]] = ..., override: _Optional[_Union[MetadataOverride, _Mapping]] = ..., sharedSecretMissing: bool = ..., thresholds: _Optional[_Union[ComputeUnitThreshold, _Mapping]] = ..., serverIdentifier: _Optional[int] = ...) -> None: ...
 
 class FileListRequest(_message.Message):
     __slots__ = ("files", "filesWithHash", "sharedSecret")
