@@ -97,7 +97,7 @@ export const propertyData = [
     ['cond_aug', 'guiding_frame_noise', 'DrawThingsSampler', 'guidingFrameNoise', 'float', 0.02, 0, 1, 0.01],
     ['start_frame_cfg', 'start_frame_guidance', 'DrawThingsSampler', 'startFrameGuidance', 'float', 1, 0, 15, 0.1],
 
-    ['num_frames', 'num_frames', 'DrawThingsSampler', 'numFrames', 'int', numFramesDefMap, 1, numFramesDefMap, 1],
+    ['num_frames', 'num_frames', 'DrawThingsSampler', 'numFrames', 'int', 25, 1, numFramesDefMap, 1],
 
     ['mask_blur_outset', 'mask_blur_outset', 'DrawThingsSampler', 'maskBlurOutset', 'float', 0, -100, 100, 0.1],
     ['sharpness', 'sharpness', 'DrawThingsSampler', 'sharpness', 'float', 0, 0, 30, 0.1],
@@ -125,7 +125,7 @@ export const propertyData = [
     ['guidance_embed', 'guidance_embed', 'DrawThingsSampler', 'guidanceEmbed', 'float', 4.5, 0, 50, 0.1, 'ifFalse=speedUpWithGuidanceEmbed'],
     ['resolution_dependent_shift', 'res_dpt_shift', 'DrawThingsSampler', 'resolutionDependentShift', 'bool', true],
     ['tea_cache_start', 'tea_cache_start', 'DrawThingsSampler', 'teaCacheStart', 'int', 5, 0, 'ref=steps', 1, 'ifTrue=teaCache'],
-    ['tea_cache_end', 'tea_cache_end', 'DrawThingsSampler', 'teaCacheEnd', 'int', 'ref=steps', 0, 'ref=steps', 1, 'ifTrue=teaCache'],
+    ['tea_cache_end', 'tea_cache_end', 'DrawThingsSampler', 'teaCacheEnd', 'int', '20', 0, 'ref=steps', 1, 'ifTrue=teaCache'],
     ['tea_cache_threshold', 'tea_cache_threshold', 'DrawThingsSampler', 'teaCacheThreshold', 'float', 0.3, 0, 1, 0.01, 'ifTrue=teaCache'],
     ['tea_cache', 'tea_cache', 'DrawThingsSampler', 'teaCache', 'bool', false],
     ['separate_t5', null, null, 'separateT5'],
@@ -315,7 +315,7 @@ class DTProperty {
             if (typeof value !== "number") return this.defaultValue || 0;
             if (Number.isFinite(this.min) && value < this.min) return this.min;
             if (Number.isFinite(this.max) && value > this.max) return this.max;
-            return value;
+            return this.type === "int" ? Math.round(value) : value;;
         }
 
         if (this.type === "bool") {
@@ -363,5 +363,6 @@ export function findPropertyJson(name) {
 }
 
 export function findPropertyPython(name) {
+    console.debug('looking for ', name)
     return properties.find((p) => p.python === name);
 }

@@ -1,11 +1,11 @@
-import { findPropertyPython } from "./configProperties.js"
+import { findPropertyJson, findPropertyPython } from "./configProperties.js"
 import { DtButtonsTypeHandler } from './lora.js'
 import { DtModelTypeHandler } from "./models.js"
 import { checkVersion } from './upgrade.js'
 import { setCallback, updateProto } from "./util.js"
 
 
-export const nodePackVersion = "1.7.1"
+export const nodePackVersion = "1.7.2"
 let previewMethod = undefined
 
 // this holds the node definition from python
@@ -108,6 +108,14 @@ const samplerProto = {
             }
         }
 
+        this.coerceWidgetValues()
+
+        delete this.widget_values_keyed
+
+        this.updateDynamicWidgets?.()
+    },
+
+    coerceWidgetValues() {
         // check each widget value
         const corrections = []
         for (const w of this.widgets) {
@@ -134,10 +142,6 @@ const samplerProto = {
                 life: 8000
             })
         }
-
-        delete this.widget_values_keyed
-
-        this.updateDynamicWidgets?.()
     },
 
     getExtraMenuOptions(canvas, options) {
@@ -151,13 +155,25 @@ const samplerProto = {
                         try {
                             const config = JSON.parse(text)
 
-                            for (const w of this.widgets) {
-                                const prop = findPropertyPython(w.name)
-                                if (!prop)
+                            for (const [k, v] of Object.entries(config)) {
+                                const prop = findPropertyJson(k)
+                                if (!prop) {
+                                    console.debug('unknown property in dt config', k, v)
                                     continue
-                                await prop.import(w.name, config[prop.json], w, this, config)
+                                }
+                                if (prop.node !== this.type) {
+                                    console.debug('prop found for support node', k, v)
+                                    continue
+                                }
+                                const widget = this.widgets.find(w => w.name === prop.python)
+                                if (!widget) {
+                                    console.debug('widget not found for property', k, v)
+                                    continue
+                                }
+                                await prop.import(k, v, widget, this, config)
+                                console.debug('imported', prop.json, 'to', widget.name, config[prop.json], '->', widget.value)
                             }
-
+                            this.coerceWidgetValues();
                             this.updateDynamicWidgets?.()
                         } catch (e) {
                             alert("Failed to parse Draw Things config from clipboard\n\n" + e)
