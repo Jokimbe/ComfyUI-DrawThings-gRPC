@@ -1,4 +1,4 @@
-import { findPropertyJson, findPropertyPython } from "./configProperties.js"
+import { findPropertyJson, findPropertyPython, findPropertiesByNode } from "./configProperties.js"
 import { DtButtonsTypeHandler } from './lora.js'
 import { DtModelTypeHandler } from "./models.js"
 import { checkVersion } from './upgrade.js'
@@ -144,6 +144,35 @@ const samplerProto = {
         }
     },
 
+    getConfigInputNodes() {
+        const inputs = {
+            DrawThingsLoRA: [],
+            DrawThingsControlNet: [],
+            DrawThingsUpscaler: [],
+            DrawThingsRefiner: []
+        }
+
+        const upscaler = this.getInputNode(this.findInputSlot("upscaler"))
+        if (upscaler) inputs.DrawThingsUpscaler.push(upscaler)
+
+        const refiner = this.getInputNode(this.findInputSlot("refiner"))
+        if (refiner) inputs.DrawThingsRefiner.push(refiner)
+
+        let cnet = this.getInputNode(this.findInputSlot("control_net"))
+        while (cnet) {
+            inputs.DrawThingsControlNet.push(cnet)
+            cnet = cnet.getInputNode(cnet.findInputSlot("control_net"))
+        }
+
+        let lora = this.getInputNode(this.findInputSlot("lora"))
+        while (lora) {
+            inputs.DrawThingsLoRA.push(lora)
+            lora = lora.getInputNode(lora.findInputSlot("lora_stack"))
+        }
+
+        return inputs
+    },
+
     getExtraMenuOptions(canvas, options) {
         const keepNodeShrunk = app.extensionManager.setting.get("drawthings.node.keep_shrunk")
         options.push(
@@ -155,6 +184,8 @@ const samplerProto = {
                         try {
                             const config = JSON.parse(text)
 
+                            const requiredNodes = []
+
                             for (const [k, v] of Object.entries(config)) {
                                 const prop = findPropertyJson(k)
                                 if (!prop) {
@@ -162,7 +193,8 @@ const samplerProto = {
                                     continue
                                 }
                                 if (prop.node !== this.type) {
-                                    console.debug('prop found for support node', k, v)
+                                    console.log(prop.node, k, v)
+                                    requiredNodes.push(...prop.getRequiredNodes(v, config))
                                     continue
                                 }
                                 const widget = this.widgets.find(w => w.name === prop.python)
@@ -173,8 +205,57 @@ const samplerProto = {
                                 await prop.import(k, v, widget, this, config)
                                 console.debug('imported', prop.json, 'to', widget.name, config[prop.json], '->', widget.value)
                             }
-                            this.coerceWidgetValues();
+                            this.coerceWidgetValues()
                             this.updateDynamicWidgets?.()
+
+                            console.log(requiredNodes)
+                            const availableNodes = this.getConfigInputNodes()
+                            const missingNodes = []
+
+                            if (requiredNodes.includes("DrawThingsUpscaler")) {
+                                if (!availableNodes.DrawThingsUpscaler.length)
+                                    missingNodes.push("DrawThingsUpscaler")
+                                else
+                                    applyConfig(availableNodes.DrawThingsUpscaler[0], config)
+                            }
+
+                            if (requiredNodes.includes("DrawThingsRefiner")) {
+                                if (!availableNodes.DrawThingsRefiner.length)
+                                    missingNodes.push("DrawThingsRefiner")
+                                else
+                                    applyConfig(availableNodes.DrawThingsRefiner[0], config)
+                            }
+
+                            if (requiredNodes.includes("DrawThingsControlNet")) {
+                                const cnetNeeded = requiredNodes.filter(n => n === "DrawThingsControlNet").length
+                                if (cnetNeeded > availableNodes.DrawThingsControlNet.length)
+                                    missingNodes.push(`${cnetNeeded - availableNodes.DrawThingsControlNet.length} x DrawThingsControlNet`)
+                                let controlIndex = 0
+                                for (const cnetNode of availableNodes.DrawThingsControlNet) {
+                                    applyCnetConfig(cnetNode, config.controls[controlIndex++])
+                                }
+                            }
+
+                            if (requiredNodes.includes("DrawThingsLoRA")) {
+                                const loraNeeded = requiredNodes.filter(n => n === "DrawThingsLoRA").length
+                                if (loraNeeded > availableNodes.DrawThingsLoRA.length)
+                                    missingNodes.push(`${loraNeeded - availableNodes.DrawThingsLoRA.length} x DrawThingsLoRA`)
+
+                                applyLoraConfig(availableNodes.DrawThingsLoRA, config.loras)
+                            }
+
+                            if (missingNodes.length) {
+                                app.extensionManager.toast.add({
+                                    severity: "warn",
+                                    summary: "Draw Things gRPC",
+                                    detail: [
+                                        'The Draw Things config has been partially loaded. To load the full config, add the following nodes:\n',
+                                        ...missingNodes.map(n => `• ${n}`)
+                                    ].join('\n'),
+                                    life: 8000
+                                })
+                            }
+
                         } catch (e) {
                             alert("Failed to parse Draw Things config from clipboard\n\n" + e)
                             console.warn(e)
@@ -210,6 +291,137 @@ const samplerProto = {
             null
         )
     },
+}
+
+
+function applyConfig(node, config) {
+    const nodeProps = findPropertiesByNode(node.type)
+    for (const nodeProp of nodeProps) {
+        const widget = node.widgets.find(w => w.name === nodeProp.python)
+        if (!widget) continue
+        nodeProp.import(nodeProp.json, config[nodeProp.json], widget, node, config)
+    }
+}
+
+function applyCnetConfig(node, controlConfig) {
+    const widgets = node.widgets.reduce((acc, w) => {
+        acc[w.name] = w
+        return acc
+    }, {})
+
+    if ("file" in controlConfig) {
+        const matchingOption = widgets.control_name?.options?.values?.find(wv => wv.value?.file === controlConfig.file)
+        if (matchingOption) widgets.control_name.value = matchingOption
+    }
+
+    if ("globalAveragePooling" in controlConfig)
+        widgets.global_average_pooling.value = !!controlConfig.globalAveragePooling
+
+    if ("weight" in controlConfig && typeof controlConfig.weight === "number")
+        widgets.control_weight.value = Math.min(Math.max(controlConfig.weight, 0), 1.5)
+    else
+        widgets.control_weight.value = 1.0
+
+    if ("guidanceStart" in controlConfig && typeof controlConfig.guidanceStart === "number")
+        widgets.control_start.value = Math.min(Math.max(controlConfig.guidanceStart, 0), 1)
+    else
+        widgets.control_start.value = 0
+
+    if ("guidanceEnd" in controlConfig && typeof controlConfig.guidanceEnd === "number")
+        widgets.control_end.value = Math.min(Math.max(controlConfig.guidanceEnd, 0), 1)
+    else
+        widgets.control_end.value = 1
+
+    if ("downSamplingRate" in controlConfig && typeof controlConfig.downSamplingRate === "number")
+        widgets.down_sampling_rate.value = controlConfig.downSamplingRate
+    else
+        widgets.down_sampling_rate.value = 1
+
+    if ("inputOverride" in controlConfig && typeof controlConfig.inputOverride === "string") {
+        const capitalized = controlConfig.inputOverride.charAt(0).toUpperCase() + controlConfig.inputOverride.slice(1)
+        if (widgets.control_input_type?.options?.values?.includes(capitalized))
+            widgets.control_input_type.value = capitalized
+        else
+            widgets.control_input_type.value = "Unspecified"
+    }
+    else
+        widgets.control_input_type.value = "Unspecified"
+
+    if ("controlImportance" in controlConfig && typeof controlConfig.controlImportance === "string") {
+        const capitalized = controlConfig.controlImportance.charAt(0).toUpperCase() + controlConfig.controlImportance.slice(1)
+        if (widgets.control_mode?.options?.values?.includes(capitalized))
+            widgets.control_mode.value = capitalized
+        else
+            widgets.control_mode.value = "Balanced"
+    }
+    else
+        widgets.control_mode.value = "Balanced"
+
+    if ("targetBlocks" in controlConfig && Array.isArray(controlConfig.targetBlocks)) {
+        if (controlConfig.targetBlocks.length === 0)
+            widgets.target_blocks.value = "All"
+        if (controlConfig.targetBlocks.length === 1)
+            widgets.target_blocks.value = "Style"
+        if (controlConfig.targetBlocks.length > 1)
+            widgets.target_blocks.value = "Style and Layout"
+    }
+    else
+        widgets.target_blocks.value = "All"
+}
+
+async function applyLoraConfig(nodes, loraConfig) {
+    // any exissting loras will be cleared when loading a config
+    // lora count will be set to the number of loras in config, unless the current count is higher
+    // (to preserve layouts)
+    for (let iNode = 0; iNode < nodes.length; iNode++) {
+        const node = nodes[iNode]
+
+        const lastIndex = iNode * 8 + 8
+        if (loraConfig.length > lastIndex)
+            node.loraCount = 8
+        else
+            // 13 loras
+            // 8 - (16 - 13) = 5
+            node.loraCount = 8 - (lastIndex - loraConfig.length)
+
+        for (let iSlot = 0; iSlot < 8; iSlot++) {
+            const lc = loraConfig[iSlot + iNode * 8]
+            const { file, weight, mode } = getLoraSlotWidgets(node, iSlot)
+
+            if (!lc || !lc.file) {
+                file.value = "(None selected)"
+                weight.value = 1.0
+                mode.value = "All"
+                continue
+            }
+
+            const matchingOption = file?.options?.values?.find(wv => wv.value?.file === lc.file)
+            if (matchingOption) file.value = matchingOption
+
+
+            if ("weight" in lc && typeof lc.weight === "number")
+                weight.value = Math.min(Math.max(lc.weight, -5.0), 5.0)
+            else weight.value = 1.0
+
+            if ("mode" in lc && typeof lc.mode === "string") {
+                const capitalized = lc.mode.charAt(0).toUpperCase() + lc.mode.slice(1)
+                if (mode?.options?.values?.includes(capitalized))
+                    mode.value = capitalized
+                else
+                    mode.value = "All"
+            }
+            else mode.value = "All"
+        }
+    }
+}
+
+function getLoraSlotWidgets(node, loraIndex) {
+    const widgets = node.widgets.slice(loraIndex * 3 + 1, loraIndex * 3 + 4)
+    return {
+        file: widgets[0],
+        weight: widgets[1],
+        mode: widgets[2],
+    }
 }
 
 

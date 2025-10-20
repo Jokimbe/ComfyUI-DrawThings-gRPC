@@ -163,7 +163,7 @@ const dtModelStandardNodeProto = {
 
             const type = widget?.options?.modelType
 
-            if (!models[type]) {
+            if (!models?.[type]) {
                 widget.options.values = ["Not connected", "Click to retry"]
                 widget.value = "Not connected"
                 continue
