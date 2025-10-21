@@ -438,7 +438,7 @@ test.describe("Lora", () => {
 
         // load config, confirm message says 2 more are needed
         await sampler?.selectContextMenuOption("Paste Draw Things config");
-        await expect(toast).toContainText("2 x DrawThingsLoRA");
+        await expect(toast.last()).toContainText("2 x DrawThingsLoRA");
     });
 
     test("if the config has >8 loras and enough nodes are connected, both nodes have config applied", async ({

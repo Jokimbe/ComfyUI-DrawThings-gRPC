@@ -431,7 +431,6 @@ function patchProp(jsonName, funcName, func) {
     const prop = findPropertyJson(jsonName)
     if (prop)
         prop[funcName] = func
-    console.debug("patched prop on ", jsonName, funcName, func)
 }
 
 

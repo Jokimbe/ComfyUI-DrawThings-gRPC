@@ -67,10 +67,12 @@ export class NodeRef {
 
     async clickWidget(name: string) {
         const { view, pos, widgetPos, size } = await this.page.evaluate(
-            ([nodeId, name]) => {
+            async ([nodeId, name]) => {
                 const view: [number, number, number, number] =
                     window.app.canvas.visible_area;
                 const node = app.graph.getNodeById(nodeId);
+                await window.graph.primaryCanvas.centerOnNode(node);
+                await new Promise((resolve) => setTimeout(resolve, 200));
                 const pos: [number, number, number, number] = node._posSize;
                 const widget = node.widgets.find((w) => w.name === name);
                 if (!widget) {
@@ -371,7 +373,7 @@ export class NodeRef {
             .locator("#graph-canvas")
             .hover({ position: { x: clickX + 50, y: clickY } });
         await this.page.mouse.up();
-
+        await this.page.getByRole("menuitem", { name: "Search" }).click();
         await this.page.keyboard.type(nodeName);
 
         await this.page.getByLabel("Option List").getByText(nodeName).click();

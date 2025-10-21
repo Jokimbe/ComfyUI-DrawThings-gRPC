@@ -189,26 +189,21 @@ const samplerProto = {
                             for (const [k, v] of Object.entries(config)) {
                                 const prop = findPropertyJson(k)
                                 if (!prop) {
-                                    console.debug('unknown property in dt config', k, v)
                                     continue
                                 }
                                 if (prop.node !== this.type) {
-                                    console.log(prop.node, k, v)
                                     requiredNodes.push(...prop.getRequiredNodes(v, config))
                                     continue
                                 }
                                 const widget = this.widgets.find(w => w.name === prop.python)
                                 if (!widget) {
-                                    console.debug('widget not found for property', k, v)
                                     continue
                                 }
                                 await prop.import(k, v, widget, this, config)
-                                console.debug('imported', prop.json, 'to', widget.name, config[prop.json], '->', widget.value)
                             }
                             this.coerceWidgetValues()
                             this.updateDynamicWidgets?.()
 
-                            console.log(requiredNodes)
                             const availableNodes = this.getConfigInputNodes()
                             const missingNodes = []
 
