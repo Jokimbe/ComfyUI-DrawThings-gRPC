@@ -105,6 +105,7 @@ cookiecutter-pypackage-env/
 # tests/
 
 node_modules/
+/web/**/*.js.map
 package.json
 package-lock.json
 
