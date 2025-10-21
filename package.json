@@ -1,0 +1,29 @@
+{
+    "name": "comfyui-drawthings-grpc",
+    "version": "1.7.0",
+    "description": "Connect to any Draw Things [gRPCServerCLI](https://github.com/drawthingsai/draw-things-community/tree/main?tab=readme-ov-file#self-host-grpcservercli-from-packaged-binaries) and let ComfyUI generate and provide DT with images for ControlNet without needing to set them in DT itself.",
+    "main": "index.js",
+    "directories": {
+        "test": "tests"
+    },
+    "type": "module",
+    "dependencies": {},
+    "devDependencies": {
+        "@comfyorg/comfyui-frontend-types": "^1.24.1",
+        "@comfyorg/litegraph": "^0.16.9",
+        "@playwright/test": "^1.52.0",
+        "@types/fs-extra": "^11.0.4",
+        "@types/node": "^24.0.4",
+        "dotenv": "^16.5.0",
+        "fs-extra": "^11.3.0",
+        "tsup": "^8.5.0",
+        "tsx": "^4.20.3",
+        "typescript": "^5.8.3"
+    },
+    "scripts": {
+        "build": "tsup"
+    },
+    "keywords": [],
+    "author": "Kelly Jerrell",
+    "license": "ISC"
+}
