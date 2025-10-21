@@ -144,7 +144,7 @@ def apply_extra(config: Config, configT: GenerationConfigurationT):
                 configT.upscaler = upscaler["upscaler_model"]["value"]["file"]
             elif type(upscaler["upscaler_model"]) == str:
                 configT.upscaler = upscaler["upscaler_model"]
-            configT.upscalerScaleFactor = upscaler.get("upscaler_scale_factor") or 2
+            configT.upscalerScaleFactor = upscaler.get("upscaler_scale_factor") or 0
 
     if "refiner" in config and config["refiner"] is not None:
         refiner = config["refiner"]

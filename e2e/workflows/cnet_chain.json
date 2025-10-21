@@ -1,22 +1,22 @@
 {
   "id": "101ed669-2d4a-4c85-9e62-16aa1f6bc99e",
   "revision": 0,
-  "last_node_id": 16,
-  "last_link_id": 28,
+  "last_node_id": 29,
+  "last_link_id": 49,
   "nodes": [
     {
-      "id": 16,
+      "id": 27,
       "type": "DrawThingsSampler",
       "pos": [
-        1750,
-        540
+        1770,
+        490
       ],
       "size": [
         318.740234375,
-        790
+        574
       ],
       "flags": {},
-      "order": 0,
+      "order": 2,
       "mode": 0,
       "inputs": [
         {
@@ -57,7 +57,7 @@
           "name": "control_net",
           "shape": 7,
           "type": "DT_CNET",
-          "link": null
+          "link": 47
         },
         {
           "name": "upscaler",
@@ -97,11 +97,11 @@
         "Node name for S&R": "DrawThingsSampler"
       },
       "widgets_values": [
-        "All",
+        "Basic",
         "localhost",
         "7859",
         true,
-        "Not connected",
+        "(None selected)",
         1,
         0,
         "randomize",
@@ -155,11 +155,11 @@
       ],
       "nodePackVersion": "1.7.2",
       "widget_values_keyed": {
-        "settings": "All",
+        "settings": "Basic",
         "server": "localhost",
         "port": "7859",
         "use_tls": true,
-        "model": "Not connected",
+        "model": "(None selected)",
         "strength": 1,
         "seed": 0,
         "control_after_generate": "randomize",
@@ -212,17 +212,172 @@
         "open_clip_g_text": ""
       },
       "_lastSelectedModel": {}
+    },
+    {
+      "id": 28,
+      "type": "DrawThingsControlNet",
+      "pos": [
+        1440,
+        590
+      ],
+      "size": [
+        291.44140625,
+        198
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "control_net",
+          "shape": 7,
+          "type": "DT_CNET",
+          "link": 49
+        },
+        {
+          "name": "image",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONTROL_NET",
+          "type": "DT_CNET",
+          "links": [
+            47
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "drawthings-grpc",
+        "ver": "3520c9eb3f93e6708e810e511e50c0432e3d1f96",
+        "Node name for S&R": "DrawThingsControlNet"
+      },
+      "widgets_values": [
+        "(None selected)",
+        "Custom",
+        "Balanced",
+        1,
+        0,
+        1,
+        false,
+        1,
+        "All",
+        false
+      ],
+      "_lastSelectedModel": {},
+      "nodePackVersion": "1.7.2",
+      "widget_values_keyed": {
+        "control_name": "(None selected)",
+        "control_input_type": "Custom",
+        "control_mode": "Balanced",
+        "control_weight": 1,
+        "control_start": 0,
+        "control_end": 1,
+        "global_average_pooling": false,
+        "down_sampling_rate": 1,
+        "target_blocks": "All",
+        "invert_image": false
+      }
+    },
+    {
+      "id": 29,
+      "type": "DrawThingsControlNet",
+      "pos": [
+        1120,
+        590
+      ],
+      "size": [
+        291.44140625,
+        198
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "control_net",
+          "shape": 7,
+          "type": "DT_CNET",
+          "link": null
+        },
+        {
+          "name": "image",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONTROL_NET",
+          "type": "DT_CNET",
+          "links": [
+            49
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "drawthings-grpc",
+        "ver": "3520c9eb3f93e6708e810e511e50c0432e3d1f96",
+        "Node name for S&R": "DrawThingsControlNet"
+      },
+      "widgets_values": [
+        "(None selected)",
+        "Custom",
+        "Balanced",
+        1,
+        0,
+        1,
+        false,
+        1,
+        "All",
+        false
+      ],
+      "_lastSelectedModel": {},
+      "nodePackVersion": "1.7.2",
+      "widget_values_keyed": {
+        "control_name": "(None selected)",
+        "control_input_type": "Custom",
+        "control_mode": "Balanced",
+        "control_weight": 1,
+        "control_start": 0,
+        "control_end": 1,
+        "global_average_pooling": false,
+        "down_sampling_rate": 1,
+        "target_blocks": "All",
+        "invert_image": false
+      }
     }
   ],
-  "links": [],
+  "links": [
+    [
+      47,
+      28,
+      0,
+      27,
+      5,
+      "DT_CNET"
+    ],
+    [
+      49,
+      29,
+      0,
+      28,
+      0,
+      "DT_CNET"
+    ]
+  ],
   "groups": [],
   "config": {},
   "extra": {
     "ds": {
-      "scale": 0.8140274938684031,
+      "scale": 1.1918176537727256,
       "offset": [
-        -1159.7297416275508,
-        -431.69084387007325
+        -1100.4918696186337,
+        -434.75496725566944
       ]
     },
     "frontendVersion": "1.27.10",
