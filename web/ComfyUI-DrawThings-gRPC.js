@@ -5,7 +5,7 @@ import { checkVersion } from './upgrade.js'
 import { setCallback, updateProto } from "./util.js"
 
 
-export const nodePackVersion = "1.7.2"
+export const nodePackVersion = "1.7.3"
 let previewMethod = undefined
 
 // this holds the node definition from python
