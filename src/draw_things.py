@@ -79,6 +79,8 @@ async def dt_sampler(inputs: dict):
     version = inputs.get("version")
 
     config = build_config(inputs)
+    override = build_override(inputs)
+
     width = config.startWidth * 64
     height = config.startHeight * 64
 
@@ -178,7 +180,7 @@ async def dt_sampler(inputs: dict):
                 prompt=str(positive),
                 negativePrompt=str(negative),
                 configuration=config_fbs,
-                # override = override,
+                override=override,
                 user="ComfyUI",
                 device="LAPTOP",
                 contents=contents,
@@ -249,3 +251,33 @@ async def dt_sampler(inputs: dict):
             raise Exception("There was an error converting the response image")
 
         return (torch.stack(images),)
+
+
+def build_override(inputs):
+    models = [inputs["model_info"]]
+    if "refiner" in inputs and "refiner_model" in inputs["refiner"]:
+        models.append(inputs["refiner"]["refiner_model"])
+    models_json = json.dumps(models)
+    models_buf = models_json.encode("utf-8")
+
+    controls = None
+    if "control_net" in inputs and len(inputs["control_net"]) > 0:
+        controls = []
+        for cnet in inputs["control_net"]:
+            if "model" in cnet:
+                controls.append(cnet["model"])
+    control_json = json.dumps(controls) if controls is not None else None
+    control_buf = control_json.encode("utf-8") if control_json is not None else None
+
+    loras = None
+    if "lora" in inputs and len(inputs["lora"]) > 0:
+        loras = []
+        for lora in inputs["lora"]:
+            if "model" in lora:
+                loras.append(lora["model"])
+    loras_json = json.dumps(loras) if loras is not None else None
+    loras_buf = loras_json.encode("utf-8") if loras_json is not None else None
+
+    override = imageService_pb2.MetadataOverride(models=models_buf, controlNets=control_buf, loras=loras_buf)
+
+    return override

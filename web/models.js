@@ -22,7 +22,8 @@ class ModelService {
     }
 
     async #updateNodes() {
-        const dtModelNodes = app.graph.nodes.filter(n => n.isDtServerNode !== undefined)
+        const useBridgeMode = app.extensionManager.setting.get("drawthings.node.bridge_mode")
+        const dtModelNodes = app.rootGraph.nodes.filter(n => n.isDtServerNode !== undefined)
         const graphServerNodes = dtModelNodes.filter(n => n.isDtServerNode)
 
         if (!graphServerNodes.length) return
@@ -31,24 +32,13 @@ class ModelService {
         /** @type {Map<string, ModelInfo | undefined>} */
         const serverModels = new Map()
 
-        // original version iterated over server nodes, and then recursively traversed its
-        // input nodes and updated any dtModelNodes with matching nodes.
-        // Problem: dtModelNodes can get confused about which version they should filter, if
-        // they their graph touches multiple sampler nodes
-        // So instead of trying to be too smart with this, we'll just...
-        // - iterate over server nodes, and fetch/update their models
-        // - iterate over non-server nodes
-        // - - determine their models list and version by traversing their outputs
-        // - - change version from string to string[]
-        // - - update widgets with the union of their connected samplers
-        // - - - ...maybe the intersection for the models list and union for version
         for (const sn of graphServerNodes) {
             // get fresh models list for the server
             const { server, port, useTls } = sn.getServer()
             if (!server || !port || useTls === undefined) continue
             const key = modelInfoStoreKey(server, port, useTls)
             if (!serverModels.has(key)) {
-                serverModels.set(key, await getModels(server, port, useTls))
+                serverModels.set(key, await getModels(server, port, useTls, useBridgeMode))
             }
 
             // update server node's models
@@ -127,13 +117,39 @@ export async function getFiles(server, port, useTls) {
     body.append("use_tls", useTls)
 
     const api = window.comfyAPI.api.api
-
     const filesInfoResponse = await api.fetchApi(`/dt_grpc/files_info`, {
         method: "POST",
         body,
     })
 
     return filesInfoResponse
+}
+
+let combinedBridgeModels = null
+async function getBridgeModels() {
+    if (combinedBridgeModels) return combinedBridgeModels
+
+    const api = window.comfyAPI.api.api
+    const filesResponse = await api.fetchApi('/dt_grpc/bridge_models')
+    const files = await filesResponse.json()
+
+    const filter = (modelList) => modelList.filter(m => files.includes(m.file))
+
+    const { default: models } = await import("./models/models.json", { with: { type: "json" } })
+    const { default: uncurated } = await import("./models/uncurated_models.json", { with: { type: "json" } })
+    const { default: controlNets } = await import("./models/controlnets.json", { with: { type: "json" } })
+    const { default: loras } = await import("./models/loras.json", { with: { type: "json" } })
+    const { default: textualInversions } = await import("./models/embeddings.json", { with: { type: "json" } })
+
+    combinedBridgeModels = {
+        models: filter([...models, ...uncurated]),
+        controlNets: filter(controlNets),
+        loras: filter(loras),
+        textualInversions: filter(textualInversions),
+        upscalers: []
+    }
+
+    return combinedBridgeModels
 }
 
 /* @typedef {{ models: any[], controlNets: any[], loras: any[], upscalers: any[]}} ModelInfo */
@@ -173,10 +189,11 @@ const notConnectedOptions = ["Not connected to sampler node", "Connect to a samp
     })
 )
 
-async function getModels(server, port, useTls) {
+async function getModels(server, port, useTls, bridgeMode = false) {
     if (!server || !port || useTls === undefined) return
-    const key = modelInfoStoreKey(server, port, useTls)
+    if (bridgeMode) return getBridgeModels()
 
+    const key = modelInfoStoreKey(server, port, useTls)
     if (modelInfoRequests.has(key)) {
         const request = modelInfoRequests.get(key)
         await request

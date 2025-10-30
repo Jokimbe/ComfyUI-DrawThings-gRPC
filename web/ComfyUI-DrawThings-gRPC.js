@@ -146,6 +146,8 @@ const samplerProto = {
 
     getExtraMenuOptions(canvas, options) {
         const keepNodeShrunk = app.extensionManager.setting.get("drawthings.node.keep_shrunk")
+        const bridgeMode = app.extensionManager.setting.get("drawthings.node.bridge_mode")
+
         options.push(
             null,
             {
@@ -173,7 +175,7 @@ const samplerProto = {
                                 await prop.import(k, v, widget, this, config)
                                 console.debug('imported', prop.json, 'to', widget.name, config[prop.json], '->', widget.value)
                             }
-                            this.coerceWidgetValues();
+                            this.coerceWidgetValues()
                             this.updateDynamicWidgets?.()
                         } catch (e) {
                             alert("Failed to parse Draw Things config from clipboard\n\n" + e)
@@ -202,6 +204,16 @@ const samplerProto = {
                 callback: async () => {
                     try {
                         await app.extensionManager.setting.set("drawthings.node.keep_shrunk", !keepNodeShrunk)
+                    } catch (error) {
+                        console.error(`Error changing setting: ${error}`)
+                    }
+                },
+            },
+            {
+                content: (bridgeMode ? "✓ " : "") + "Use bridge mode",
+                callback: async () => {
+                    try {
+                        await app.extensionManager.setting.set("drawthings.node.bridge_mode", !bridgeMode)
                     } catch (error) {
                         console.error(`Error changing setting: ${error}`)
                     }

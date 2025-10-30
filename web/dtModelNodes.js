@@ -25,7 +25,21 @@ export default {
 
     afterConfigureGraph() {
         modelService.updateNodes()
-    }
+    },
+
+    settings: [
+        {
+            id: "drawthings.node.bridge_mode",
+            type: "boolean",
+            name: "Use bridge mode models",
+            default: true,
+            category: ["DrawThings", "Nodes", "Bridge mode"],
+            tooltip: "Display the official models available in bridge mode (DT+)",
+            onChange: (value) => {
+                modelService.updateNodes()
+            },
+        },
+    ]
 }
 
 /** @type {import("@comfyorg/litegraph").LGraphNode} */

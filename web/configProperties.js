@@ -363,6 +363,5 @@ export function findPropertyJson(name) {
 }
 
 export function findPropertyPython(name) {
-    console.debug('looking for ', name)
     return properties.find((p) => p.python === name);
 }

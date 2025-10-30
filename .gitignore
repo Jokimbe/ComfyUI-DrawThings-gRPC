@@ -110,6 +110,8 @@ package-lock.json
 
 notes.md
 
+/models
+
 # Playwright
 /test-results/
 /playwright-report/

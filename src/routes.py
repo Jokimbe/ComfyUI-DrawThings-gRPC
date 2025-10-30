@@ -1,9 +1,16 @@
+import json
+import grpc
 from aiohttp import web
 from aiohttp.web_request import Request
+from google.protobuf.json_format import MessageToJson
+
 from server import PromptServer # type: ignore
 
+from .generated import imageService_pb2
+from .generated import imageService_pb2_grpc
 from .. import cancel_request, settings
 from .draw_things import get_files
+
 
 routes = PromptServer.instance.routes
 
@@ -30,6 +37,28 @@ async def handle_files_info_request(request):
         return web.json_response(
             {
                 "error": "Could not connect to Draw Things gRPC server. Please check the server address and port."
+            },
+            status=500,
+        )
+
+
+@routes.get("/dt_grpc/bridge_models")
+async def handle_bridge_models_request(request):
+    """
+    Returns a list of all files available on the Draw Things+ server.
+    """
+    try:
+        async with grpc.aio.secure_channel('compute.drawthings.ai:443', grpc.ssl_channel_credentials()) as channel:
+            stub = imageService_pb2_grpc.ImageGenerationServiceStub(channel)
+            response = await stub.Echo(imageService_pb2.EchoRequest(name="ComfyUI"))
+            response_json = json.loads(MessageToJson(response))
+            file_list = response_json['files']
+            return web.json_response(file_list)
+    except Exception as e:
+        print(e)
+        return web.json_response(
+            {
+                "error": "Could not connect to Draw Things+ server."
             },
             status=500,
         )

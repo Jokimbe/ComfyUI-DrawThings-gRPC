@@ -144,6 +144,7 @@ class DrawThingsSampler:
 
         kwargs["model"] = model.get("file")
         kwargs["version"] = model.get("version")
+        kwargs["model_info"] = model
 
         try:
             return await dt_sampler(kwargs)

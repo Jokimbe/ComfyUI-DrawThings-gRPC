@@ -20,15 +20,7 @@ async function updateConfig() {
     await fse.ensureDir("resources")
     await fse.writeFile("resources/config.fbs", fbs)
 
-    await useFlatc(async (exec) => {
-        console.log("running flatc")
-        exec([
-            "-I ./resources",
-            "--python --gen-object-api --grpc --python-typing --gen-onefile",
-            "-o ./src/generated",
-            "./resources/config.fbs",
-        ].join(" "))
-    })
+    cp.exec('flatc --python --gen-object-api --gen-onefile --python-typing --grpc -o ./src/generated ./resources/config.fbs', { stdio: "inherit" })
 }
 
 async function updateClient() {
@@ -56,45 +48,25 @@ async function updateClient() {
     )
 }
 
+async function updateModels() {
+    await cloneCommunityModels()
+    await compileModelData()
+}
+
 if (import.meta.filename === process.argv[1]) {
-    updateBoth()
+    updateAll()
         .then(() => process.exit(0))
         .catch(console.error)
 }
 
-async function updateBoth() {
+async function updateAll() {
     console.log("removing old generated files")
     fse.emptyDirSync("src/generated")
+
     await updateConfig()
     await updateClient()
     await fixImports()
-    console.log("done")
-}
-
-/**
- * @param {string} url
- * @param {(exec: (args) => any) => any} callback
- */
-async function useFlatc(callback) {
-    let temp
-    try {
-        temp = fse.mkdtempSync("flatc-")
-        console.log("downloading flatc")
-        cp.execSync(
-            `wget -O ${join(temp, "flatc.zip")} https://github.com/google/flatbuffers/releases/download/v25.2.10/Mac.flatc.binary.zip`,
-            { stdio: "ignore" }
-        )
-        cp.execSync(`unzip -u -d ${temp} ${join(temp, "flatc.zip")}`, { stdio: "ignore" })
-
-        const exec = (args) => {
-            return cp.execSync(`${join(temp, "flatc")} ${args}`)
-        }
-        callback(exec)
-    }
-    finally {
-        if (temp)
-            fse.rmSync(temp, { recursive: true })
-    }
+    await updateModels()
 }
 
 async function fixImports() {
@@ -128,4 +100,140 @@ async function fixImports() {
         )
         fse.writeFileSync(`src/generated/${file}`, fixed)
     }
+}
+
+async function compileOfficialModels(name) {
+    const res = await fetch(
+        `https://api.github.com/repos/drawthingsai/draw-things-community/contents/Libraries/ModelZoo/Sources/${name}Zoo.swift`
+    )
+    const src = Buffer.from((await res.json()).content, "base64").toString(
+        "utf-8"
+    )
+
+    const specs = extractSpecifications(src)
+    const extract = specs.map(s => extractData(s)).filter(s => !!s)
+    return extract
+    // await fse.writeJSON(`./web/models/official.json`, extract, { spaces: 2 })
+}
+
+async function cloneCommunityModels() {
+    console.log("removing old generated files")
+    fse.emptyDirSync("./models")
+    console.log("cloning draw things community models")
+    cp.execSync("git clone https://github.com/drawthingsai/community-models.git", { cwd: "./models", stdio: "inherit" })
+}
+
+async function compileModelData() {
+    console.log("compiling model data")
+
+    fse.ensureDir("./web/models")
+    fse.emptyDirSync("./web/models")
+
+    await compileModelType("models", 'Model')
+    await compileModelType("uncurated_models")
+    await compileModelType("controlnets"), 'ControlNet'
+    await compileModelType("loras", 'LoRA')
+    await compileModelType("embeddings", 'TextualInversion')
+}
+
+async function compileModelType(type, official) {
+    try {
+        cp.execSync(`python utils/${type}_json.py`, { cwd: "./models/community-models", stdio: "inherit" })
+        const models = await fse.readJSON(`./models/community-models/${type}.json`)
+
+        if (official) {
+            const officialModels = await compileOfficialModels(official)
+            models.push(...officialModels)
+        }
+
+        models.sort((a, b) => a.name.localeCompare(b.name))
+
+        await fse.writeJSON(`./web/models/${type}.json`, models, { spaces: 2 })
+        // await fse.copyFile(`./models/community-models/${type}.json`, `./web/models/${type}.json`)
+        // await fse.copyFile(`./models/community-models/${type}_sha256.json`, `./web/models/${type}_sha256.json`)
+    } catch (e) {
+        console.error("couldn't compile", type)
+        console.error(e)
+    }
+}
+
+
+function extractSpecifications(text) {
+    const specs = []
+    let i = 0
+    while (true) {
+        const start = text.indexOf("Specification(", i)
+        if (start === -1) break
+
+        let depth = 0
+        let inQuote = false
+        let escaped = false
+        let j = text.indexOf("(", start)
+        j++ // skip first '('
+
+        const startIdx = j
+        for (; j < text.length; j++) {
+            const ch = text[j]
+
+            if (inQuote) {
+                if (escaped) escaped = false
+                else if (ch === "\\") escaped = true
+                else if (ch === '"') inQuote = false
+            } else {
+                if (ch === '"') inQuote = true
+                else if (ch === "(") depth++
+                else if (ch === ")") {
+                    if (depth === 0) break
+                    depth--
+                }
+            }
+        }
+
+        const block = text.slice(startIdx, j)
+        specs.push(block.trim())
+        i = j + 1
+    }
+    return specs
+}
+
+/**
+ * Specification(
+      name: "Qwen Image 1.0", file: "qwen_image_1.0_q8p.ckpt", prefix: "",
+      version: .qwenImage, defaultScale: 16, textEncoder: "qwen_2.5_vl_7b_q8p.ckpt",
+      autoencoder: "qwen_image_vae_f16.ckpt", objective: .u(conditionScale: 1000),
+      hiresFixScale: 24,
+      note:
+        "[Qwen Image](https://huggingface.co/Qwen/Qwen-Image) is a state-of-the-art open-source image generation model known for its exceptional text layout and prompt adherence across a wide range of styles, including photorealistic, cartoon, and artistic. It is Apache 2.0-licensed and commercially friendly. The model is trained at multiple resolutions using a Flow Matching objective; trailing samplers yield the best results, with 30–50 sampling steps recommended."
+    )
+        also
+        modifier: .qwenimageEditPlus,
+ */
+
+/** @param spec string */
+function extractData(spec) {
+    const data = {
+        name: extractValue(spec, "name"),
+        file: extractValue(spec, "file"),
+        version: extractDotValue(spec, "version"),
+        modifier: extractDotValue(spec, "modifier") ?? undefined
+    }
+    if (data.name && data.file && data.version) return data
+    console.error("couldn't extract data from", spec)
+    return undefined
+}
+
+/** @param spec {string} */
+function extractValue(spec, key) {
+    if (key === "name")
+        return spec.match(/\bname:\s+?"([^"]+)"/)?.[1]
+    if (key === "file")
+        return spec.match(/\bfile:\s+?"([^"]+)"/)?.[1]
+}
+
+/** @param spec {string} */
+function extractDotValue(spec, key) {
+    if (key === "version")
+        return spec.match(/\bversion:\s+?\.(\w+)/)?.[1]
+    if (key === "modifier")
+        return spec.match(/\bmodifier:\s+?\.(\w+)/)?.[1]
 }
