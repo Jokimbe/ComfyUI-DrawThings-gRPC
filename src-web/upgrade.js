@@ -52,7 +52,7 @@ async function getUserData() {
     const data = {
         announced: []
     }
-    await app.api.storeUserData(dataPath, data)
+
     return data
 }
 
@@ -86,7 +86,7 @@ const announcements = [
         ].join('\n')
     },
     {
-        veresion: "1.8.0",
+        version: "1.8.0",
         title: "DrawThings-gRPC 1.8.0",
         detail: `- Bridge Mode support: For DT+ subscribers interested in using Bridge Mode, you can now list all official, community, and uncurated models available in Cloud Compute. Right click the sampler node, or go to the Draw Things tab in Settings, to enable. Make sure to enable Bridge Mode in the API settings of your Draw Things app (only available for DT+ subscribers). (User uploaded loras are currently unsupported.)
 - Note: We have no way of knowing if bridge mode is enabled from ComfyUI. Enabling bridge mode in Comfy simply changes the list of models that are shown - it's up to your DT app or CLI how to handle the request.
