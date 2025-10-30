@@ -1,958 +1,524 @@
 {
-    "id": "524b405d-3c13-4315-a88c-bd01596c560e",
-    "revision": 0,
-    "last_node_id": 14,
-    "last_link_id": 11,
-    "nodes": [
+  "id": "524b405d-3c13-4315-a88c-bd01596c560e",
+  "revision": 0,
+  "last_node_id": 15,
+  "last_link_id": 12,
+  "nodes": [
+    {
+      "id": 6,
+      "type": "SaveImage",
+      "pos": [
+        3160,
+        1150
+      ],
+      "size": [
+        450,
+        440
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
         {
-            "id": 6,
-            "type": "SaveImage",
-            "pos": [
-                3160,
-                1150
-            ],
-            "size": [
-                450,
-                440
-            ],
-            "flags": {},
-            "order": 5,
-            "mode": 0,
-            "inputs": [
-                {
-                    "localized_name": "images",
-                    "name": "images",
-                    "type": "IMAGE",
-                    "link": 4
-                },
-                {
-                    "localized_name": "filename_prefix",
-                    "name": "filename_prefix",
-                    "type": "STRING",
-                    "widget": {
-                        "name": "filename_prefix"
-                    },
-                    "link": null
-                }
-            ],
-            "outputs": [],
-            "properties": {
-                "cnr_id": "comfy-core",
-                "ver": "0.3.38",
-                "Node name for S&R": "SaveImage"
-            },
-            "widgets_values": [
-                "ComfyUI"
-            ]
-        },
-        {
-            "id": 7,
-            "type": "DrawThingsPrompt",
-            "pos": [
-                1890,
-                1400
-            ],
-            "size": [
-                400,
-                200
-            ],
-            "flags": {},
-            "order": 1,
-            "mode": 0,
-            "inputs": [
-                {
-                    "localized_name": "insert_textual_inversion",
-                    "name": "insert_textual_inversion",
-                    "type": "DT_MODEL",
-                    "widget": {
-                        "name": "insert_textual_inversion"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "prompt",
-                    "name": "prompt",
-                    "type": "STRING",
-                    "widget": {
-                        "name": "prompt"
-                    },
-                    "link": null
-                }
-            ],
-            "outputs": [
-                {
-                    "color_off": "#EF5350",
-                    "color_on": "#EF5350",
-                    "localized_name": "PROMPT",
-                    "name": "PROMPT",
-                    "type": "STRING",
-                    "links": [
-                        6
-                    ]
-                }
-            ],
-            "properties": {
-                "cnr_id": "drawthings-grpc",
-                "ver": "97b273b461f7d06b8823d0e4b16cb1bcdb77054e",
-                "Node name for S&R": "DrawThingsPrompt"
-            },
-            "widgets_values": [
-                "...",
-                "low quality, blurry, watermark"
-            ],
-            "color": "#322",
-            "bgcolor": "#533",
-            "_lastSelectedModel": {}
-        },
-        {
-            "id": 10,
-            "type": "DrawThingsSampler",
-            "pos": [
-                2800,
-                1150
-            ],
-            "size": [
-                312.08984375,
-                750
-            ],
-            "flags": {},
-            "order": 4,
-            "mode": 0,
-            "inputs": [
-                {
-                    "localized_name": "image",
-                    "name": "image",
-                    "shape": 7,
-                    "type": "IMAGE",
-                    "link": 7
-                },
-                {
-                    "localized_name": "mask",
-                    "name": "mask",
-                    "shape": 7,
-                    "type": "MASK",
-                    "link": 8
-                },
-                {
-                    "color_off": "#FFA931",
-                    "color_on": "#FFA931",
-                    "localized_name": "positive",
-                    "name": "positive",
-                    "shape": 7,
-                    "type": "STRING",
-                    "link": 5
-                },
-                {
-                    "color_off": "#FFA931",
-                    "color_on": "#FFA931",
-                    "localized_name": "negative",
-                    "name": "negative",
-                    "shape": 7,
-                    "type": "STRING",
-                    "link": 6
-                },
-                {
-                    "localized_name": "lora",
-                    "name": "lora",
-                    "shape": 7,
-                    "type": "DT_LORA",
-                    "link": null
-                },
-                {
-                    "localized_name": "control_net",
-                    "name": "control_net",
-                    "shape": 7,
-                    "type": "DT_CNET",
-                    "link": null
-                },
-                {
-                    "localized_name": "upscaler",
-                    "name": "upscaler",
-                    "shape": 7,
-                    "type": "DT_UPSCALER",
-                    "link": null
-                },
-                {
-                    "localized_name": "refiner",
-                    "name": "refiner",
-                    "shape": 7,
-                    "type": "DT_REFINER",
-                    "link": null
-                },
-                {
-                    "localized_name": "settings",
-                    "name": "settings",
-                    "type": "COMBO",
-                    "widget": {
-                        "name": "settings"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "server",
-                    "name": "server",
-                    "type": "STRING",
-                    "widget": {
-                        "name": "server"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "port",
-                    "name": "port",
-                    "type": "STRING",
-                    "widget": {
-                        "name": "port"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "use_tls",
-                    "name": "use_tls",
-                    "type": "BOOLEAN",
-                    "widget": {
-                        "name": "use_tls"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "model",
-                    "name": "model",
-                    "type": "DT_MODEL",
-                    "widget": {
-                        "name": "model"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "strength",
-                    "name": "strength",
-                    "type": "FLOAT",
-                    "widget": {
-                        "name": "strength"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "seed",
-                    "name": "seed",
-                    "type": "INT",
-                    "widget": {
-                        "name": "seed"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "seed_mode",
-                    "name": "seed_mode",
-                    "type": "COMBO",
-                    "widget": {
-                        "name": "seed_mode"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "width",
-                    "name": "width",
-                    "type": "INT",
-                    "widget": {
-                        "name": "width"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "height",
-                    "name": "height",
-                    "type": "INT",
-                    "widget": {
-                        "name": "height"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "steps",
-                    "name": "steps",
-                    "type": "INT",
-                    "widget": {
-                        "name": "steps"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "num_frames",
-                    "name": "num_frames",
-                    "type": "INT",
-                    "widget": {
-                        "name": "num_frames"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "cfg",
-                    "name": "cfg",
-                    "type": "FLOAT",
-                    "widget": {
-                        "name": "cfg"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "speed_up",
-                    "name": "speed_up",
-                    "type": "BOOLEAN",
-                    "widget": {
-                        "name": "speed_up"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "guidance_embed",
-                    "name": "guidance_embed",
-                    "type": "FLOAT",
-                    "widget": {
-                        "name": "guidance_embed"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "sampler_name",
-                    "name": "sampler_name",
-                    "type": "COMBO",
-                    "widget": {
-                        "name": "sampler_name"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "res_dpt_shift",
-                    "name": "res_dpt_shift",
-                    "type": "BOOLEAN",
-                    "widget": {
-                        "name": "res_dpt_shift"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "shift",
-                    "name": "shift",
-                    "type": "FLOAT",
-                    "widget": {
-                        "name": "shift"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "batch_size",
-                    "name": "batch_size",
-                    "type": "INT",
-                    "widget": {
-                        "name": "batch_size"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "fps",
-                    "name": "fps",
-                    "type": "INT",
-                    "widget": {
-                        "name": "fps"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "motion_scale",
-                    "name": "motion_scale",
-                    "type": "INT",
-                    "widget": {
-                        "name": "motion_scale"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "guiding_frame_noise",
-                    "name": "guiding_frame_noise",
-                    "type": "FLOAT",
-                    "widget": {
-                        "name": "guiding_frame_noise"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "start_frame_guidance",
-                    "name": "start_frame_guidance",
-                    "type": "FLOAT",
-                    "widget": {
-                        "name": "start_frame_guidance"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "causal_inference",
-                    "name": "causal_inference",
-                    "type": "INT",
-                    "widget": {
-                        "name": "causal_inference"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "clip_skip",
-                    "name": "clip_skip",
-                    "type": "INT",
-                    "widget": {
-                        "name": "clip_skip"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "sharpness",
-                    "name": "sharpness",
-                    "type": "FLOAT",
-                    "widget": {
-                        "name": "sharpness"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "mask_blur",
-                    "name": "mask_blur",
-                    "type": "FLOAT",
-                    "widget": {
-                        "name": "mask_blur"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "mask_blur_outset",
-                    "name": "mask_blur_outset",
-                    "type": "INT",
-                    "widget": {
-                        "name": "mask_blur_outset"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "preserve_original",
-                    "name": "preserve_original",
-                    "type": "BOOLEAN",
-                    "widget": {
-                        "name": "preserve_original"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "high_res_fix",
-                    "name": "high_res_fix",
-                    "type": "BOOLEAN",
-                    "widget": {
-                        "name": "high_res_fix"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "high_res_fix_start_width",
-                    "name": "high_res_fix_start_width",
-                    "type": "INT",
-                    "widget": {
-                        "name": "high_res_fix_start_width"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "high_res_fix_start_height",
-                    "name": "high_res_fix_start_height",
-                    "type": "INT",
-                    "widget": {
-                        "name": "high_res_fix_start_height"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "high_res_fix_strength",
-                    "name": "high_res_fix_strength",
-                    "type": "FLOAT",
-                    "widget": {
-                        "name": "high_res_fix_strength"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "tiled_decoding",
-                    "name": "tiled_decoding",
-                    "type": "BOOLEAN",
-                    "widget": {
-                        "name": "tiled_decoding"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "decoding_tile_width",
-                    "name": "decoding_tile_width",
-                    "type": "INT",
-                    "widget": {
-                        "name": "decoding_tile_width"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "decoding_tile_height",
-                    "name": "decoding_tile_height",
-                    "type": "INT",
-                    "widget": {
-                        "name": "decoding_tile_height"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "decoding_tile_overlap",
-                    "name": "decoding_tile_overlap",
-                    "type": "INT",
-                    "widget": {
-                        "name": "decoding_tile_overlap"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "tiled_diffusion",
-                    "name": "tiled_diffusion",
-                    "type": "BOOLEAN",
-                    "widget": {
-                        "name": "tiled_diffusion"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "diffusion_tile_width",
-                    "name": "diffusion_tile_width",
-                    "type": "INT",
-                    "widget": {
-                        "name": "diffusion_tile_width"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "diffusion_tile_height",
-                    "name": "diffusion_tile_height",
-                    "type": "INT",
-                    "widget": {
-                        "name": "diffusion_tile_height"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "diffusion_tile_overlap",
-                    "name": "diffusion_tile_overlap",
-                    "type": "INT",
-                    "widget": {
-                        "name": "diffusion_tile_overlap"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "tea_cache",
-                    "name": "tea_cache",
-                    "type": "BOOLEAN",
-                    "widget": {
-                        "name": "tea_cache"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "tea_cache_start",
-                    "name": "tea_cache_start",
-                    "type": "INT",
-                    "widget": {
-                        "name": "tea_cache_start"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "tea_cache_end",
-                    "name": "tea_cache_end",
-                    "type": "INT",
-                    "widget": {
-                        "name": "tea_cache_end"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "tea_cache_threshold",
-                    "name": "tea_cache_threshold",
-                    "type": "FLOAT",
-                    "widget": {
-                        "name": "tea_cache_threshold"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "tea_cache_max_skip_steps",
-                    "name": "tea_cache_max_skip_steps",
-                    "type": "INT",
-                    "widget": {
-                        "name": "tea_cache_max_skip_steps"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "separate_clip_l",
-                    "name": "separate_clip_l",
-                    "type": "BOOLEAN",
-                    "widget": {
-                        "name": "separate_clip_l"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "clip_l_text",
-                    "name": "clip_l_text",
-                    "type": "STRING",
-                    "widget": {
-                        "name": "clip_l_text"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "separate_open_clip_g",
-                    "name": "separate_open_clip_g",
-                    "type": "BOOLEAN",
-                    "widget": {
-                        "name": "separate_open_clip_g"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "open_clip_g_text",
-                    "name": "open_clip_g_text",
-                    "type": "STRING",
-                    "widget": {
-                        "name": "open_clip_g_text"
-                    },
-                    "link": null
-                }
-            ],
-            "outputs": [
-                {
-                    "localized_name": "IMAGE",
-                    "name": "IMAGE",
-                    "type": "IMAGE",
-                    "links": [
-                        4
-                    ]
-                }
-            ],
-            "properties": {
-                "cnr_id": "drawthings-grpc",
-                "ver": "40f4205bee94471af99f0eb38a992885173146fe",
-                "Node name for S&R": "DrawThingsSampler"
-            },
-            "widgets_values": [
-                "All",
-                "localhost",
-                "7859",
-                true,
-                "(None selected)",
-                1,
-                -1,
-                "randomize",
-                "ScaleAlike",
-                1024,
-                1024,
-                20,
-                14,
-                4.5,
-                true,
-                4.5,
-                "Euler A",
-                true,
-                1,
-                1,
-                5,
-                127,
-                0.02,
-                1,
-                0,
-                1,
-                0,
-                0,
-                0,
-                true,
-                false,
-                448,
-                448,
-                0.7,
-                false,
-                640,
-                640,
-                128,
-                false,
-                512,
-                512,
-                64,
-                false,
-                5,
-                2,
-                0.2,
-                3,
-                false,
-                "",
-                false,
-                ""
-            ],
-            "nodePackVersion": "1.3.1",
-            "widget_values_keyed": {
-                "settings": "All",
-                "server": "localhost",
-                "port": "7859",
-                "use_tls": true,
-                "model": "(None selected)",
-                "strength": 1,
-                "seed": -1,
-                "control_after_generate": "randomize",
-                "seed_mode": "ScaleAlike",
-                "width": 1024,
-                "height": 1024,
-                "steps": 20,
-                "num_frames": 14,
-                "cfg": 4.5,
-                "speed_up": true,
-                "guidance_embed": 4.5,
-                "sampler_name": "Euler A",
-                "res_dpt_shift": true,
-                "shift": 1,
-                "batch_size": 1,
-                "fps": 5,
-                "motion_scale": 127,
-                "guiding_frame_noise": 0.02,
-                "start_frame_guidance": 1,
-                "causal_inference": 0,
-                "clip_skip": 1,
-                "sharpness": 0,
-                "mask_blur": 0,
-                "mask_blur_outset": 0,
-                "preserve_original": true,
-                "high_res_fix": false,
-                "high_res_fix_start_width": 448,
-                "high_res_fix_start_height": 448,
-                "high_res_fix_strength": 0.7,
-                "tiled_decoding": false,
-                "decoding_tile_width": 640,
-                "decoding_tile_height": 640,
-                "decoding_tile_overlap": 128,
-                "tiled_diffusion": false,
-                "diffusion_tile_width": 512,
-                "diffusion_tile_height": 512,
-                "diffusion_tile_overlap": 64,
-                "tea_cache": false,
-                "tea_cache_start": 5,
-                "tea_cache_end": 2,
-                "tea_cache_threshold": 0.2,
-                "tea_cache_max_skip_steps": 3,
-                "separate_clip_l": false,
-                "clip_l_text": "",
-                "separate_open_clip_g": false,
-                "open_clip_g_text": ""
-            },
-            "_lastSelectedModel": {
-                "model": "(None selected)"
-            }
-        },
-        {
-            "id": 9,
-            "type": "MarkdownNote",
-            "pos": [
-                1950,
-                1670
-            ],
-            "size": [
-                340,
-                340
-            ],
-            "flags": {},
-            "order": 2,
-            "mode": 0,
-            "inputs": [],
-            "outputs": [],
-            "properties": {},
-            "widgets_values": [
-                "If you are using a ControlNet for inpainting, connect a Draw Things ControlNet node to select a model.\n\nProvide an image and mask to the sampler node (even if you are using a ControlNet)\n\nIf the image provided is a different size than the sampler settings, it will be resized and cropped automatically.\n\n---\n\nMake sure your Draw Things app has the following settings:\n- API Server: enabled\n- Protocol: gRPC\n- Transport Layer Security: Enabled\n- Enable Model Browser: Enabled\n- Response Compression: Disabled\n\nOr if you are using the gRPCServerCLI, use the following command:\n\n`gRPCServerCLI-macOS [path to models] --no-response-compression --model-browser`\n\nIssues or questions? Is a setting missing or not working as expected?\n- [Discord](https://discord.com/channels/1038516303666876436/1357377020299837464)\n- [Github Issues](https://github.com/Jokimbe/ComfyUI-DrawThings-gRPC/issues)\n- [Github Discusions](https://github.com/Jokimbe/ComfyUI-DrawThings-gRPC/discussions)"
-            ],
-            "color": "#432",
-            "bgcolor": "#653"
-        },
-        {
-            "id": 11,
-            "type": "LoadImage",
-            "pos": [
-                2340,
-                1150
-            ],
-            "size": [
-                400,
-                480
-            ],
-            "flags": {},
-            "order": 3,
-            "mode": 0,
-            "inputs": [
-                {
-                    "localized_name": "image",
-                    "name": "image",
-                    "type": "COMBO",
-                    "widget": {
-                        "name": "image"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "choose file to upload",
-                    "name": "upload",
-                    "type": "IMAGEUPLOAD",
-                    "widget": {
-                        "name": "upload"
-                    },
-                    "link": null
-                }
-            ],
-            "outputs": [
-                {
-                    "localized_name": "IMAGE",
-                    "name": "IMAGE",
-                    "type": "IMAGE",
-                    "links": [
-                        7
-                    ]
-                },
-                {
-                    "localized_name": "MASK",
-                    "name": "MASK",
-                    "type": "MASK",
-                    "links": [
-                        8
-                    ]
-                }
-            ],
-            "properties": {
-                "cnr_id": "comfy-core",
-                "ver": "0.3.43",
-                "Node name for S&R": "LoadImage"
-            },
-            "widgets_values": [
-                "",
-                "image"
-            ]
-        },
-        {
-            "id": 8,
-            "type": "DrawThingsPrompt",
-            "pos": [
-                1890,
-                1150
-            ],
-            "size": [
-                400,
-                200
-            ],
-            "flags": {},
-            "order": 0,
-            "mode": 0,
-            "inputs": [
-                {
-                    "localized_name": "insert_textual_inversion",
-                    "name": "insert_textual_inversion",
-                    "type": "DT_MODEL",
-                    "widget": {
-                        "name": "insert_textual_inversion"
-                    },
-                    "link": null
-                },
-                {
-                    "localized_name": "prompt",
-                    "name": "prompt",
-                    "type": "STRING",
-                    "widget": {
-                        "name": "prompt"
-                    },
-                    "link": null
-                }
-            ],
-            "outputs": [
-                {
-                    "color_off": "#EF5350",
-                    "color_on": "#EF5350",
-                    "localized_name": "PROMPT",
-                    "name": "PROMPT",
-                    "type": "STRING",
-                    "links": [
-                        5
-                    ]
-                }
-            ],
-            "properties": {
-                "cnr_id": "drawthings-grpc",
-                "ver": "97b273b461f7d06b8823d0e4b16cb1bcdb77054e",
-                "Node name for S&R": "DrawThingsPrompt"
-            },
-            "widgets_values": [
-                "...",
-                "a photograph of an cowboy riding a horse, 4k, volumetric"
-            ],
-            "color": "#232",
-            "bgcolor": "#353",
-            "_lastSelectedModel": {}
+          "name": "images",
+          "type": "IMAGE",
+          "link": 4
         }
-    ],
-    "links": [
-        [
-            4,
-            10,
-            0,
-            6,
-            0,
-            "IMAGE"
-        ],
-        [
-            5,
-            8,
-            0,
-            10,
-            2,
-            "STRING"
-        ],
-        [
-            6,
-            7,
-            0,
-            10,
-            3,
-            "STRING"
-        ],
-        [
-            7,
-            11,
-            0,
-            10,
-            0,
-            "IMAGE"
-        ],
-        [
-            8,
-            11,
-            1,
-            10,
-            1,
-            "MASK"
-        ]
-    ],
-    "groups": [],
-    "config": {},
-    "extra": {
-        "ds": {
-            "scale": 0.6776426776161406,
-            "offset": [
-                -1594.4479230007187,
-                -908.0778117737971
-            ]
-        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.38",
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "ComfyUI"
+      ]
     },
-    "version": 0.4
+    {
+      "id": 7,
+      "type": "DrawThingsPrompt",
+      "pos": [
+        1890,
+        1400
+      ],
+      "size": [
+        400,
+        200
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "color_off": "#EF5350",
+          "color_on": "#EF5350",
+          "name": "PROMPT",
+          "type": "STRING",
+          "links": [
+            6
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "drawthings-grpc",
+        "ver": "97b273b461f7d06b8823d0e4b16cb1bcdb77054e",
+        "Node name for S&R": "DrawThingsPrompt"
+      },
+      "widgets_values": [
+        "...",
+        "low quality, blurry, watermark"
+      ],
+      "color": "#322",
+      "bgcolor": "#533",
+      "_lastSelectedModel": {}
+    },
+    {
+      "id": 11,
+      "type": "LoadImage",
+      "pos": [
+        2340,
+        1150
+      ],
+      "size": [
+        400,
+        480
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            7
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": [
+            8
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.43",
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "0020.png",
+        "image"
+      ]
+    },
+    {
+      "id": 8,
+      "type": "DrawThingsPrompt",
+      "pos": [
+        1890,
+        1150
+      ],
+      "size": [
+        400,
+        200
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "color_off": "#EF5350",
+          "color_on": "#EF5350",
+          "name": "PROMPT",
+          "type": "STRING",
+          "links": [
+            5
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "drawthings-grpc",
+        "ver": "97b273b461f7d06b8823d0e4b16cb1bcdb77054e",
+        "Node name for S&R": "DrawThingsPrompt"
+      },
+      "widgets_values": [
+        "...",
+        "a photograph of an cowboy riding a horse, 4k, volumetric"
+      ],
+      "color": "#232",
+      "bgcolor": "#353",
+      "_lastSelectedModel": {}
+    },
+    {
+      "id": 10,
+      "type": "DrawThingsSampler",
+      "pos": [
+        2800,
+        1150
+      ],
+      "size": [
+        312.08984375,
+        770
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 7
+        },
+        {
+          "name": "mask",
+          "shape": 7,
+          "type": "MASK",
+          "link": 8
+        },
+        {
+          "color_off": "#FFA931",
+          "color_on": "#FFA931",
+          "name": "positive",
+          "shape": 7,
+          "type": "STRING",
+          "link": 5
+        },
+        {
+          "color_off": "#FFA931",
+          "color_on": "#FFA931",
+          "name": "negative",
+          "shape": 7,
+          "type": "STRING",
+          "link": 6
+        },
+        {
+          "name": "lora",
+          "shape": 7,
+          "type": "DT_LORA",
+          "link": null
+        },
+        {
+          "name": "control_net",
+          "shape": 7,
+          "type": "DT_CNET",
+          "link": 12
+        },
+        {
+          "name": "upscaler",
+          "shape": 7,
+          "type": "DT_UPSCALER",
+          "link": null
+        },
+        {
+          "name": "refiner",
+          "shape": 7,
+          "type": "DT_REFINER",
+          "link": null
+        },
+        {
+          "name": "hints",
+          "shape": 7,
+          "type": "DT_HINTS",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            4
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "drawthings-grpc",
+        "ver": "40f4205bee94471af99f0eb38a992885173146fe",
+        "Node name for S&R": "DrawThingsSampler"
+      },
+      "widgets_values": [
+        "All",
+        "localhost",
+        "7859",
+        true,
+        "(None selected)",
+        1,
+        -1,
+        "randomize",
+        "ScaleAlike",
+        1024,
+        1024,
+        20,
+        14,
+        4.5,
+        true,
+        0,
+        true,
+        4.5,
+        "Euler A",
+        1,
+        true,
+        1,
+        1,
+        5,
+        127,
+        0.02,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        true,
+        false,
+        448,
+        448,
+        0.7,
+        false,
+        640,
+        640,
+        128,
+        false,
+        512,
+        512,
+        64,
+        false,
+        5,
+        2,
+        0.2,
+        3,
+        false,
+        "",
+        false,
+        ""
+      ],
+      "nodePackVersion": "1.7.4",
+      "widget_values_keyed": {
+        "settings": "All",
+        "server": "localhost",
+        "port": "7859",
+        "use_tls": true,
+        "model": "(None selected)",
+        "strength": 1,
+        "seed": -1,
+        "control_after_generate": "randomize",
+        "seed_mode": "ScaleAlike",
+        "width": 1024,
+        "height": 1024,
+        "steps": 20,
+        "num_frames": 14,
+        "cfg": 4.5,
+        "cfg_zero_star": true,
+        "cfg_zero_star_init_steps": 0,
+        "speed_up": true,
+        "guidance_embed": 4.5,
+        "sampler_name": "Euler A",
+        "stochastic_sampling_gamma": 1,
+        "res_dpt_shift": true,
+        "shift": 1,
+        "batch_size": 1,
+        "fps": 5,
+        "motion_scale": 127,
+        "guiding_frame_noise": 0.02,
+        "start_frame_guidance": 1,
+        "causal_inference": 0,
+        "causal_inference_pad": 0,
+        "clip_skip": 1,
+        "sharpness": 0,
+        "mask_blur": 0,
+        "mask_blur_outset": 0,
+        "preserve_original": true,
+        "high_res_fix": false,
+        "high_res_fix_start_width": 448,
+        "high_res_fix_start_height": 448,
+        "high_res_fix_strength": 0.7,
+        "tiled_decoding": false,
+        "decoding_tile_width": 640,
+        "decoding_tile_height": 640,
+        "decoding_tile_overlap": 128,
+        "tiled_diffusion": false,
+        "diffusion_tile_width": 512,
+        "diffusion_tile_height": 512,
+        "diffusion_tile_overlap": 64,
+        "tea_cache": false,
+        "tea_cache_start": 5,
+        "tea_cache_end": 2,
+        "tea_cache_threshold": 0.2,
+        "tea_cache_max_skip_steps": 3,
+        "separate_clip_l": false,
+        "clip_l_text": "",
+        "separate_open_clip_g": false,
+        "open_clip_g_text": ""
+      },
+      "_lastSelectedModel": {
+        "model": "(None selected)"
+      }
+    },
+    {
+      "id": 15,
+      "type": "DrawThingsControlNet",
+      "pos": [
+        2380,
+        1690
+      ],
+      "size": [
+        360,
+        200
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "control_net",
+          "shape": 7,
+          "type": "DT_CNET",
+          "link": null
+        },
+        {
+          "name": "image",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONTROL_NET",
+          "type": "DT_CNET",
+          "links": [
+            12
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "drawthings-grpc",
+        "ver": "2ef09be838ec760637bf451e8f84b4b8e40cef33",
+        "Node name for S&R": "DrawThingsControlNet"
+      },
+      "widgets_values": [
+        "(None selected)",
+        "Custom",
+        "Balanced",
+        1,
+        0,
+        1,
+        false,
+        1,
+        "All",
+        false
+      ],
+      "_lastSelectedModel": {},
+      "nodePackVersion": "1.7.4",
+      "widget_values_keyed": {
+        "control_name": "(None selected)",
+        "control_input_type": "Custom",
+        "control_mode": "Balanced",
+        "control_weight": 1,
+        "control_start": 0,
+        "control_end": 1,
+        "global_average_pooling": false,
+        "down_sampling_rate": 1,
+        "target_blocks": "All",
+        "invert_image": false
+      }
+    },
+    {
+      "id": 9,
+      "type": "MarkdownNote",
+      "pos": [
+        1900,
+        1650
+      ],
+      "size": [
+        380,
+        340
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "If you are using a ControlNet for inpainting, select it in the ControlNet node. If you're using Flux Fill or another inpainting model, you can delete the control net node.\n\nProvide an image and mask to the sampler node (even if you are using a ControlNet)\n\nIf the image provided is a different size than the sampler settings, it will be resized and cropped automatically.\n\n---\n\nMake sure your Draw Things app has the following settings:\n- API Server: enabled\n- Protocol: gRPC\n- Transport Layer Security: Enabled\n- Enable Model Browser: Enabled\n\nOr if you are using the gRPCServerCLI, use the following command:\n\n`gRPCServerCLI-macOS [path to models] --model-browser`\n\nIssues or questions? Is a setting missing or not working as expected?\n- [Discord](https://discord.com/channels/1038516303666876436/1357377020299837464)\n- [Github Issues](https://github.com/Jokimbe/ComfyUI-DrawThings-gRPC/issues)\n- [Github Discussions](https://github.com/Jokimbe/ComfyUI-DrawThings-gRPC/discussions)"
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    }
+  ],
+  "links": [
+    [
+      4,
+      10,
+      0,
+      6,
+      0,
+      "IMAGE"
+    ],
+    [
+      5,
+      8,
+      0,
+      10,
+      2,
+      "STRING"
+    ],
+    [
+      6,
+      7,
+      0,
+      10,
+      3,
+      "STRING"
+    ],
+    [
+      7,
+      11,
+      0,
+      10,
+      0,
+      "IMAGE"
+    ],
+    [
+      8,
+      11,
+      1,
+      10,
+      1,
+      "MASK"
+    ],
+    [
+      12,
+      15,
+      0,
+      10,
+      5,
+      "DT_CNET"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.8709622431736262,
+      "offset": [
+        -1981.3471708282277,
+        -1163.4766654246387
+      ]
+    },
+    "frontendVersion": "1.28.8",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
 }

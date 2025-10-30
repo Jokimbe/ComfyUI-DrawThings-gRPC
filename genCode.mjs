@@ -111,7 +111,7 @@ async function compileOfficialModels(name) {
     )
 
     const specs = extractSpecifications(src)
-    const extract = specs.map(s => extractData(s)).filter(s => !!s)
+    const extract = specs.map(s => extractData(s)).filter(s => !!s).map(s => ({ ...s, official: true }))
     return extract
     // await fse.writeJSON(`./web/models/official.json`, extract, { spaces: 2 })
 }
@@ -131,7 +131,7 @@ async function compileModelData() {
 
     await compileModelType("models", 'Model')
     await compileModelType("uncurated_models")
-    await compileModelType("controlnets"), 'ControlNet'
+    await compileModelType("controlnets", 'ControlNet')
     await compileModelType("loras", 'LoRA')
     await compileModelType("embeddings", 'TextualInversion')
 }

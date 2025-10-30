@@ -146,81 +146,103 @@ const samplerProto = {
 
     getExtraMenuOptions(canvas, options) {
         const keepNodeShrunk = app.extensionManager.setting.get("drawthings.node.keep_shrunk")
-        const bridgeMode = app.extensionManager.setting.get("drawthings.node.bridge_mode")
+        const bridgeMode = app.extensionManager.setting.get("drawthings.bridge_mode.enabled")
+        const bridgeCommunity = app.extensionManager.setting.get("drawthings.bridge_mode.community")
+        const bridgeUncurated = app.extensionManager.setting.get("drawthings.bridge_mode.uncurated")
 
-        options.push(
-            null,
-            {
-                content: "Paste Draw Things config",
-                callback: () => {
-                    navigator.clipboard.readText().then(async (text) => {
-                        try {
-                            const config = JSON.parse(text)
+        options.push(null)
+        options.push({
+            content: "Paste Draw Things config",
+            callback: () => {
+                navigator.clipboard.readText().then(async (text) => {
+                    try {
+                        const config = JSON.parse(text)
 
-                            for (const [k, v] of Object.entries(config)) {
-                                const prop = findPropertyJson(k)
-                                if (!prop) {
-                                    console.debug('unknown property in dt config', k, v)
-                                    continue
-                                }
-                                if (prop.node !== this.type) {
-                                    console.debug('prop found for support node', k, v)
-                                    continue
-                                }
-                                const widget = this.widgets.find(w => w.name === prop.python)
-                                if (!widget) {
-                                    console.debug('widget not found for property', k, v)
-                                    continue
-                                }
-                                await prop.import(k, v, widget, this, config)
-                                console.debug('imported', prop.json, 'to', widget.name, config[prop.json], '->', widget.value)
+                        for (const [k, v] of Object.entries(config)) {
+                            const prop = findPropertyJson(k)
+                            if (!prop) {
+                                console.debug('unknown property in dt config', k, v)
+                                continue
                             }
-                            this.coerceWidgetValues()
-                            this.updateDynamicWidgets?.()
-                        } catch (e) {
-                            alert("Failed to parse Draw Things config from clipboard\n\n" + e)
-                            console.warn(e)
+                            if (prop.node !== this.type) {
+                                console.debug('prop found for support node', k, v)
+                                continue
+                            }
+                            const widget = this.widgets.find(w => w.name === prop.python)
+                            if (!widget) {
+                                console.debug('widget not found for property', k, v)
+                                continue
+                            }
+                            await prop.import(k, v, widget, this, config)
+                            console.debug('imported', prop.json, 'to', widget.name, config[prop.json], '->', widget.value)
                         }
-                    })
-                },
-            },
-            {
-                content: "Copy Draw Things config",
-                callback: () => {
-                    const config = {}
-                    for (const w of this.widgets) {
-                        const prop = findPropertyPython(w.name)
-                        if (!prop)
-                            continue
-                        prop.export(w, this, config)
+                        this.coerceWidgetValues()
+                        this.updateDynamicWidgets?.()
+                    } catch (e) {
+                        alert("Failed to parse Draw Things config from clipboard\n\n" + e)
+                        console.warn(e)
                     }
-                    config.loras = []
-                    config.control = []
-                    navigator.clipboard.writeText(JSON.stringify(config))
-                },
+                })
             },
-            {
-                content: (keepNodeShrunk ? "✓ " : "") + "Keep node shrunk when widgets change",
+        })
+        options.push({
+            content: "Copy Draw Things config",
+            callback: () => {
+                const config = {}
+                for (const w of this.widgets) {
+                    const prop = findPropertyPython(w.name)
+                    if (!prop)
+                        continue
+                    prop.export(w, this, config)
+                }
+                config.loras = []
+                config.control = []
+                navigator.clipboard.writeText(JSON.stringify(config))
+            },
+        })
+        options.push({
+            content: (keepNodeShrunk ? "✓ " : "") + "Keep node shrunk when widgets change",
+            callback: async () => {
+                try {
+                    await app.extensionManager.setting.set("drawthings.node.keep_shrunk", !keepNodeShrunk)
+                } catch (error) {
+                    console.error(`Error changing setting: ${error}`)
+                }
+            },
+        })
+        options.push({
+            content: (bridgeMode ? "✓ " : "") + "Use bridge mode",
+            callback: async () => {
+                try {
+                    await app.extensionManager.setting.set("drawthings.bridge_mode.enabled", !bridgeMode)
+                } catch (error) {
+                    console.error(`Error changing setting: ${error}`)
+                }
+            },
+        })
+        if (bridgeMode) {
+            options.push({
+                content: (bridgeCommunity ? "✓ " : "") + "Show community models",
                 callback: async () => {
                     try {
-                        await app.extensionManager.setting.set("drawthings.node.keep_shrunk", !keepNodeShrunk)
+                        await app.extensionManager.setting.set("drawthings.bridge_mode.community", !bridgeCommunity)
                     } catch (error) {
                         console.error(`Error changing setting: ${error}`)
                     }
                 },
-            },
-            {
-                content: (bridgeMode ? "✓ " : "") + "Use bridge mode",
+            })
+            options.push({
+                content: (bridgeUncurated ? "✓ " : "") + "Show uncurated models",
                 callback: async () => {
                     try {
-                        await app.extensionManager.setting.set("drawthings.node.bridge_mode", !bridgeMode)
+                        await app.extensionManager.setting.set("drawthings.bridge_mode.uncurated", !bridgeUncurated)
                     } catch (error) {
                         console.error(`Error changing setting: ${error}`)
                     }
                 },
-            },
-            null
-        )
+            })
+        }
+        options.push(null)
     },
 }
 

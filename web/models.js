@@ -22,7 +22,6 @@ class ModelService {
     }
 
     async #updateNodes() {
-        const useBridgeMode = app.extensionManager.setting.get("drawthings.node.bridge_mode")
         const dtModelNodes = app.rootGraph.nodes.filter(n => n.isDtServerNode !== undefined)
         const graphServerNodes = dtModelNodes.filter(n => n.isDtServerNode)
 
@@ -38,7 +37,7 @@ class ModelService {
             if (!server || !port || useTls === undefined) continue
             const key = modelInfoStoreKey(server, port, useTls)
             if (!serverModels.has(key)) {
-                serverModels.set(key, await getModels(server, port, useTls, useBridgeMode))
+                serverModels.set(key, await getModels(server, port, useTls))
             }
 
             // update server node's models
@@ -125,29 +124,40 @@ export async function getFiles(server, port, useTls) {
     return filesInfoResponse
 }
 
+let combinedIncludes = [null, null]
 let combinedBridgeModels = null
 async function getBridgeModels() {
-    if (combinedBridgeModels) return combinedBridgeModels
+    const includeCommunity = app.extensionManager.setting.get("drawthings.bridge_mode.community")
+    const includeUncurated = app.extensionManager.setting.get("drawthings.bridge_mode.uncurated")
+    if (combinedBridgeModels
+        && combinedIncludes[0] === includeCommunity
+        && combinedIncludes[1] === includeUncurated) return combinedBridgeModels
 
     const api = window.comfyAPI.api.api
     const filesResponse = await api.fetchApi('/dt_grpc/bridge_models')
     const files = await filesResponse.json()
 
-    const filter = (modelList) => modelList.filter(m => files.includes(m.file))
+    const filterFn = includeCommunity
+        ? (m => files.includes(m.file))
+        : (m => files.includes(m.file) && m.official)
 
     const { default: models } = await import("./models/models.json", { with: { type: "json" } })
-    const { default: uncurated } = await import("./models/uncurated_models.json", { with: { type: "json" } })
+    if (includeUncurated) {
+        const { default: uncurated } = await import("./models/uncurated_models.json", { with: { type: "json" } })
+        models.push(...uncurated)
+    }
     const { default: controlNets } = await import("./models/controlnets.json", { with: { type: "json" } })
     const { default: loras } = await import("./models/loras.json", { with: { type: "json" } })
     const { default: textualInversions } = await import("./models/embeddings.json", { with: { type: "json" } })
 
     combinedBridgeModels = {
-        models: filter([...models, ...uncurated]),
-        controlNets: filter(controlNets),
-        loras: filter(loras),
-        textualInversions: filter(textualInversions),
+        models: models.filter(filterFn),
+        controlNets: controlNets.filter(filterFn),
+        loras: loras.filter(filterFn),
+        textualInversions: textualInversions.filter(filterFn),
         upscalers: []
     }
+    combinedIncludes = [includeCommunity, includeUncurated]
 
     return combinedBridgeModels
 }
@@ -189,9 +199,9 @@ const notConnectedOptions = ["Not connected to sampler node", "Connect to a samp
     })
 )
 
-async function getModels(server, port, useTls, bridgeMode = false) {
+async function getModels(server, port, useTls) {
     if (!server || !port || useTls === undefined) return
-    if (bridgeMode) return getBridgeModels()
+    if (app.extensionManager.setting.get("drawthings.bridge_mode.enabled")) return getBridgeModels()
 
     const key = modelInfoStoreKey(server, port, useTls)
     if (modelInfoRequests.has(key)) {

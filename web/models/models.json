@@ -294,22 +294,26 @@
   {
     "name": "AuraFlow v0.1",
     "file": "auraflow_v0.1_q8p.ckpt",
-    "version": "auraflow"
+    "version": "auraflow",
+    "official": true
   },
   {
     "name": "AuraFlow v0.1 (8-bit)",
     "file": "auraflow_v0.1_q5p.ckpt",
-    "version": "auraflow"
+    "version": "auraflow",
+    "official": true
   },
   {
     "name": "AuraFlow v0.2",
     "file": "auraflow_v0.2_q8p.ckpt",
-    "version": "auraflow"
+    "version": "auraflow",
+    "official": true
   },
   {
     "name": "AuraFlow v0.2 (8-bit)",
     "file": "auraflow_v0.2_q5p.ckpt",
-    "version": "auraflow"
+    "version": "auraflow",
+    "official": true
   },
   {
     "name": "Balloon Art (v1)",
@@ -806,12 +810,14 @@
   {
     "name": "FLUX.1 [schnell]",
     "file": "flux_1_schnell_q8p.ckpt",
-    "version": "flux1"
+    "version": "flux1",
+    "official": true
   },
   {
     "name": "FLUX.1 [schnell] (5-bit)",
     "file": "flux_1_schnell_q5p.ckpt",
-    "version": "flux1"
+    "version": "flux1",
+    "official": true
   },
   {
     "name": "FLUX.1 Canny [dev]",
@@ -1081,13 +1087,15 @@
     "name": "Fooocus Inpaint SDXL v2.6",
     "file": "fooocus_inpaint_sd_xl_v2.6_f16.ckpt",
     "version": "sdxlBase",
-    "modifier": "inpainting"
+    "modifier": "inpainting",
+    "official": true
   },
   {
     "name": "Fooocus Inpaint SDXL v2.6 (8-bit)",
     "file": "fooocus_inpaint_sd_xl_v2.6_q6p_q8p.ckpt",
     "version": "sdxlBase",
-    "modifier": "inpainting"
+    "modifier": "inpainting",
+    "official": true
   },
   {
     "upcast_attention": false,
@@ -1120,25 +1128,29 @@
     "name": "HiDream E1 [full]",
     "file": "hidream_e1_full_q8p.ckpt",
     "version": "hiDreamI1",
-    "modifier": "editing"
+    "modifier": "editing",
+    "official": true
   },
   {
     "name": "HiDream E1 [full] (5-bit)",
     "file": "hidream_e1_full_q5p.ckpt",
     "version": "hiDreamI1",
-    "modifier": "editing"
+    "modifier": "editing",
+    "official": true
   },
   {
     "name": "HiDream E1-1",
     "file": "hidream_e1_1_q8p.ckpt",
     "version": "hiDreamI1",
-    "modifier": "editing"
+    "modifier": "editing",
+    "official": true
   },
   {
     "name": "HiDream E1-1 (5-bit)",
     "file": "hidream_e1_1_q5p.ckpt",
     "version": "hiDreamI1",
-    "modifier": "editing"
+    "modifier": "editing",
+    "official": true
   },
   {
     "name": "HiDream E1-1 (Exact)",
@@ -1168,12 +1180,14 @@
   {
     "name": "HiDream I1 [dev]",
     "file": "hidream_i1_dev_q8p.ckpt",
-    "version": "hiDreamI1"
+    "version": "hiDreamI1",
+    "official": true
   },
   {
     "name": "HiDream I1 [dev] (5-bit)",
     "file": "hidream_i1_dev_q5p.ckpt",
-    "version": "hiDreamI1"
+    "version": "hiDreamI1",
+    "official": true
   },
   {
     "name": "HiDream I1 [dev] (Exact)",
@@ -1203,12 +1217,14 @@
   {
     "name": "HiDream I1 [fast]",
     "file": "hidream_i1_fast_q8p.ckpt",
-    "version": "hiDreamI1"
+    "version": "hiDreamI1",
+    "official": true
   },
   {
     "name": "HiDream I1 [fast] (5-bit)",
     "file": "hidream_i1_fast_q5p.ckpt",
-    "version": "hiDreamI1"
+    "version": "hiDreamI1",
+    "official": true
   },
   {
     "name": "HiDream I1 [fast] (Exact)",
@@ -1238,12 +1254,14 @@
   {
     "name": "HiDream I1 [full]",
     "file": "hidream_i1_full_q8p.ckpt",
-    "version": "hiDreamI1"
+    "version": "hiDreamI1",
+    "official": true
   },
   {
     "name": "HiDream I1 [full] (5-bit)",
     "file": "hidream_i1_full_q5p.ckpt",
-    "version": "hiDreamI1"
+    "version": "hiDreamI1",
+    "official": true
   },
   {
     "name": "HiDream I1 [full] (Exact)",
@@ -1387,7 +1405,8 @@
     "name": "Instruct Pix2Pix",
     "file": "instruct_pix2pix_22000_f16.ckpt",
     "version": "v1",
-    "modifier": "editing"
+    "modifier": "editing",
+    "official": true
   },
   {
     "version": "v1",
@@ -1508,7 +1527,8 @@
   {
     "name": "Kandinsky v2.1",
     "file": "kandinsky_f16.ckpt",
-    "version": "kandinsky21"
+    "version": "kandinsky21",
+    "official": true
   },
   {
     "autoencoder": "sdxl_vae_v1.0_f16.ckpt",
@@ -1581,7 +1601,8 @@
   {
     "name": "MiniSD v1.4",
     "file": "minisd_v1.4_f16.ckpt",
-    "version": "v1"
+    "version": "v1",
+    "official": true
   },
   {
     "prefix": "modern disney style ",
@@ -1644,22 +1665,26 @@
   {
     "name": "PixArt Sigma XL 1K",
     "file": "pixart_sigma_xl_2_1024_ms_f16.ckpt",
-    "version": "pixart"
+    "version": "pixart",
+    "official": true
   },
   {
     "name": "PixArt Sigma XL 1K (8-bit)",
     "file": "pixart_sigma_xl_2_1024_ms_q8p.ckpt",
-    "version": "pixart"
+    "version": "pixart",
+    "official": true
   },
   {
     "name": "PixArt Sigma XL 512",
     "file": "pixart_sigma_xl_2_512_ms_f16.ckpt",
-    "version": "pixart"
+    "version": "pixart",
+    "official": true
   },
   {
     "name": "PixArt Sigma XL 512 (8-bit)",
     "file": "pixart_sigma_xl_2_512_ms_q8p.ckpt",
-    "version": "pixart"
+    "version": "pixart",
+    "official": true
   },
   {
     "autoencoder": "sdxl_vae_v1.0_f16.ckpt",
@@ -1879,17 +1904,20 @@
   {
     "name": "Qwen Image 1.0",
     "file": "qwen_image_1.0_q8p.ckpt",
-    "version": "qwenImage"
+    "version": "qwenImage",
+    "official": true
   },
   {
     "name": "Qwen Image 1.0 (6-bit)",
     "file": "qwen_image_1.0_q6p.ckpt",
-    "version": "qwenImage"
+    "version": "qwenImage",
+    "official": true
   },
   {
     "name": "Qwen Image 1.0 (BF16, 6-bit)",
     "file": "qwen_image_1.0_bf16_q6p.ckpt",
-    "version": "qwenImage"
+    "version": "qwenImage",
+    "official": true
   },
   {
     "name": "Qwen Image 1.0 (BF16, Exact)",
@@ -1913,7 +1941,8 @@
   {
     "name": "Qwen Image 1.0 (BF16)",
     "file": "qwen_image_1.0_bf16_q8p.ckpt",
-    "version": "qwenImage"
+    "version": "qwenImage",
+    "official": true
   },
   {
     "name": "Qwen Image 1.0 (Exact)",
@@ -1937,31 +1966,36 @@
     "name": "Qwen Image Edit 1.0",
     "file": "qwen_image_edit_1.0_q8p.ckpt",
     "version": "qwenImage",
-    "modifier": "kontext"
+    "modifier": "kontext",
+    "official": true
   },
   {
     "name": "Qwen Image Edit 1.0 (6-bit)",
     "file": "qwen_image_edit_1.0_q6p.ckpt",
     "version": "qwenImage",
-    "modifier": "kontext"
+    "modifier": "kontext",
+    "official": true
   },
   {
     "name": "Qwen Image Edit 2509",
     "file": "qwen_image_edit_2509_q8p.ckpt",
     "version": "qwenImage",
-    "modifier": "qwenimageEditPlus"
+    "modifier": "qwenimageEditPlus",
+    "official": true
   },
   {
     "name": "Qwen Image Edit 2509 (6-bit)",
     "file": "qwen_image_edit_2509_q6p.ckpt",
     "version": "qwenImage",
-    "modifier": "qwenimageEditPlus"
+    "modifier": "qwenimageEditPlus",
+    "official": true
   },
   {
     "name": "Qwen Image Edit 2509 (BF16, 6-bit)",
     "file": "qwen_image_edit_2509_bf16_q6p.ckpt",
     "version": "qwenImage",
-    "modifier": "qwenimageEditPlus"
+    "modifier": "qwenimageEditPlus",
+    "official": true
   },
   {
     "name": "Qwen Image Edit 2509 (BF16, Exact)",
@@ -1988,7 +2022,8 @@
     "name": "Qwen Image Edit 2509 (BF16)",
     "file": "qwen_image_edit_2509_bf16_q8p.ckpt",
     "version": "qwenImage",
-    "modifier": "qwenimageEditPlus"
+    "modifier": "qwenimageEditPlus",
+    "official": true
   },
   {
     "name": "Qwen Image Edit 2509 (Exact)",
@@ -2374,32 +2409,38 @@
   {
     "name": "SDXL Base (v0.9)",
     "file": "sd_xl_base_0.9_f16.ckpt",
-    "version": "sdxlBase"
+    "version": "sdxlBase",
+    "official": true
   },
   {
     "name": "SDXL Base (v1.0)",
     "file": "sd_xl_base_1.0_f16.ckpt",
-    "version": "sdxlBase"
+    "version": "sdxlBase",
+    "official": true
   },
   {
     "name": "SDXL Base v1.0 (8-bit)",
     "file": "sd_xl_base_1.0_q6p_q8p.ckpt",
-    "version": "sdxlBase"
+    "version": "sdxlBase",
+    "official": true
   },
   {
     "name": "SDXL Refiner (v0.9)",
     "file": "sd_xl_refiner_0.9_f16.ckpt",
-    "version": "sdxlRefiner"
+    "version": "sdxlRefiner",
+    "official": true
   },
   {
     "name": "SDXL Refiner (v1.0)",
     "file": "sd_xl_refiner_1.0_f16.ckpt",
-    "version": "sdxlRefiner"
+    "version": "sdxlRefiner",
+    "official": true
   },
   {
     "name": "SDXL Refiner v1.0 (8-bit)",
     "file": "sd_xl_refiner_1.0_q6p_q8p.ckpt",
-    "version": "sdxlRefiner"
+    "version": "sdxlRefiner",
+    "official": true
   },
   {
     "name": "SDXL Turbo",
@@ -2968,50 +3009,59 @@
   {
     "name": "Stable Diffusion v1.4",
     "file": "sd_v1.4_f16.ckpt",
-    "version": "v1"
+    "version": "v1",
+    "official": true
   },
   {
     "name": "Stable Diffusion v1.5",
     "file": "sd_v1.5_f16.ckpt",
-    "version": "v1"
+    "version": "v1",
+    "official": true
   },
   {
     "name": "Stable Diffusion v1.5 Inpainting",
     "file": "sd_v1.5_inpainting_f16.ckpt",
     "version": "v1",
-    "modifier": "inpainting"
+    "modifier": "inpainting",
+    "official": true
   },
   {
     "name": "Stable Diffusion v2.0",
     "file": "sd_v2.0_f16.ckpt",
-    "version": "v2"
+    "version": "v2",
+    "official": true
   },
   {
     "name": "Stable Diffusion v2.0 768-v",
     "file": "sd_v2.0_768_v_f16.ckpt",
-    "version": "v2"
+    "version": "v2",
+    "official": true
   },
   {
     "name": "Stable Diffusion v2.0 Depth",
     "file": "sd_v2.0_depth_f16.ckpt",
     "version": "v2",
-    "modifier": "depth"
+    "modifier": "depth",
+    "official": true
   },
   {
     "name": "Stable Diffusion v2.0 Inpainting",
     "file": "sd_v2.0_inpainting_f16.ckpt",
     "version": "v2",
-    "modifier": "inpainting"
+    "modifier": "inpainting",
+    "official": true
   },
   {
     "name": "Stable Diffusion v2.1",
     "file": "sd_v2.1_f16.ckpt",
-    "version": "v2"
+    "version": "v2",
+    "official": true
   },
   {
     "name": "Stable Diffusion v2.1 768-v",
     "file": "sd_v2.1_768_v_f16.ckpt",
-    "version": "v2"
+    "version": "v2",
+    "official": true
   },
   {
     "file": "svd_i2v_1.0_f16.ckpt",
@@ -3064,12 +3114,14 @@
   {
     "name": "Stable Video Diffusion I2V XT 1.0 (8-bit)",
     "file": "svd_i2v_xt_1.0_q6p_q8p.ckpt",
-    "version": "svdI2v"
+    "version": "svdI2v",
+    "official": true
   },
   {
     "name": "Stable Video Diffusion I2V XT v1.0",
     "file": "svd_i2v_xt_1.0_f16.ckpt",
-    "version": "svdI2v"
+    "version": "svdI2v",
+    "official": true
   },
   {
     "file": "svd_i2v_xt_1.1_f16.ckpt",
@@ -3495,104 +3547,123 @@
     "name": "Wan 2.1 I2V 14B 480p",
     "file": "wan_v2.1_14b_i2v_480p_q8p.ckpt",
     "version": "wan21_14b",
-    "modifier": "inpainting"
+    "modifier": "inpainting",
+    "official": true
   },
   {
     "name": "Wan 2.1 I2V 14B 480p (6-bit, SVDQuant)",
     "file": "wan_v2.1_14b_i2v_480p_q6p_svd.ckpt",
     "version": "wan21_14b",
-    "modifier": "inpainting"
+    "modifier": "inpainting",
+    "official": true
   },
   {
     "name": "Wan 2.1 I2V 14B 720p",
     "file": "wan_v2.1_14b_i2v_720p_q8p.ckpt",
     "version": "wan21_14b",
-    "modifier": "inpainting"
+    "modifier": "inpainting",
+    "official": true
   },
   {
     "name": "Wan 2.1 I2V 14B 720p (6-bit, SVDQuant)",
     "file": "wan_v2.1_14b_i2v_720p_q6p_svd.ckpt",
     "version": "wan21_14b",
-    "modifier": "inpainting"
+    "modifier": "inpainting",
+    "official": true
   },
   {
     "name": "Wan 2.1 T2V 1.3B",
     "file": "wan_v2.1_1.3b_480p_f16.ckpt",
-    "version": "wan21_1_3b"
+    "version": "wan21_1_3b",
+    "official": true
   },
   {
     "name": "Wan 2.1 T2V 1.3B (8-bit)",
     "file": "wan_v2.1_1.3b_480p_q8p.ckpt",
-    "version": "wan21_1_3b"
+    "version": "wan21_1_3b",
+    "official": true
   },
   {
     "name": "Wan 2.1 T2V 14B",
     "file": "wan_v2.1_14b_720p_q8p.ckpt",
-    "version": "wan21_14b"
+    "version": "wan21_14b",
+    "official": true
   },
   {
     "name": "Wan 2.1 T2V 14B (5-bit, SVDQuant)",
     "file": "wan_v2.1_14b_720p_q5p_svd.ckpt",
-    "version": "wan21_14b"
+    "version": "wan21_14b",
+    "official": true
   },
   {
     "name": "Wan 2.1 T2V 14B (6-bit, SVDQuant)",
     "file": "wan_v2.1_14b_720p_q6p_svd.ckpt",
-    "version": "wan21_14b"
+    "version": "wan21_14b",
+    "official": true
   },
   {
     "name": "Wan 2.2 High Noise Expert I2V A14B",
     "file": "wan_v2.2_a14b_hne_i2v_q8p.ckpt",
     "version": "wan21_14b",
-    "modifier": "inpainting"
+    "modifier": "inpainting",
+    "official": true
   },
   {
     "name": "Wan 2.2 High Noise Expert I2V A14B (6-bit, SVDQuant)",
     "file": "wan_v2.2_a14b_hne_i2v_q6p_svd.ckpt",
     "version": "wan21_14b",
-    "modifier": "inpainting"
+    "modifier": "inpainting",
+    "official": true
   },
   {
     "name": "Wan 2.2 High Noise Expert T2V A14B",
     "file": "wan_v2.2_a14b_hne_t2v_q8p.ckpt",
-    "version": "wan21_14b"
+    "version": "wan21_14b",
+    "official": true
   },
   {
     "name": "Wan 2.2 High Noise Expert T2V A14B (6-bit, SVDQuant)",
     "file": "wan_v2.2_a14b_hne_t2v_q6p_svd.ckpt",
-    "version": "wan21_14b"
+    "version": "wan21_14b",
+    "official": true
   },
   {
     "name": "Wan 2.2 Low Noise Expert I2V A14B",
     "file": "wan_v2.2_a14b_lne_i2v_q8p.ckpt",
     "version": "wan21_14b",
-    "modifier": "inpainting"
+    "modifier": "inpainting",
+    "official": true
   },
   {
     "name": "Wan 2.2 Low Noise Expert I2V A14B (6-bit, SVDQuant)",
     "file": "wan_v2.2_a14b_lne_i2v_q6p_svd.ckpt",
     "version": "wan21_14b",
-    "modifier": "inpainting"
+    "modifier": "inpainting",
+    "official": true
   },
   {
     "name": "Wan 2.2 Low Noise Expert T2V A14B",
     "file": "wan_v2.2_a14b_lne_t2v_q8p.ckpt",
-    "version": "wan21_14b"
+    "version": "wan21_14b",
+    "official": true
   },
   {
     "name": "Wan 2.2 Low Noise Expert T2V A14B (6-bit, SVDQuant)",
     "file": "wan_v2.2_a14b_lne_t2v_q6p_svd.ckpt",
-    "version": "wan21_14b"
+    "version": "wan21_14b",
+    "official": true
   },
   {
     "name": "Wan 2.2 TI2V 5B",
     "file": "wan_v2.2_5b_ti2v_f16.ckpt",
-    "version": "wan22_5b"
+    "version": "wan22_5b",
+    "official": true
   },
   {
     "name": "Wan 2.2 TI2V 5B (8-bit)",
     "file": "wan_v2.2_5b_ti2v_q8p.ckpt",
-    "version": "wan22_5b"
+    "version": "wan22_5b",
+    "official": true
   },
   {
     "name": "Wan v2.2 High Noise Expert T2V A14B Lightning 250928",

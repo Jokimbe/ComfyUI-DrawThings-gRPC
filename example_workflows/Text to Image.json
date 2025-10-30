@@ -1,1 +1,390 @@
-{"id":"baa3023d-71f8-42d7-9bc5-69dcced8c4b5","revision":0,"last_node_id":19,"last_link_id":41,"nodes":[{"id":2,"type":"SaveImage","pos":[2110,530],"size":[450,440],"flags":{},"order":4,"mode":0,"inputs":[{"localized_name":"images","name":"images","type":"IMAGE","link":41},{"localized_name":"filename_prefix","name":"filename_prefix","type":"STRING","widget":{"name":"filename_prefix"},"link":null}],"outputs":[],"properties":{"cnr_id":"comfy-core","ver":"0.3.38","Node name for S&R":"SaveImage"},"widgets_values":["ComfyUI"]},{"id":12,"type":"DrawThingsPrompt","pos":[1300,790],"size":[400,200],"flags":{},"order":0,"mode":0,"inputs":[{"localized_name":"insert_textual_inversion","name":"insert_textual_inversion","type":"DT_MODEL","widget":{"name":"insert_textual_inversion"},"link":null},{"localized_name":"prompt","name":"prompt","type":"STRING","widget":{"name":"prompt"},"link":null}],"outputs":[{"color_off":"#EF5350","color_on":"#EF5350","localized_name":"PROMPT","name":"PROMPT","type":"STRING","links":[40]}],"properties":{"cnr_id":"drawthings-grpc","ver":"97b273b461f7d06b8823d0e4b16cb1bcdb77054e","Node name for S&R":"DrawThingsPrompt"},"widgets_values":["...","low quality, blurry, watermark"],"color":"#322","bgcolor":"#533","_lastSelectedModel":{}},{"id":11,"type":"DrawThingsPrompt","pos":[1300,530],"size":[400,200],"flags":{},"order":1,"mode":0,"inputs":[{"localized_name":"insert_textual_inversion","name":"insert_textual_inversion","type":"DT_MODEL","widget":{"name":"insert_textual_inversion"},"link":null},{"localized_name":"prompt","name":"prompt","type":"STRING","widget":{"name":"prompt"},"link":null}],"outputs":[{"color_off":"#EF5350","color_on":"#EF5350","localized_name":"PROMPT","name":"PROMPT","type":"STRING","links":[39]}],"properties":{"cnr_id":"drawthings-grpc","ver":"97b273b461f7d06b8823d0e4b16cb1bcdb77054e","Node name for S&R":"DrawThingsPrompt"},"widgets_values":["...","a photograph of an astronaut riding a horse, 4k, volumetric"],"color":"#232","bgcolor":"#353","_lastSelectedModel":{}},{"id":18,"type":"MarkdownNote","pos":[920,530],"size":[340,340],"flags":{},"order":2,"mode":0,"inputs":[],"outputs":[],"properties":{},"widgets_values":["Make sure your Draw Things app has the following settings:\n- API Server: enabled\n- Protocol: gRPC\n- Transport Layer Security: Enabled\n- Enable Model Browser: Enabled\n- Response Compression: Disabled\n\nOr if you are using the gRPCServerCLI, use the following command:\n\n`gRPCServerCLI-macOS [path to models] --no-response-compression --model-browser`\n\nYou can paste a Draw Things config into the sampler node through the context menu \n\nLora/ControlNet/Upscaler/Refiner can be set with the corresponding node\n\nIssues or questions? Is a setting missing or not working as expected?\n- [Discord](https://discord.com/channels/1038516303666876436/1357377020299837464)\n- [Github Issues](https://github.com/Jokimbe/ComfyUI-DrawThings-gRPC/issues)\n- [Github Discusions](https://github.com/Jokimbe/ComfyUI-DrawThings-gRPC/discussions)"],"color":"#432","bgcolor":"#653"},{"id":17,"type":"DrawThingsSampler","pos":[1750,530],"size":[312.08984375,534],"flags":{},"order":3,"mode":0,"inputs":[{"localized_name":"image","name":"image","shape":7,"type":"IMAGE","link":null},{"localized_name":"mask","name":"mask","shape":7,"type":"MASK","link":null},{"color_off":"#FFA931","color_on":"#FFA931","localized_name":"positive","name":"positive","shape":7,"type":"STRING","link":39},{"color_off":"#FFA931","color_on":"#FFA931","localized_name":"negative","name":"negative","shape":7,"type":"STRING","link":40},{"localized_name":"lora","name":"lora","shape":7,"type":"DT_LORA","link":null},{"localized_name":"control_net","name":"control_net","shape":7,"type":"DT_CNET","link":null},{"localized_name":"upscaler","name":"upscaler","shape":7,"type":"DT_UPSCALER","link":null},{"localized_name":"refiner","name":"refiner","shape":7,"type":"DT_REFINER","link":null},{"localized_name":"settings","name":"settings","type":"COMBO","widget":{"name":"settings"},"link":null},{"localized_name":"server","name":"server","type":"STRING","widget":{"name":"server"},"link":null},{"localized_name":"port","name":"port","type":"STRING","widget":{"name":"port"},"link":null},{"localized_name":"use_tls","name":"use_tls","type":"BOOLEAN","widget":{"name":"use_tls"},"link":null},{"localized_name":"model","name":"model","type":"DT_MODEL","widget":{"name":"model"},"link":null},{"localized_name":"strength","name":"strength","type":"FLOAT","widget":{"name":"strength"},"link":null},{"localized_name":"seed","name":"seed","type":"INT","widget":{"name":"seed"},"link":null},{"localized_name":"seed_mode","name":"seed_mode","type":"COMBO","widget":{"name":"seed_mode"},"link":null},{"localized_name":"width","name":"width","type":"INT","widget":{"name":"width"},"link":null},{"localized_name":"height","name":"height","type":"INT","widget":{"name":"height"},"link":null},{"localized_name":"steps","name":"steps","type":"INT","widget":{"name":"steps"},"link":null},{"localized_name":"num_frames","name":"num_frames","type":"INT","widget":{"name":"num_frames"},"link":null},{"localized_name":"cfg","name":"cfg","type":"FLOAT","widget":{"name":"cfg"},"link":null},{"localized_name":"speed_up","name":"speed_up","type":"BOOLEAN","widget":{"name":"speed_up"},"link":null},{"localized_name":"guidance_embed","name":"guidance_embed","type":"FLOAT","widget":{"name":"guidance_embed"},"link":null},{"localized_name":"sampler_name","name":"sampler_name","type":"COMBO","widget":{"name":"sampler_name"},"link":null},{"localized_name":"res_dpt_shift","name":"res_dpt_shift","type":"BOOLEAN","widget":{"name":"res_dpt_shift"},"link":null},{"localized_name":"shift","name":"shift","type":"FLOAT","widget":{"name":"shift"},"link":null},{"localized_name":"batch_size","name":"batch_size","type":"INT","widget":{"name":"batch_size"},"link":null},{"localized_name":"fps","name":"fps","type":"INT","widget":{"name":"fps"},"link":null},{"localized_name":"motion_scale","name":"motion_scale","type":"INT","widget":{"name":"motion_scale"},"link":null},{"localized_name":"guiding_frame_noise","name":"guiding_frame_noise","type":"FLOAT","widget":{"name":"guiding_frame_noise"},"link":null},{"localized_name":"start_frame_guidance","name":"start_frame_guidance","type":"FLOAT","widget":{"name":"start_frame_guidance"},"link":null},{"localized_name":"causal_inference","name":"causal_inference","type":"INT","widget":{"name":"causal_inference"},"link":null},{"localized_name":"clip_skip","name":"clip_skip","type":"INT","widget":{"name":"clip_skip"},"link":null},{"localized_name":"sharpness","name":"sharpness","type":"FLOAT","widget":{"name":"sharpness"},"link":null},{"localized_name":"mask_blur","name":"mask_blur","type":"FLOAT","widget":{"name":"mask_blur"},"link":null},{"localized_name":"mask_blur_outset","name":"mask_blur_outset","type":"INT","widget":{"name":"mask_blur_outset"},"link":null},{"localized_name":"preserve_original","name":"preserve_original","type":"BOOLEAN","widget":{"name":"preserve_original"},"link":null},{"localized_name":"high_res_fix","name":"high_res_fix","type":"BOOLEAN","widget":{"name":"high_res_fix"},"link":null},{"localized_name":"high_res_fix_start_width","name":"high_res_fix_start_width","type":"INT","widget":{"name":"high_res_fix_start_width"},"link":null},{"localized_name":"high_res_fix_start_height","name":"high_res_fix_start_height","type":"INT","widget":{"name":"high_res_fix_start_height"},"link":null},{"localized_name":"high_res_fix_strength","name":"high_res_fix_strength","type":"FLOAT","widget":{"name":"high_res_fix_strength"},"link":null},{"localized_name":"tiled_decoding","name":"tiled_decoding","type":"BOOLEAN","widget":{"name":"tiled_decoding"},"link":null},{"localized_name":"decoding_tile_width","name":"decoding_tile_width","type":"INT","widget":{"name":"decoding_tile_width"},"link":null},{"localized_name":"decoding_tile_height","name":"decoding_tile_height","type":"INT","widget":{"name":"decoding_tile_height"},"link":null},{"localized_name":"decoding_tile_overlap","name":"decoding_tile_overlap","type":"INT","widget":{"name":"decoding_tile_overlap"},"link":null},{"localized_name":"tiled_diffusion","name":"tiled_diffusion","type":"BOOLEAN","widget":{"name":"tiled_diffusion"},"link":null},{"localized_name":"diffusion_tile_width","name":"diffusion_tile_width","type":"INT","widget":{"name":"diffusion_tile_width"},"link":null},{"localized_name":"diffusion_tile_height","name":"diffusion_tile_height","type":"INT","widget":{"name":"diffusion_tile_height"},"link":null},{"localized_name":"diffusion_tile_overlap","name":"diffusion_tile_overlap","type":"INT","widget":{"name":"diffusion_tile_overlap"},"link":null},{"localized_name":"tea_cache","name":"tea_cache","type":"BOOLEAN","widget":{"name":"tea_cache"},"link":null},{"localized_name":"tea_cache_start","name":"tea_cache_start","type":"INT","widget":{"name":"tea_cache_start"},"link":null},{"localized_name":"tea_cache_end","name":"tea_cache_end","type":"INT","widget":{"name":"tea_cache_end"},"link":null},{"localized_name":"tea_cache_threshold","name":"tea_cache_threshold","type":"FLOAT","widget":{"name":"tea_cache_threshold"},"link":null},{"localized_name":"tea_cache_max_skip_steps","name":"tea_cache_max_skip_steps","type":"INT","widget":{"name":"tea_cache_max_skip_steps"},"link":null},{"localized_name":"separate_clip_l","name":"separate_clip_l","type":"BOOLEAN","widget":{"name":"separate_clip_l"},"link":null},{"localized_name":"clip_l_text","name":"clip_l_text","type":"STRING","widget":{"name":"clip_l_text"},"link":null},{"localized_name":"separate_open_clip_g","name":"separate_open_clip_g","type":"BOOLEAN","widget":{"name":"separate_open_clip_g"},"link":null},{"localized_name":"open_clip_g_text","name":"open_clip_g_text","type":"STRING","widget":{"name":"open_clip_g_text"},"link":null}],"outputs":[{"localized_name":"IMAGE","name":"IMAGE","type":"IMAGE","links":[41]}],"properties":{"cnr_id":"drawthings-grpc","ver":"40f4205bee94471af99f0eb38a992885173146fe","Node name for S&R":"DrawThingsSampler"},"widgets_values":["Basic","localhost","7859",true,"(None selected)",1,-1,"randomize","ScaleAlike",1024,1024,20,14,4.5,true,4.5,"Euler A",true,1,1,5,127,0.02,1,0,1,0,0,0,true,false,448,448,0.7,false,640,640,128,false,512,512,64,false,5,2,0.2,3,false,"",false,""],"nodePackVersion":"1.3.1","widget_values_keyed":{"settings":"Basic","server":"localhost","port":"7859","use_tls":true,"model":"(None selected)","strength":1,"seed":-1,"control_after_generate":"randomize","seed_mode":"ScaleAlike","width":1024,"height":1024,"steps":20,"num_frames":14,"cfg":4.5,"speed_up":true,"guidance_embed":4.5,"sampler_name":"Euler A","res_dpt_shift":true,"shift":1,"batch_size":1,"fps":5,"motion_scale":127,"guiding_frame_noise":0.02,"start_frame_guidance":1,"causal_inference":0,"clip_skip":1,"sharpness":0,"mask_blur":0,"mask_blur_outset":0,"preserve_original":true,"high_res_fix":false,"high_res_fix_start_width":448,"high_res_fix_start_height":448,"high_res_fix_strength":0.7,"tiled_decoding":false,"decoding_tile_width":640,"decoding_tile_height":640,"decoding_tile_overlap":128,"tiled_diffusion":false,"diffusion_tile_width":512,"diffusion_tile_height":512,"diffusion_tile_overlap":64,"tea_cache":false,"tea_cache_start":5,"tea_cache_end":2,"tea_cache_threshold":0.2,"tea_cache_max_skip_steps":3,"separate_clip_l":false,"clip_l_text":"","separate_open_clip_g":false,"open_clip_g_text":""},"_lastSelectedModel":{"model":"(None selected)"}}],"links":[[39,11,0,17,2,"STRING"],[40,12,0,17,3,"STRING"],[41,17,0,2,0,"IMAGE"]],"groups":[],"config":{},"extra":{"ds":{"scale":0.806792123499272,"offset":[-868.802980978265,-331.99806447270487]}},"version":0.4}
+{
+  "id": "baa3023d-71f8-42d7-9bc5-69dcced8c4b5",
+  "revision": 0,
+  "last_node_id": 19,
+  "last_link_id": 41,
+  "nodes": [
+    {
+      "id": 2,
+      "type": "SaveImage",
+      "pos": [
+        2110,
+        530
+      ],
+      "size": [
+        450,
+        440
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 41
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.3.38",
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "ComfyUI"
+      ]
+    },
+    {
+      "id": 12,
+      "type": "DrawThingsPrompt",
+      "pos": [
+        1300,
+        790
+      ],
+      "size": [
+        400,
+        200
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "color_off": "#EF5350",
+          "color_on": "#EF5350",
+          "name": "PROMPT",
+          "type": "STRING",
+          "links": [
+            40
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "drawthings-grpc",
+        "ver": "97b273b461f7d06b8823d0e4b16cb1bcdb77054e",
+        "Node name for S&R": "DrawThingsPrompt"
+      },
+      "widgets_values": [
+        "...",
+        "low quality, blurry, watermark"
+      ],
+      "color": "#322",
+      "bgcolor": "#533",
+      "_lastSelectedModel": {}
+    },
+    {
+      "id": 11,
+      "type": "DrawThingsPrompt",
+      "pos": [
+        1300,
+        530
+      ],
+      "size": [
+        400,
+        200
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "color_off": "#EF5350",
+          "color_on": "#EF5350",
+          "name": "PROMPT",
+          "type": "STRING",
+          "links": [
+            39
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "drawthings-grpc",
+        "ver": "97b273b461f7d06b8823d0e4b16cb1bcdb77054e",
+        "Node name for S&R": "DrawThingsPrompt"
+      },
+      "widgets_values": [
+        "...",
+        "a photograph of an astronaut riding a horse, 4k, volumetric"
+      ],
+      "color": "#232",
+      "bgcolor": "#353",
+      "_lastSelectedModel": {}
+    },
+    {
+      "id": 17,
+      "type": "DrawThingsSampler",
+      "pos": [
+        1750,
+        530
+      ],
+      "size": [
+        312.08984375,
+        554
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "mask",
+          "shape": 7,
+          "type": "MASK",
+          "link": null
+        },
+        {
+          "color_off": "#FFA931",
+          "color_on": "#FFA931",
+          "name": "positive",
+          "shape": 7,
+          "type": "STRING",
+          "link": 39
+        },
+        {
+          "color_off": "#FFA931",
+          "color_on": "#FFA931",
+          "name": "negative",
+          "shape": 7,
+          "type": "STRING",
+          "link": 40
+        },
+        {
+          "name": "lora",
+          "shape": 7,
+          "type": "DT_LORA",
+          "link": null
+        },
+        {
+          "name": "control_net",
+          "shape": 7,
+          "type": "DT_CNET",
+          "link": null
+        },
+        {
+          "name": "upscaler",
+          "shape": 7,
+          "type": "DT_UPSCALER",
+          "link": null
+        },
+        {
+          "name": "refiner",
+          "shape": 7,
+          "type": "DT_REFINER",
+          "link": null
+        },
+        {
+          "name": "hints",
+          "shape": 7,
+          "type": "DT_HINTS",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            41
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "drawthings-grpc",
+        "ver": "40f4205bee94471af99f0eb38a992885173146fe",
+        "Node name for S&R": "DrawThingsSampler"
+      },
+      "widgets_values": [
+        "Basic",
+        "localhost",
+        "7859",
+        true,
+        "(None selected)",
+        1,
+        -1,
+        "randomize",
+        "ScaleAlike",
+        1024,
+        1024,
+        20,
+        14,
+        4.5,
+        true,
+        0,
+        true,
+        4.5,
+        "Euler A",
+        1,
+        true,
+        1,
+        1,
+        5,
+        127,
+        0.02,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        true,
+        false,
+        448,
+        448,
+        0.7,
+        false,
+        640,
+        640,
+        128,
+        false,
+        512,
+        512,
+        64,
+        false,
+        5,
+        2,
+        0.2,
+        3,
+        false,
+        "",
+        false,
+        ""
+      ],
+      "nodePackVersion": "1.7.4",
+      "widget_values_keyed": {
+        "settings": "Basic",
+        "server": "localhost",
+        "port": "7859",
+        "use_tls": true,
+        "model": "(None selected)",
+        "strength": 1,
+        "seed": -1,
+        "control_after_generate": "randomize",
+        "seed_mode": "ScaleAlike",
+        "width": 1024,
+        "height": 1024,
+        "steps": 20,
+        "num_frames": 14,
+        "cfg": 4.5,
+        "cfg_zero_star": true,
+        "cfg_zero_star_init_steps": 0,
+        "speed_up": true,
+        "guidance_embed": 4.5,
+        "sampler_name": "Euler A",
+        "stochastic_sampling_gamma": 1,
+        "res_dpt_shift": true,
+        "shift": 1,
+        "batch_size": 1,
+        "fps": 5,
+        "motion_scale": 127,
+        "guiding_frame_noise": 0.02,
+        "start_frame_guidance": 1,
+        "causal_inference": 0,
+        "causal_inference_pad": 0,
+        "clip_skip": 1,
+        "sharpness": 0,
+        "mask_blur": 0,
+        "mask_blur_outset": 0,
+        "preserve_original": true,
+        "high_res_fix": false,
+        "high_res_fix_start_width": 448,
+        "high_res_fix_start_height": 448,
+        "high_res_fix_strength": 0.7,
+        "tiled_decoding": false,
+        "decoding_tile_width": 640,
+        "decoding_tile_height": 640,
+        "decoding_tile_overlap": 128,
+        "tiled_diffusion": false,
+        "diffusion_tile_width": 512,
+        "diffusion_tile_height": 512,
+        "diffusion_tile_overlap": 64,
+        "tea_cache": false,
+        "tea_cache_start": 5,
+        "tea_cache_end": 2,
+        "tea_cache_threshold": 0.2,
+        "tea_cache_max_skip_steps": 3,
+        "separate_clip_l": false,
+        "clip_l_text": "",
+        "separate_open_clip_g": false,
+        "open_clip_g_text": ""
+      },
+      "_lastSelectedModel": {
+        "model": "(None selected)"
+      }
+    },
+    {
+      "id": 18,
+      "type": "MarkdownNote",
+      "pos": [
+        920,
+        530
+      ],
+      "size": [
+        340,
+        340
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "Make sure your Draw Things app has the following settings:\n- API Server: enabled\n- Protocol: gRPC\n- Transport Layer Security: Enabled\n- Enable Model Browser: Enabled\n\nOr if you are using the gRPCServerCLI, use the following command:\n\n`gRPCServerCLI-macOS [path to models] --model-browser`\n\nYou can paste a Draw Things config into the sampler node through the context menu \n\nLora/ControlNet/Upscaler/Refiner can be set with the corresponding node\n\nIssues or questions? Is a setting missing or not working as expected?\n- [Discord](https://discord.com/channels/1038516303666876436/1357377020299837464)\n- [Github Issues](https://github.com/Jokimbe/ComfyUI-DrawThings-gRPC/issues)\n- [Github Discussions](https://github.com/Jokimbe/ComfyUI-DrawThings-gRPC/discussions)"
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    }
+  ],
+  "links": [
+    [
+      39,
+      11,
+      0,
+      17,
+      2,
+      "STRING"
+    ],
+    [
+      40,
+      12,
+      0,
+      17,
+      3,
+      "STRING"
+    ],
+    [
+      41,
+      17,
+      0,
+      2,
+      0,
+      "IMAGE"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 1.0349809879774934,
+      "offset": [
+        -1005.8660856773976,
+        -473.1873555132241
+      ]
+    },
+    "frontendVersion": "1.28.8",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}

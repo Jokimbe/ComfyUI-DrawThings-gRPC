@@ -114,213 +114,6 @@
       "_lastSelectedModel": {}
     },
     {
-      "id": 17,
-      "type": "DrawThingsSampler",
-      "pos": [
-        1750,
-        530
-      ],
-      "size": [
-        312.08984375,
-        578
-      ],
-      "flags": {},
-      "order": 6,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "image",
-          "shape": 7,
-          "type": "IMAGE",
-          "link": null
-        },
-        {
-          "name": "mask",
-          "shape": 7,
-          "type": "MASK",
-          "link": null
-        },
-        {
-          "color_off": "#FFA931",
-          "color_on": "#FFA931",
-          "name": "positive",
-          "shape": 7,
-          "type": "STRING",
-          "link": 39
-        },
-        {
-          "color_off": "#FFA931",
-          "color_on": "#FFA931",
-          "name": "negative",
-          "shape": 7,
-          "type": "STRING",
-          "link": 40
-        },
-        {
-          "name": "lora",
-          "shape": 7,
-          "type": "DT_LORA",
-          "link": 42
-        },
-        {
-          "name": "control_net",
-          "shape": 7,
-          "type": "DT_CNET",
-          "link": null
-        },
-        {
-          "name": "upscaler",
-          "shape": 7,
-          "type": "DT_UPSCALER",
-          "link": 44
-        },
-        {
-          "name": "refiner",
-          "shape": 7,
-          "type": "DT_REFINER",
-          "link": 45
-        },
-        {
-          "name": "hints",
-          "shape": 7,
-          "type": "DT_HINTS",
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [
-            41
-          ]
-        }
-      ],
-      "properties": {
-        "cnr_id": "drawthings-grpc",
-        "ver": "40f4205bee94471af99f0eb38a992885173146fe",
-        "Node name for S&R": "DrawThingsSampler"
-      },
-      "widgets_values": [
-        "Basic",
-        "localhost",
-        "7859",
-        true,
-        "(None selected)",
-        1,
-        -1,
-        "randomize",
-        "ScaleAlike",
-        1024,
-        1024,
-        20,
-        14,
-        4.5,
-        true,
-        4.5,
-        true,
-        4.5,
-        "Euler A",
-        1,
-        true,
-        1,
-        1,
-        5,
-        127,
-        0.02,
-        1,
-        0,
-        0,
-        1,
-        0,
-        0,
-        0,
-        true,
-        false,
-        448,
-        448,
-        0.7,
-        false,
-        640,
-        640,
-        128,
-        false,
-        512,
-        512,
-        64,
-        false,
-        5,
-        2,
-        0.2,
-        3,
-        false,
-        "",
-        false,
-        ""
-      ],
-      "nodePackVersion": "1.6.0",
-      "widget_values_keyed": {
-        "settings": "Basic",
-        "server": "localhost",
-        "port": "7859",
-        "use_tls": true,
-        "model": "(None selected)",
-        "strength": 1,
-        "seed": -1,
-        "control_after_generate": "randomize",
-        "seed_mode": "ScaleAlike",
-        "width": 1024,
-        "height": 1024,
-        "steps": 20,
-        "num_frames": 14,
-        "cfg": 4.5,
-        "cfg_zero_star": true,
-        "cfg_zero_star_init_steps": 4.5,
-        "speed_up": true,
-        "guidance_embed": 4.5,
-        "sampler_name": "Euler A",
-        "stochastic_sampling_gamma": 1,
-        "res_dpt_shift": true,
-        "shift": 1,
-        "batch_size": 1,
-        "fps": 5,
-        "motion_scale": 127,
-        "guiding_frame_noise": 0.02,
-        "start_frame_guidance": 1,
-        "causal_inference": 0,
-        "causal_inference_pad": 0,
-        "clip_skip": 1,
-        "sharpness": 0,
-        "mask_blur": 0,
-        "mask_blur_outset": 0,
-        "preserve_original": true,
-        "high_res_fix": false,
-        "high_res_fix_start_width": 448,
-        "high_res_fix_start_height": 448,
-        "high_res_fix_strength": 0.7,
-        "tiled_decoding": false,
-        "decoding_tile_width": 640,
-        "decoding_tile_height": 640,
-        "decoding_tile_overlap": 128,
-        "tiled_diffusion": false,
-        "diffusion_tile_width": 512,
-        "diffusion_tile_height": 512,
-        "diffusion_tile_overlap": 64,
-        "tea_cache": false,
-        "tea_cache_start": 5,
-        "tea_cache_end": 2,
-        "tea_cache_threshold": 0.2,
-        "tea_cache_max_skip_steps": 3,
-        "separate_clip_l": false,
-        "clip_l_text": "",
-        "separate_open_clip_g": false,
-        "open_clip_g_text": ""
-      },
-      "_lastSelectedModel": {
-        "model": "(None selected)"
-      }
-    },
-    {
       "id": 23,
       "type": "DrawThingsRefiner",
       "pos": [
@@ -478,7 +271,7 @@
       },
       "loraCount": 2,
       "showMode": false,
-      "nodePackVersion": "1.6.0",
+      "nodePackVersion": "1.7.4",
       "widget_values_keyed": {
         "buttons": "",
         "lora": {
@@ -585,6 +378,213 @@
       }
     },
     {
+      "id": 17,
+      "type": "DrawThingsSampler",
+      "pos": [
+        1750,
+        530
+      ],
+      "size": [
+        312.08984375,
+        554
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "mask",
+          "shape": 7,
+          "type": "MASK",
+          "link": null
+        },
+        {
+          "color_off": "#FFA931",
+          "color_on": "#FFA931",
+          "name": "positive",
+          "shape": 7,
+          "type": "STRING",
+          "link": 39
+        },
+        {
+          "color_off": "#FFA931",
+          "color_on": "#FFA931",
+          "name": "negative",
+          "shape": 7,
+          "type": "STRING",
+          "link": 40
+        },
+        {
+          "name": "lora",
+          "shape": 7,
+          "type": "DT_LORA",
+          "link": 42
+        },
+        {
+          "name": "control_net",
+          "shape": 7,
+          "type": "DT_CNET",
+          "link": null
+        },
+        {
+          "name": "upscaler",
+          "shape": 7,
+          "type": "DT_UPSCALER",
+          "link": 44
+        },
+        {
+          "name": "refiner",
+          "shape": 7,
+          "type": "DT_REFINER",
+          "link": 45
+        },
+        {
+          "name": "hints",
+          "shape": 7,
+          "type": "DT_HINTS",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            41
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "drawthings-grpc",
+        "ver": "40f4205bee94471af99f0eb38a992885173146fe",
+        "Node name for S&R": "DrawThingsSampler"
+      },
+      "widgets_values": [
+        "Basic",
+        "localhost",
+        "7859",
+        true,
+        "(None selected)",
+        1,
+        -1,
+        "randomize",
+        "ScaleAlike",
+        1024,
+        1024,
+        20,
+        14,
+        4.5,
+        true,
+        0,
+        true,
+        4.5,
+        "Euler A",
+        1,
+        true,
+        1,
+        1,
+        5,
+        127,
+        0.02,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        true,
+        false,
+        448,
+        448,
+        0.7,
+        false,
+        640,
+        640,
+        128,
+        false,
+        512,
+        512,
+        64,
+        false,
+        5,
+        2,
+        0.2,
+        3,
+        false,
+        "",
+        false,
+        ""
+      ],
+      "nodePackVersion": "1.7.4",
+      "widget_values_keyed": {
+        "settings": "Basic",
+        "server": "localhost",
+        "port": "7859",
+        "use_tls": true,
+        "model": "(None selected)",
+        "strength": 1,
+        "seed": -1,
+        "control_after_generate": "randomize",
+        "seed_mode": "ScaleAlike",
+        "width": 1024,
+        "height": 1024,
+        "steps": 20,
+        "num_frames": 14,
+        "cfg": 4.5,
+        "cfg_zero_star": true,
+        "cfg_zero_star_init_steps": 0,
+        "speed_up": true,
+        "guidance_embed": 4.5,
+        "sampler_name": "Euler A",
+        "stochastic_sampling_gamma": 1,
+        "res_dpt_shift": true,
+        "shift": 1,
+        "batch_size": 1,
+        "fps": 5,
+        "motion_scale": 127,
+        "guiding_frame_noise": 0.02,
+        "start_frame_guidance": 1,
+        "causal_inference": 0,
+        "causal_inference_pad": 0,
+        "clip_skip": 1,
+        "sharpness": 0,
+        "mask_blur": 0,
+        "mask_blur_outset": 0,
+        "preserve_original": true,
+        "high_res_fix": false,
+        "high_res_fix_start_width": 448,
+        "high_res_fix_start_height": 448,
+        "high_res_fix_strength": 0.7,
+        "tiled_decoding": false,
+        "decoding_tile_width": 640,
+        "decoding_tile_height": 640,
+        "decoding_tile_overlap": 128,
+        "tiled_diffusion": false,
+        "diffusion_tile_width": 512,
+        "diffusion_tile_height": 512,
+        "diffusion_tile_overlap": 64,
+        "tea_cache": false,
+        "tea_cache_start": 5,
+        "tea_cache_end": 2,
+        "tea_cache_threshold": 0.2,
+        "tea_cache_max_skip_steps": 3,
+        "separate_clip_l": false,
+        "clip_l_text": "",
+        "separate_open_clip_g": false,
+        "open_clip_g_text": ""
+      },
+      "_lastSelectedModel": {
+        "model": "(None selected)"
+      }
+    },
+    {
       "id": 18,
       "type": "MarkdownNote",
       "pos": [
@@ -602,7 +602,7 @@
       "outputs": [],
       "properties": {},
       "widgets_values": [
-        "The LoRA node now supports up to 8 LoRAs! Use the 'Less/More' buttons to add or remove slots to the stack. The 'Show/Hide Mode' button lets you specify which refiner stage the LoRA should be applied to.\n\nIf you need to use more than 8 LoRAs, you can chain an additional LoRA node.\n\nThe upscaler node allows you to specify the upscaler model and scale to use.\n\nUse the refiner node to apply a refiner stage to the gen.\n\n---\n\nMake sure your Draw Things app has the following settings:\n- API Server: enabled\n- Protocol: gRPC\n- Transport Layer Security: Enabled\n- Enable Model Browser: Enabled\n- Response Compression: Disabled\n\nOr if you are using the gRPCServerCLI, use the following command:\n\n`gRPCServerCLI-macOS [path to models] --no-response-compression --model-browser`\n\nIssues or questions? Is a setting missing or not working as expected?\n- [Discord](https://discord.com/channels/1038516303666876436/1357377020299837464)\n- [Github Issues](https://github.com/Jokimbe/ComfyUI-DrawThings-gRPC/issues)\n- [Github Discusions](https://github.com/Jokimbe/ComfyUI-DrawThings-gRPC/discussions)"
+        "The LoRA node now supports up to 8 LoRAs! Use the 'Less/More' buttons to add or remove slots to the stack. The 'Show/Hide Mode' button lets you specify which refiner stage the LoRA should be applied to.\n\nIf you need to use more than 8 LoRAs, you can chain an additional LoRA node.\n\nThe upscaler node allows you to specify the upscaler model and scale to use.\n\nUse the refiner node to apply a refiner stage to the gen.\n\n---\n\nMake sure your Draw Things app has the following settings:\n- API Server: enabled\n- Protocol: gRPC\n- Transport Layer Security: Enabled\n- Enable Model Browser: Enabled\n\nOr if you are using the gRPCServerCLI, use the following command:\n\n`gRPCServerCLI-macOS [path to models] --model-browser`\n\nIssues or questions? Is a setting missing or not working as expected?\n- [Discord](https://discord.com/channels/1038516303666876436/1357377020299837464)\n- [Github Issues](https://github.com/Jokimbe/ComfyUI-DrawThings-gRPC/issues)\n- [Github Discussions](https://github.com/Jokimbe/ComfyUI-DrawThings-gRPC/discussions)"
       ],
       "color": "#432",
       "bgcolor": "#653"
@@ -662,13 +662,13 @@
   "config": {},
   "extra": {
     "ds": {
-      "scale": 1.1704264724392919,
+      "scale": 0.6939949122652598,
       "offset": [
-        -831.5280126018049,
-        -471.86412363598436
+        -613.9377662594272,
+        -406.0354945246693
       ]
     },
-    "frontendVersion": "1.23.4",
+    "frontendVersion": "1.28.8",
     "VHS_latentpreview": false,
     "VHS_latentpreviewrate": 0,
     "VHS_MetadataImage": true,

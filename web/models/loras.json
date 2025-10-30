@@ -197,19 +197,22 @@
     "name": "Fooocus Inpaint v2.6",
     "file": "fooocus_inpaint_v2.6_lora_f16.ckpt",
     "version": "sdxlBase",
-    "modifier": "inpainting"
+    "modifier": "inpainting",
+    "official": true
   },
   {
     "name": "Fooocus Inpaint v2.6 (8-bit)",
     "file": "fooocus_inpaint_v2.6_lora_q8p.ckpt",
     "version": "sdxlBase",
-    "modifier": "inpainting"
+    "modifier": "inpainting",
+    "official": true
   },
   {
     "name": "Foreground to Blending",
     "file": "layer_xl_fg2ble_v1.0_lora_f16.ckpt",
     "version": "sdxlBase",
-    "modifier": "inpainting"
+    "modifier": "inpainting",
+    "official": true
   },
   {
     "name": "Ghibli Cartoon Art",
@@ -452,12 +455,14 @@
   {
     "name": "LCM SDXL Base (1.0)",
     "file": "lcm_sd_xl_base_1.0_lora_f16.ckpt",
-    "version": "sdxlBase"
+    "version": "sdxlBase",
+    "official": true
   },
   {
     "name": "LCM SDXL Refiner (1.0)",
     "file": "lcm_sd_xl_refiner_1.0_lora_f16.ckpt",
-    "version": "sdxlRefiner"
+    "version": "sdxlRefiner",
+    "official": true
   },
   {
     "version": "ssd_1b",
@@ -468,7 +473,8 @@
   {
     "name": "LCM Stable Diffusion v1.5",
     "file": "lcm_sd_v1.5_lora_f16.ckpt",
-    "version": "v1"
+    "version": "v1",
+    "official": true
   },
   {
     "name": "Long Hair Slider",
@@ -670,7 +676,8 @@
   {
     "name": "SDXL Offset (1.0)",
     "file": "sdxl_offset_v1.0_lora_f16.ckpt",
-    "version": "sdxlBase"
+    "version": "sdxlBase",
+    "official": true
   },
   {
     "version": "v1",
@@ -696,12 +703,14 @@
   {
     "name": "TCD SDXL Base (1.0)",
     "file": "tcd_sd_xl_base_1.0_lora_f16.ckpt",
-    "version": "sdxlBase"
+    "version": "sdxlBase",
+    "official": true
   },
   {
     "name": "TCD Stable Diffusion v1.5",
     "file": "tcd_sd_v1.5_lora_f16.ckpt",
-    "version": "v1"
+    "version": "v1",
+    "official": true
   },
   {
     "version": "v1",
@@ -730,12 +739,14 @@
   {
     "name": "Transparent Image",
     "file": "layer_flux_1_transparent_lora_f16.ckpt",
-    "version": "flux1"
+    "version": "flux1",
+    "official": true
   },
   {
     "name": "Transparent Image (Attention Injection)",
     "file": "layer_xl_transparent_attn_v1.0_lora_f16.ckpt",
-    "version": "sdxlBase"
+    "version": "sdxlBase",
+    "official": true
   },
   {
     "name": "Transparent Image FLUX.1 [dev]",
