@@ -289,9 +289,6 @@ const exporters = {
     causal_inference: (w, n, c) => {
         if (w && typeof w.value === "number") c.causal_inference = Math.floor((w.value + 3) / 4)
     },
-    causal_inference: (w, n, c) => {
-        if (w && typeof w.value === "number") c.causal_inference_pad = Math.floor(w.value / 4)
-    },
 }
 
 class DTProperty {

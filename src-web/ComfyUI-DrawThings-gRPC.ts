@@ -1,27 +1,24 @@
-import { ComfyExtension } from "@comfyorg/comfyui-frontend-types";
-import { LGraphNode } from "@comfyorg/litegraph";
+import { type ComfyExtension } from "@comfyorg/comfyui-frontend-types";
+import { type LGraphNode } from "@comfyorg/litegraph";
+import { type DTSampler } from "./types.js";
 import { importConfig } from "./configImport.js";
-import {
-    findPropertyPython
-} from "./configProperties.js";
+import { findPropertyPython } from "./configProperties.js";
 import { DtButtonsTypeHandler } from "./lora.js";
 import { DtModelTypeHandler } from "./models.js";
-import { DTSampler } from "./types.js";
 import { checkVersion } from "./upgrade.js";
 import { setCallback, updateProto } from "./util.js";
 
-export const nodePackVersion = "1.7.2";
-let previewMethod = undefined;
+export const nodePackVersion = "1.8.0";
+let previewMethod: string | undefined = undefined;
 
-/** @type {import("@comfyorg/comfyui-frontend-types").ComfyExtension} */
 export default {
     name: "core",
 
     getCustomWidgets(): unknown {
         return {
             DT_MODEL: DtModelTypeHandler,
-            "DT_BUTTONS": DtButtonsTypeHandler
-        }
+            DT_BUTTONS: DtButtonsTypeHandler,
+        };
     },
 
     beforeConfigureGraph(graph) {
@@ -47,13 +44,6 @@ export default {
         }
     },
 
-    // beforeConfigureGraph: function (graph) {
-    //     const samplerNodes = graph.nodes.filter(n => n.type === "DrawThingsSampler")
-    //     if (samplerNodes.some(n => n.nodePackVersion !== nodePackVersion)) {
-    //         console.log("Nodes in workflow are from different version of ComfyUI-DrawThings-gRPC")
-    //     }
-    // },
-
     async setup(app) {
         // query the api for the preview setting
         await updatePreviewSetting();
@@ -78,7 +68,7 @@ export default {
 
         // if the prompt is cancelled, send a signal to the server to cancel the grpc request
         setCallback(app.api, "interrupt", async (_e) => {
-            if (app.graph.nodes.some((n) => n.type === "DrawThingsSampler")) {
+            if (app.rootGraph?.nodes.some((n) => n.type === "DrawThingsSampler")) {
                 await app.api.fetchApi(`/dt_grpc/interrupt`, {
                     method: "POST",
                 });
@@ -88,7 +78,7 @@ export default {
 } as ComfyExtension;
 
 export const samplerProto: Partial<DTSampler> = {
-    onNodeCreated: async function (this: DTSampler & LGraphNode) {
+    async onNodeCreated(this: DTSampler & LGraphNode) {
         const inputPos = this.inputs?.find(
             (inputPos) => inputPos.name == "positive"
         )!;
@@ -110,7 +100,7 @@ export const samplerProto: Partial<DTSampler> = {
         setTimeout(() => checkVersion(), 2000);
     },
 
-    onMouseDown: function (_e, _pos, _canvas) {
+    onMouseDown(_e, _pos, _canvas) {
         // this exists for easier debugging in devtools
         console.debug("Click!", this);
         return true;
@@ -126,7 +116,6 @@ export const samplerProto: Partial<DTSampler> = {
 
     onConfigure(this: DTSampler & LGraphNode, serialised) {
         // at this point, the node should already be loaded with values from the values array
-
         // if there is keyed data, apply that
         if (
             "widget_values_keyed" in serialised &&
@@ -148,15 +137,17 @@ export const samplerProto: Partial<DTSampler> = {
         }
 
         this.coerceWidgetValues();
-
         if ("widget_values_keyed" in this) delete this.widget_values_keyed;
-
         this.updateDynamicWidgets?.();
     },
 
     coerceWidgetValues() {
         // check each widget value
-        const corrections = [];
+        const corrections = [] as {
+            name: string;
+            value: unknown;
+            coerced: unknown;
+        }[];
         for (const w of this.widgets ?? []) {
             const prop = findPropertyPython(w.name);
             if (!prop) {
@@ -219,39 +210,79 @@ export const samplerProto: Partial<DTSampler> = {
         const keepNodeShrunk = app.extensionManager.setting.get(
             "drawthings.node.keep_shrunk"
         );
-        options.push(
-            null,
-            {
-                content: "Paste Draw Things config",
-                callback: () => importConfig(this as unknown as DTSampler),
+        const bridgeMode = app.extensionManager.setting.get(
+            "drawthings.bridge_mode.enabled"
+        );
+        const bridgeCommunity = app.extensionManager.setting.get(
+            "drawthings.bridge_mode.community"
+        );
+        const bridgeUncurated = app.extensionManager.setting.get(
+            "drawthings.bridge_mode.uncurated"
+        );
+
+        options.push(null);
+        options.push({
+            content: "Paste Draw Things config",
+            callback: () => importConfig(this as unknown as DTSampler),
+        });
+        options.push({
+            content: "Copy Draw Things config",
+            callback: () => {
+                const config: Record<string, unknown> = {};
+                for (const w of this.widgets ?? []) {
+                    const prop = findPropertyPython(w.name);
+                    if (!prop) continue;
+                    prop.export(w, this, config);
+                }
+                config.loras = [];
+                config.control = [];
+                navigator.clipboard.writeText(JSON.stringify(config));
             },
-            {
-                content: "Copy Draw Things config",
-                callback: () => {
-                    const config: Record<string, unknown> = {};
-                    for (const w of this.widgets ?? []) {
-                        const prop = findPropertyPython(w.name);
-                        if (!prop) continue;
-                        prop.export(w, this, config);
-                    }
-                    config.loras = [];
-                    config.control = [];
-                    navigator.clipboard.writeText(JSON.stringify(config));
-                },
+        });
+        options.push({
+            content:
+                (keepNodeShrunk ? "✓ " : "") +
+                "Keep node shrunk when widgets change",
+            callback: () => {
+                app.extensionManager.setting.set(
+                    "drawthings.node.keep_shrunk",
+                    !keepNodeShrunk
+                );
             },
-            {
+        });
+        options.push({
+            content: (bridgeMode ? "✓ " : "") + "Use bridge mode",
+            callback: () => {
+                app.extensionManager.setting.set(
+                    "drawthings.bridge_mode.enabled",
+                    !bridgeMode
+                );
+            },
+        });
+        if (bridgeMode) {
+            options.push({
                 content:
-                    (keepNodeShrunk ? "✓ " : "") +
-                    "Keep node shrunk when widgets change",
+                    (bridgeCommunity ? "✓ " : "") + "Show community models",
                 callback: () => {
                     app.extensionManager.setting.set(
-                        "drawthings.node.keep_shrunk",
-                        !keepNodeShrunk
+                        "drawthings.bridge_mode.community",
+                        !bridgeCommunity
                     );
                 },
-            },
-            null
-        );
+            });
+            options.push({
+                content:
+                    (bridgeUncurated ? "✓ " : "") + "Show uncurated models",
+                callback: () => {
+                    app.extensionManager.setting.set(
+                        "drawthings.bridge_mode.uncurated",
+                        !bridgeUncurated
+                    );
+                },
+            });
+        }
+        options.push(null);
+
         return options;
     },
 };
