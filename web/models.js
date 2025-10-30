@@ -149,13 +149,14 @@ async function getBridgeModels() {
     const { default: controlNets } = await import("./models/controlnets.json", { with: { type: "json" } })
     const { default: loras } = await import("./models/loras.json", { with: { type: "json" } })
     const { default: textualInversions } = await import("./models/embeddings.json", { with: { type: "json" } })
+    const { default: upscalers } = await import("./models/upscalers.json", { with: { type: "json" } })
 
     combinedBridgeModels = {
         models: models.filter(filterFn),
         controlNets: controlNets.filter(filterFn),
         loras: loras.filter(filterFn),
         textualInversions: textualInversions.filter(filterFn),
-        upscalers: []
+        upscalers: upscalers.filter(filterFn),
     }
     combinedIncludes = [includeCommunity, includeUncurated]
 

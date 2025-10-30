@@ -135,6 +135,8 @@
         0,
         1,
         false,
+        false,
+        "All",
         false
       ],
       "_lastSelectedModel": {
@@ -150,6 +152,30 @@
           "content": "Inpainting (SD v1.x, ControlNet 1.1) (SD)",
           "disabled": false
         }
+      },
+      "nodePackVersion": "1.7.4",
+      "widget_values_keyed": {
+        "control_name": {
+          "value": {
+            "global_average_pooling": false,
+            "version": "v1",
+            "modifier": "inpaint",
+            "name": "Inpainting (SD v1.x, ControlNet 1.1)",
+            "type": "controlnet",
+            "file": "controlnet_inpaint_1.x_v1.1_f16.ckpt"
+          },
+          "content": "Inpainting (SD v1.x, ControlNet 1.1) (SD)",
+          "disabled": false
+        },
+        "control_input_type": "Inpaint",
+        "control_mode": "Balanced",
+        "control_weight": 1,
+        "control_start": 0,
+        "control_end": 1,
+        "global_average_pooling": false,
+        "down_sampling_rate": false,
+        "target_blocks": "All",
+        "invert_image": false
       }
     },
     {
@@ -202,7 +228,7 @@
       ],
       "size": [
         312.08984375,
-        750
+        770
       ],
       "flags": {},
       "order": 3,
@@ -259,6 +285,12 @@
           "shape": 7,
           "type": "DT_REFINER",
           "link": null
+        },
+        {
+          "name": "hints",
+          "shape": 7,
+          "type": "DT_HINTS",
+          "link": null
         }
       ],
       "outputs": [
@@ -282,20 +314,15 @@
         true,
         {
           "value": {
-            "prefix": "",
+            "name": "Super Mario Nation (v2)",
             "default_scale": 8,
-            "name": "Sdmix2",
-            "modifier": "none",
+            "text_encoder": "supermarionation_v2_clip_vit_l14_f16.ckpt",
+            "file": "supermarionation_v2_f16.ckpt",
+            "prefix": "supermarionation ",
             "version": "v1",
-            "text_encoder": "sdmix2_clip_vit_l14_f16.ckpt",
-            "objective": {
-              "epsilon": {}
-            },
-            "upcast_attention": false,
-            "note": "",
-            "file": "sdmix2_f16.ckpt"
+            "upcast_attention": false
           },
-          "content": "Sdmix2 (SD)"
+          "content": "Super Mario Nation (v2) (SD)"
         },
         1,
         1127051144,
@@ -307,8 +334,11 @@
         14,
         5,
         true,
+        5,
+        true,
         4.5,
         "DPM++ 2M Karras",
+        1,
         false,
         1,
         1,
@@ -316,6 +346,7 @@
         127,
         0.02,
         1,
+        0,
         0,
         1,
         0,
@@ -344,7 +375,7 @@
         false,
         ""
       ],
-      "nodePackVersion": "1.3.1",
+      "nodePackVersion": "1.7.4",
       "widget_values_keyed": {
         "settings": "All",
         "server": "localhost",
@@ -352,20 +383,15 @@
         "use_tls": true,
         "model": {
           "value": {
-            "prefix": "",
+            "name": "Super Mario Nation (v2)",
             "default_scale": 8,
-            "name": "Sdmix2",
-            "modifier": "none",
+            "text_encoder": "supermarionation_v2_clip_vit_l14_f16.ckpt",
+            "file": "supermarionation_v2_f16.ckpt",
+            "prefix": "supermarionation ",
             "version": "v1",
-            "text_encoder": "sdmix2_clip_vit_l14_f16.ckpt",
-            "objective": {
-              "epsilon": {}
-            },
-            "upcast_attention": false,
-            "note": "",
-            "file": "sdmix2_f16.ckpt"
+            "upcast_attention": false
           },
-          "content": "Sdmix2 (SD)"
+          "content": "Super Mario Nation (v2) (SD)"
         },
         "strength": 1,
         "seed": 1127051144,
@@ -376,9 +402,12 @@
         "steps": 20,
         "num_frames": 14,
         "cfg": 5,
+        "cfg_zero_star": true,
+        "cfg_zero_star_init_steps": 5,
         "speed_up": true,
         "guidance_embed": 4.5,
         "sampler_name": "DPM++ 2M Karras",
+        "stochastic_sampling_gamma": 1,
         "res_dpt_shift": false,
         "shift": 1,
         "batch_size": 1,
@@ -387,6 +416,7 @@
         "guiding_frame_noise": 0.02,
         "start_frame_guidance": 1,
         "causal_inference": 0,
+        "causal_inference_pad": 0,
         "clip_skip": 1,
         "sharpness": 0,
         "mask_blur": 0,
@@ -417,20 +447,15 @@
       "_lastSelectedModel": {
         "model": {
           "value": {
-            "prefix": "",
+            "name": "Super Mario Nation (v2)",
             "default_scale": 8,
-            "name": "Sdmix2",
-            "modifier": "none",
+            "text_encoder": "supermarionation_v2_clip_vit_l14_f16.ckpt",
+            "file": "supermarionation_v2_f16.ckpt",
+            "prefix": "supermarionation ",
             "version": "v1",
-            "text_encoder": "sdmix2_clip_vit_l14_f16.ckpt",
-            "objective": {
-              "epsilon": {}
-            },
-            "upcast_attention": false,
-            "note": "",
-            "file": "sdmix2_f16.ckpt"
+            "upcast_attention": false
           },
-          "content": "Sdmix2 (SD)"
+          "content": "Super Mario Nation (v2) (SD)"
         }
       }
     }
@@ -483,11 +508,11 @@
     "ds": {
       "scale": 0.8954302432552433,
       "offset": [
-        -1037.4268155373995,
-        -418.693288505641
+        -1101.4890712877327,
+        -507.28111469031967
       ]
     },
-    "frontendVersion": "1.23.4",
+    "frontendVersion": "1.28.8",
     "VHS_latentpreview": false,
     "VHS_latentpreviewrate": 0,
     "VHS_MetadataImage": true,

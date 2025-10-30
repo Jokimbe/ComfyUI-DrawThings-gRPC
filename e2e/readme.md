@@ -51,3 +51,12 @@ x new version announcement only appears once
     - clear user data
     - load, assert message, clear message, refresh, assert no message
 x qwen model version widgets
+
+Tests for 1.8:
+Bridge mode
+- When bridge mode is enabled, local models are hidden and official models are listed
+- When "show community" is enabled, official and community models are listed
+- When "show uncurated" is enabled, official and uncurated models are listed
+- When "show community" and "show uncurated" are enabled, all three categories are listed
+- Settings are updated when context menu option is used
+- "Show community" and "Show uncurated" context menu options are only displayed if bridge mode is enabled
