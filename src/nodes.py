@@ -77,7 +77,7 @@ class DrawThingsSampler:
                 "diffusion_tile_overlap": ("INT", { "default": 64, "min": 64, "max": 1024, "step": 64},),
                 "tea_cache": ("BOOLEAN", { "default": False}),
                 "tea_cache_start": ("INT", { "default": 5, "min": 0, "max": 1000, "step": 1},),
-                "tea_cache_end": ("INT", { "default": 2, "min": 0, "max": 1000, "step": 1},),
+                "tea_cache_end": ("INT", { "default": 2, "min": -151, "max": 150, "step": 1, "tooltip": "A positive value corresponds to last step tea_cache should be appplied. Use a negative value to specify steps from the end+1. IE: -1 is the last step, -2 is the second to last step, and so on."},),
                 "tea_cache_threshold": ("FLOAT", { "default": 0.2, "min": 0, "max": 1, "step": 0.01, "round": 0.01},),
                 "tea_cache_max_skip_steps": ("INT", { "default": 3, "min": 1, "max": 50, "step": 1},),
                 "separate_clip_l": ("BOOLEAN", { "default": False}),
@@ -132,7 +132,9 @@ class DrawThingsSampler:
         try:
             await get_files(kwargs["server"], kwargs["port"], kwargs["use_tls"])
         except:
-            raise Exception("Couldn't connect to Draw Things gRPC server. Check your server and settings, and try again.")
+            raise Exception(
+                "Couldn't connect to Draw Things gRPC server. Check your server and settings, and try again."
+            )
 
         DrawThingsSampler.last_gen_canceled = False
         model_input = kwargs.get("model")
@@ -212,7 +214,7 @@ class DrawThingsUpscaler:
         return {
             "required": {
                 "upscaler_model": ("DT_MODEL", {"model_type": "upscalers"}),
-                "upscaler_scale_factor": ("INT", {"default": 2, "min": 0, "max": 4, "step": 1}),
+                "upscaler_scale_factor": ("INT", {"default": 2, "min": 2, "max": 4, "step": 2}),
             }
         }
         # fmt: on
@@ -468,7 +470,7 @@ class DrawThingsLoRA:
         return (lora_list,)
 
     @classmethod
-    def VALIDATE_INPUTS(s, **kwargs):
+    def VALIDATE_INPUTS(cls, **kwargs):
         return True
 
 

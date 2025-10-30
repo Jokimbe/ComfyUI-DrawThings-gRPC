@@ -83,7 +83,7 @@ export class ComfyPage {
     ) {
         const nodeId = await this.page.evaluate((node) => {
             if (typeof node === "number") {
-                return window.app.graph._nodes[node]?.id;
+                return window.app.graph._nodes.find((n) => n.id === node)?.id;
             } else if (typeof node === "string") {
                 return window.app.graph._nodes.find((n) => n.type === node)?.id;
             } else if (typeof node === "function") {
@@ -215,6 +215,18 @@ export class ComfyPage {
 
         const workflow = await fse.readJSON(join(tempDir, "workflow.json"));
         return workflow;
+    }
+
+    async setClipboard(data: string | Record<string, unknown>) {
+        const cliptext = typeof data === "string" ? data : JSON.stringify(data);
+         await this.page.addInitScript((text) => {
+                Object.defineProperty(navigator, "clipboard", {
+                    value: {
+                        readText: () => Promise.resolve(text),
+                        writeText: (t: string) => Promise.resolve(), // optional stub
+                    },
+                });
+         }, cliptext)
     }
 
     async getTempDir() {

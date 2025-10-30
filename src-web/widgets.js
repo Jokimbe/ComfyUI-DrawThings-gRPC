@@ -274,7 +274,6 @@ export default {
     },
 }
 
-/** @type {import("@comfyorg/litegraph").LGraphNode} */
 const samplerWidgetsProto = {
     updateDynamicWidgets() {
         updateSamplerWidgets(this)

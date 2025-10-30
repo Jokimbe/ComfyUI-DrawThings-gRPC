@@ -1,22 +1,22 @@
 {
   "id": "101ed669-2d4a-4c85-9e62-16aa1f6bc99e",
   "revision": 0,
-  "last_node_id": 16,
-  "last_link_id": 28,
+  "last_node_id": 27,
+  "last_link_id": 46,
   "nodes": [
     {
-      "id": 16,
+      "id": 27,
       "type": "DrawThingsSampler",
       "pos": [
-        1750,
-        540
+        1770,
+        490
       ],
       "size": [
         318.740234375,
-        790
+        574
       ],
       "flags": {},
-      "order": 0,
+      "order": 2,
       "mode": 0,
       "inputs": [
         {
@@ -51,7 +51,7 @@
           "name": "lora",
           "shape": 7,
           "type": "DT_LORA",
-          "link": null
+          "link": 45
         },
         {
           "name": "control_net",
@@ -97,11 +97,11 @@
         "Node name for S&R": "DrawThingsSampler"
       },
       "widgets_values": [
-        "All",
+        "Basic",
         "localhost",
         "7859",
         true,
-        "Not connected",
+        "(None selected)",
         1,
         0,
         "randomize",
@@ -155,11 +155,11 @@
       ],
       "nodePackVersion": "1.7.2",
       "widget_values_keyed": {
-        "settings": "All",
+        "settings": "Basic",
         "server": "localhost",
         "port": "7859",
         "use_tls": true,
-        "model": "Not connected",
+        "model": "(None selected)",
         "strength": 1,
         "seed": 0,
         "control_after_generate": "randomize",
@@ -212,17 +212,224 @@
         "open_clip_g_text": ""
       },
       "_lastSelectedModel": {}
+    },
+    {
+      "id": 26,
+      "type": "DrawThingsLoRA",
+      "pos": [
+        1470,
+        570
+      ],
+      "size": [
+        270,
+        122
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "lora_stack",
+          "shape": 7,
+          "type": "DT_LORA",
+          "link": 46
+        }
+      ],
+      "outputs": [
+        {
+          "name": "lora_stack",
+          "type": "DT_LORA",
+          "links": [
+            45
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "drawthings-grpc",
+        "ver": "3520c9eb3f93e6708e810e511e50c0432e3d1f96",
+        "Node name for S&R": "DrawThingsLoRA"
+      },
+      "widgets_values": [
+        "",
+        "(None selected)",
+        1,
+        "All",
+        null,
+        1,
+        "All",
+        null,
+        1,
+        "All",
+        null,
+        1,
+        "All",
+        null,
+        1,
+        "All",
+        null,
+        1,
+        "All",
+        null,
+        1,
+        "All",
+        null,
+        1,
+        "All"
+      ],
+      "_lastSelectedModel": {},
+      "loraCount": 1,
+      "showMode": false,
+      "nodePackVersion": "1.7.2",
+      "widget_values_keyed": {
+        "buttons": "",
+        "lora": "(None selected)",
+        "weight": 1,
+        "mode": "All",
+        "lora_2": null,
+        "weight_2": 1,
+        "mode_2": "All",
+        "lora_3": null,
+        "weight_3": 1,
+        "mode_3": "All",
+        "lora_4": null,
+        "weight_4": 1,
+        "mode_4": "All",
+        "lora_5": null,
+        "weight_5": 1,
+        "mode_5": "All",
+        "lora_6": null,
+        "weight_6": 1,
+        "mode_6": "All",
+        "lora_7": null,
+        "weight_7": 1,
+        "mode_7": "All",
+        "lora_8": null,
+        "weight_8": 1,
+        "mode_8": "All"
+      }
+    },
+    {
+      "id": 25,
+      "type": "DrawThingsLoRA",
+      "pos": [
+        1170,
+        570
+      ],
+      "size": [
+        270,
+        122
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "lora_stack",
+          "shape": 7,
+          "type": "DT_LORA",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "lora_stack",
+          "type": "DT_LORA",
+          "links": [
+            46
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "drawthings-grpc",
+        "ver": "3520c9eb3f93e6708e810e511e50c0432e3d1f96",
+        "Node name for S&R": "DrawThingsLoRA"
+      },
+      "widgets_values": [
+        "",
+        "(None selected)",
+        1,
+        "All",
+        null,
+        1,
+        "All",
+        null,
+        1,
+        "All",
+        null,
+        1,
+        "All",
+        null,
+        1,
+        "All",
+        null,
+        1,
+        "All",
+        null,
+        1,
+        "All",
+        null,
+        1,
+        "All"
+      ],
+      "_lastSelectedModel": {},
+      "loraCount": 1,
+      "showMode": false,
+      "nodePackVersion": "1.7.2",
+      "widget_values_keyed": {
+        "buttons": "",
+        "lora": "(None selected)",
+        "weight": 1,
+        "mode": "All",
+        "lora_2": null,
+        "weight_2": 1,
+        "mode_2": "All",
+        "lora_3": null,
+        "weight_3": 1,
+        "mode_3": "All",
+        "lora_4": null,
+        "weight_4": 1,
+        "mode_4": "All",
+        "lora_5": null,
+        "weight_5": 1,
+        "mode_5": "All",
+        "lora_6": null,
+        "weight_6": 1,
+        "mode_6": "All",
+        "lora_7": null,
+        "weight_7": 1,
+        "mode_7": "All",
+        "lora_8": null,
+        "weight_8": 1,
+        "mode_8": "All"
+      }
     }
   ],
-  "links": [],
+  "links": [
+    [
+      45,
+      26,
+      0,
+      27,
+      4,
+      "DT_LORA"
+    ],
+    [
+      46,
+      25,
+      0,
+      26,
+      0,
+      "DT_LORA"
+    ]
+  ],
   "groups": [],
   "config": {},
   "extra": {
     "ds": {
-      "scale": 0.8140274938684031,
+      "scale": 1.1918176537727256,
       "offset": [
-        -1159.7297416275508,
-        -431.69084387007325
+        -1100.1706690567958,
+        -434.2010601643369
       ]
     },
     "frontendVersion": "1.27.10",
