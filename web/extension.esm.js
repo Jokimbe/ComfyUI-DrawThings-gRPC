@@ -13730,6 +13730,7 @@ var ModelService = class {
     __privateAdd(this, _updateNodesPromise, null);
   }
   async updateNodes() {
+    if (app2.configuringGraph || !app2.graph) return;
     if (!__privateGet(this, _updateNodesPromise)) {
       __privateSet(this, _updateNodesPromise, new Promise((res) => {
         setTimeout(() => {
@@ -13824,16 +13825,14 @@ async function getBridgeModels() {
   const files = await filesResponse.json();
   const filterFn = includeCommunity ? ((m) => files.includes(m.file)) : ((m) => files.includes(m.file) && m.official);
   const { default: models } = await Promise.resolve().then(() => (init_models(), models_exports));
-  if (includeUncurated) {
-    const { default: uncurated } = await Promise.resolve().then(() => (init_uncurated_models(), uncurated_models_exports));
-    models.push(...uncurated);
-  }
+  const { default: uncurated } = await Promise.resolve().then(() => (init_uncurated_models(), uncurated_models_exports));
   const { default: controlNets } = await Promise.resolve().then(() => (init_controlnets(), controlnets_exports));
   const { default: loras } = await Promise.resolve().then(() => (init_loras(), loras_exports));
   const { default: textualInversions } = await Promise.resolve().then(() => (init_embeddings(), embeddings_exports));
   const { default: upscalers } = await Promise.resolve().then(() => (init_upscalers(), upscalers_exports));
+  console.log(textualInversions);
   combinedBridgeModels = {
-    models: models.filter(filterFn),
+    models: [...models, ...includeUncurated ? uncurated : []].filter(filterFn),
     controlNets: controlNets.filter(filterFn),
     loras: loras.filter(filterFn),
     textualInversions: textualInversions.filter(filterFn),

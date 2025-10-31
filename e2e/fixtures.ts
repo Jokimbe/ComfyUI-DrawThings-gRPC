@@ -4,6 +4,9 @@ import { NodeRef } from "./nodeRef";
 import fse from "fs-extra";
 import { join } from "path";
 
+if (!process.env.PLAYWRIGHT_TEST_URL) throw new Error("PLAYWRIGHT_TEST_URL is not set");
+export const DEFAULT_WORKFLOW_FOLDER = "./e2e/workflows";
+
 export class ComfyPage {
     readonly canvas: Locator;
     readonly url: string;
@@ -60,7 +63,7 @@ export class ComfyPage {
         await this.page.getByText("OpenCtrl + o").click();
 
         const fileChooser = await fileChooserPromise;
-        await fileChooser.setFiles(workflowPath);
+        await fileChooser.setFiles(resolveWorkflow(workflowPath));
 
         await this.page.locator("#graph-canvas").click({
             position: {
@@ -268,3 +271,8 @@ export const test = base.extend<ComfyFixtures>({
         { auto: true },
     ],
 });
+
+function resolveWorkflow(workflow: string) {
+    if (workflow.includes(".json")) return workflow
+    else return join(DEFAULT_WORKFLOW_FOLDER, `${workflow}.json`)
+}

@@ -295,10 +295,8 @@ export class NodeRef {
         await this.page.waitForTimeout(this.delay);
     }
 
-    async getWidgetOptions(
-        widget: string
-    ): Promise<{ content: string; value: unknown; disabled?: boolean }[]> {
-        return await this.page.evaluate(
+    async getWidgetOptions(widget: string): Promise<(string | null)[]> {
+        const options = (await this.page.evaluate(
             ([nodeId, name]) => {
                 const node = app.graph.getNodeById(nodeId);
                 const widget = node.widgets.find((w) => w.name === name);
@@ -306,7 +304,28 @@ export class NodeRef {
                 return widget.options.values;
             },
             [this.id, widget]
-        );
+        )) as unknown[];
+
+        return options.map((o) => {
+            if (typeof o === "string") return o;
+            if (o && typeof o === "object" && "content" in o)
+                return o?.content as string;
+            return String(o) || null;
+        });
+    }
+
+    async widgetHasOption(widget: string, option: string) {
+        // const options = await this.getWidgetOptions(widget)
+
+        // return options.some(o => o === option)
+        await this.clickWidget(widget);
+
+        const hasOption = await this.page
+            .getByRole("menuitem", { name: option })
+            .isVisible();
+        await this.page.locator(".grow").first().click();
+        await this.page.waitForTimeout(this.delay);
+        return hasOption;
     }
 
     async centerNode() {
@@ -418,6 +437,22 @@ export class NodeRef {
         await this.page
             .locator("#graph-canvas")
             .click({ position: { x: clickX, y: clickY }, button: "right" });
+    }
+
+    async getContextMenuOptions() {
+        await this.openContextMenu();
+        const locators = await this.page
+            .getByRole("menuitem", { name: /.*?/ })
+            .all();
+        await this.page.waitForTimeout(this.delay);
+        const options = Promise.all(
+            locators.map(async (o) => await o.textContent())
+        );
+
+        // to close the menu
+        await this.page.locator(".grow").first().click();
+
+        return options;
     }
 
     async selectContextMenuOption(option: string | RegExp) {

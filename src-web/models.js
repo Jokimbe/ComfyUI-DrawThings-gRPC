@@ -9,6 +9,7 @@ class ModelService {
 
     async updateNodes() {
         // since many nodes may be configured at once, we will batch calls to updateNodes
+        if (app.configuringGraph || !app.graph) return
         if (!this.#updateNodesPromise) {
             this.#updateNodesPromise = new Promise(res => {
                 setTimeout(() => {
@@ -142,17 +143,14 @@ async function getBridgeModels() {
         : (m => files.includes(m.file) && m.official)
 
     const { default: models } = await import("./models/models.json", { with: { type: "json" } })
-    if (includeUncurated) {
-        const { default: uncurated } = await import("./models/uncurated_models.json", { with: { type: "json" } })
-        models.push(...uncurated)
-    }
+    const { default: uncurated } = await import("./models/uncurated_models.json", { with: { type: "json" } })
     const { default: controlNets } = await import("./models/controlnets.json", { with: { type: "json" } })
     const { default: loras } = await import("./models/loras.json", { with: { type: "json" } })
     const { default: textualInversions } = await import("./models/embeddings.json", { with: { type: "json" } })
     const { default: upscalers } = await import("./models/upscalers.json", { with: { type: "json" } })
-
+    console.log(textualInversions)
     combinedBridgeModels = {
-        models: models.filter(filterFn),
+        models: [...models, ...(includeUncurated ? uncurated : [])].filter(filterFn),
         controlNets: controlNets.filter(filterFn),
         loras: loras.filter(filterFn),
         textualInversions: textualInversions.filter(filterFn),
