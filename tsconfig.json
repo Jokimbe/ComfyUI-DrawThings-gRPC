@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "target": "ES2020", // Safe, modern baseline for ComfyUI browsers
+        "module": "ESNext", // Emit plain JS (no import/export)
+        "moduleResolution": "node",
+        "lib": [
+            "DOM",
+            "ES2020"
+        ], // For browser + modern JS APIs
+        "strict": true,
+        "outDir": "./web", // Or wherever your ComfyUI extension JS goes
+        "removeComments": false,
+        "sourceMap": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "noEmitOnError": true,
+        "allowJs": true
+    },
+    "include": [
+        "./src-web/**/*",
+        "./src-web/types.d.ts"
+    ]
+}

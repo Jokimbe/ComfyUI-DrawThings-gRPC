@@ -3,64 +3,64 @@ from __future__ import annotations
 import flatbuffers
 import numpy as np
 
-import flatbuffers
 import typing
+from typing import cast
 
 uoffset: typing.TypeAlias = flatbuffers.number_types.UOffsetTFlags.py_type
 
 class SamplerType(object):
-  DPMPP2MKarras: int
-  EulerA: int
-  DDIM: int
-  PLMS: int
-  DPMPPSDEKarras: int
-  UniPC: int
-  LCM: int
-  EulerASubstep: int
-  DPMPPSDESubstep: int
-  TCD: int
-  EulerATrailing: int
-  DPMPPSDETrailing: int
-  DPMPP2MAYS: int
-  EulerAAYS: int
-  DPMPPSDEAYS: int
-  DPMPP2MTrailing: int
-  DDIMTrailing: int
-  UniPCTrailing: int
-  UniPCAYS: int
+  DPMPP2MKarras = cast(int, ...)
+  EulerA = cast(int, ...)
+  DDIM = cast(int, ...)
+  PLMS = cast(int, ...)
+  DPMPPSDEKarras = cast(int, ...)
+  UniPC = cast(int, ...)
+  LCM = cast(int, ...)
+  EulerASubstep = cast(int, ...)
+  DPMPPSDESubstep = cast(int, ...)
+  TCD = cast(int, ...)
+  EulerATrailing = cast(int, ...)
+  DPMPPSDETrailing = cast(int, ...)
+  DPMPP2MAYS = cast(int, ...)
+  EulerAAYS = cast(int, ...)
+  DPMPPSDEAYS = cast(int, ...)
+  DPMPP2MTrailing = cast(int, ...)
+  DDIMTrailing = cast(int, ...)
+  UniPCTrailing = cast(int, ...)
+  UniPCAYS = cast(int, ...)
 class SeedMode(object):
-  Legacy: int
-  TorchCpuCompatible: int
-  ScaleAlike: int
-  NvidiaGpuCompatible: int
+  Legacy = cast(int, ...)
+  TorchCpuCompatible = cast(int, ...)
+  ScaleAlike = cast(int, ...)
+  NvidiaGpuCompatible = cast(int, ...)
 class ControlMode(object):
-  Balanced: int
-  Prompt: int
-  Control: int
+  Balanced = cast(int, ...)
+  Prompt = cast(int, ...)
+  Control = cast(int, ...)
 class ControlInputType(object):
-  Unspecified: int
-  Custom: int
-  Depth: int
-  Canny: int
-  Scribble: int
-  Pose: int
-  Normalbae: int
-  Color: int
-  Lineart: int
-  Softedge: int
-  Seg: int
-  Inpaint: int
-  Ip2p: int
-  Shuffle: int
-  Mlsd: int
-  Tile: int
-  Blur: int
-  Lowquality: int
-  Gray: int
+  Unspecified = cast(int, ...)
+  Custom = cast(int, ...)
+  Depth = cast(int, ...)
+  Canny = cast(int, ...)
+  Scribble = cast(int, ...)
+  Pose = cast(int, ...)
+  Normalbae = cast(int, ...)
+  Color = cast(int, ...)
+  Lineart = cast(int, ...)
+  Softedge = cast(int, ...)
+  Seg = cast(int, ...)
+  Inpaint = cast(int, ...)
+  Ip2p = cast(int, ...)
+  Shuffle = cast(int, ...)
+  Mlsd = cast(int, ...)
+  Tile = cast(int, ...)
+  Blur = cast(int, ...)
+  Lowquality = cast(int, ...)
+  Gray = cast(int, ...)
 class LoRAMode(object):
-  All: int
-  Base: int
-  Refiner: int
+  All = cast(int, ...)
+  Base = cast(int, ...)
+  Refiner = cast(int, ...)
 class Control(object):
   @classmethod
   def GetRootAs(cls, buf: bytes, offset: int) -> Control: ...
@@ -90,6 +90,19 @@ class ControlT(object):
   controlMode: typing.Literal[ControlMode.Balanced, ControlMode.Prompt, ControlMode.Control]
   targetBlocks: typing.List[str]
   inputOverride: typing.Literal[ControlInputType.Unspecified, ControlInputType.Custom, ControlInputType.Depth, ControlInputType.Canny, ControlInputType.Scribble, ControlInputType.Pose, ControlInputType.Normalbae, ControlInputType.Color, ControlInputType.Lineart, ControlInputType.Softedge, ControlInputType.Seg, ControlInputType.Inpaint, ControlInputType.Ip2p, ControlInputType.Shuffle, ControlInputType.Mlsd, ControlInputType.Tile, ControlInputType.Blur, ControlInputType.Lowquality, ControlInputType.Gray]
+  def __init__(
+    self,
+    file: str | None = ...,
+    weight: float = ...,
+    guidanceStart: float = ...,
+    guidanceEnd: float = ...,
+    noPrompt: bool = ...,
+    globalAveragePooling: bool = ...,
+    downSamplingRate: float = ...,
+    controlMode: typing.Literal[ControlMode.Balanced, ControlMode.Prompt, ControlMode.Control] = ...,
+    targetBlocks: typing.List[str] | None = ...,
+    inputOverride: typing.Literal[ControlInputType.Unspecified, ControlInputType.Custom, ControlInputType.Depth, ControlInputType.Canny, ControlInputType.Scribble, ControlInputType.Pose, ControlInputType.Normalbae, ControlInputType.Color, ControlInputType.Lineart, ControlInputType.Softedge, ControlInputType.Seg, ControlInputType.Inpaint, ControlInputType.Ip2p, ControlInputType.Shuffle, ControlInputType.Mlsd, ControlInputType.Tile, ControlInputType.Blur, ControlInputType.Lowquality, ControlInputType.Gray] = ...,
+  ) -> None: ...
   @classmethod
   def InitFromBuf(cls, buf: bytes, pos: int) -> ControlT: ...
   @classmethod
@@ -124,6 +137,12 @@ class LoRAT(object):
   file: str | None
   weight: float
   mode: typing.Literal[LoRAMode.All, LoRAMode.Base, LoRAMode.Refiner]
+  def __init__(
+    self,
+    file: str | None = ...,
+    weight: float = ...,
+    mode: typing.Literal[LoRAMode.All, LoRAMode.Base, LoRAMode.Refiner] = ...,
+  ) -> None: ...
   @classmethod
   def InitFromBuf(cls, buf: bytes, pos: int) -> LoRAT: ...
   @classmethod
@@ -312,6 +331,91 @@ class GenerationConfigurationT(object):
   causalInferencePad: int
   cfgZeroStar: bool
   cfgZeroInitSteps: int
+  def __init__(
+    self,
+    id: int = ...,
+    startWidth: int = ...,
+    startHeight: int = ...,
+    seed: int = ...,
+    steps: int = ...,
+    guidanceScale: float = ...,
+    strength: float = ...,
+    model: str | None = ...,
+    sampler: typing.Literal[SamplerType.DPMPP2MKarras, SamplerType.EulerA, SamplerType.DDIM, SamplerType.PLMS, SamplerType.DPMPPSDEKarras, SamplerType.UniPC, SamplerType.LCM, SamplerType.EulerASubstep, SamplerType.DPMPPSDESubstep, SamplerType.TCD, SamplerType.EulerATrailing, SamplerType.DPMPPSDETrailing, SamplerType.DPMPP2MAYS, SamplerType.EulerAAYS, SamplerType.DPMPPSDEAYS, SamplerType.DPMPP2MTrailing, SamplerType.DDIMTrailing, SamplerType.UniPCTrailing, SamplerType.UniPCAYS] = ...,
+    batchCount: int = ...,
+    batchSize: int = ...,
+    hiresFix: bool = ...,
+    hiresFixStartWidth: int = ...,
+    hiresFixStartHeight: int = ...,
+    hiresFixStrength: float = ...,
+    upscaler: str | None = ...,
+    imageGuidanceScale: float = ...,
+    seedMode: typing.Literal[SeedMode.Legacy, SeedMode.TorchCpuCompatible, SeedMode.ScaleAlike, SeedMode.NvidiaGpuCompatible] = ...,
+    clipSkip: int = ...,
+    controls: typing.List['ControlT'] | None = ...,
+    loras: typing.List['LoRAT'] | None = ...,
+    maskBlur: float = ...,
+    faceRestoration: str | None = ...,
+    clipWeight: float = ...,
+    negativePromptForImagePrior: bool = ...,
+    imagePriorSteps: int = ...,
+    refinerModel: str | None = ...,
+    originalImageHeight: int = ...,
+    originalImageWidth: int = ...,
+    cropTop: int = ...,
+    cropLeft: int = ...,
+    targetImageHeight: int = ...,
+    targetImageWidth: int = ...,
+    aestheticScore: float = ...,
+    negativeAestheticScore: float = ...,
+    zeroNegativePrompt: bool = ...,
+    refinerStart: float = ...,
+    negativeOriginalImageHeight: int = ...,
+    negativeOriginalImageWidth: int = ...,
+    name: str | None = ...,
+    fpsId: int = ...,
+    motionBucketId: int = ...,
+    condAug: float = ...,
+    startFrameCfg: float = ...,
+    numFrames: int = ...,
+    maskBlurOutset: int = ...,
+    sharpness: float = ...,
+    shift: float = ...,
+    stage2Steps: int = ...,
+    stage2Cfg: float = ...,
+    stage2Shift: float = ...,
+    tiledDecoding: bool = ...,
+    decodingTileWidth: int = ...,
+    decodingTileHeight: int = ...,
+    decodingTileOverlap: int = ...,
+    stochasticSamplingGamma: float = ...,
+    preserveOriginalAfterInpaint: bool = ...,
+    tiledDiffusion: bool = ...,
+    diffusionTileWidth: int = ...,
+    diffusionTileHeight: int = ...,
+    diffusionTileOverlap: int = ...,
+    upscalerScaleFactor: int = ...,
+    t5TextEncoder: bool = ...,
+    separateClipL: bool = ...,
+    clipLText: str | None = ...,
+    separateOpenClipG: bool = ...,
+    openClipGText: str | None = ...,
+    speedUpWithGuidanceEmbed: bool = ...,
+    guidanceEmbed: float = ...,
+    resolutionDependentShift: bool = ...,
+    teaCacheStart: int = ...,
+    teaCacheEnd: int = ...,
+    teaCacheThreshold: float = ...,
+    teaCache: bool = ...,
+    separateT5: bool = ...,
+    t5Text: str | None = ...,
+    teaCacheMaxSkipSteps: int = ...,
+    causalInferenceEnabled: bool = ...,
+    causalInference: int = ...,
+    causalInferencePad: int = ...,
+    cfgZeroStar: bool = ...,
+    cfgZeroInitSteps: int = ...,
+  ) -> None: ...
   @classmethod
   def InitFromBuf(cls, buf: bytes, pos: int) -> GenerationConfigurationT: ...
   @classmethod

@@ -4,6 +4,9 @@ import { NodeRef } from "./nodeRef";
 import fse from "fs-extra";
 import { join } from "path";
 
+if (!process.env.PLAYWRIGHT_TEST_URL) throw new Error("PLAYWRIGHT_TEST_URL is not set");
+export const DEFAULT_WORKFLOW_FOLDER = "./e2e/workflows";
+
 export class ComfyPage {
     readonly canvas: Locator;
     readonly url: string;
@@ -60,7 +63,7 @@ export class ComfyPage {
         await this.page.getByText("OpenCtrl + o").click();
 
         const fileChooser = await fileChooserPromise;
-        await fileChooser.setFiles(workflowPath);
+        await fileChooser.setFiles(resolveWorkflow(workflowPath));
 
         await this.page.locator("#graph-canvas").click({
             position: {
@@ -83,7 +86,7 @@ export class ComfyPage {
     ) {
         const nodeId = await this.page.evaluate((node) => {
             if (typeof node === "number") {
-                return window.app.graph._nodes[node]?.id;
+                return window.app.graph._nodes.find((n) => n.id === node)?.id;
             } else if (typeof node === "string") {
                 return window.app.graph._nodes.find((n) => n.type === node)?.id;
             } else if (typeof node === "function") {
@@ -217,6 +220,18 @@ export class ComfyPage {
         return workflow;
     }
 
+    async setClipboard(data: string | Record<string, unknown>) {
+        const cliptext = typeof data === "string" ? data : JSON.stringify(data);
+         await this.page.addInitScript((text) => {
+                Object.defineProperty(navigator, "clipboard", {
+                    value: {
+                        readText: () => Promise.resolve(text),
+                        writeText: (t: string) => Promise.resolve(), // optional stub
+                    },
+                });
+         }, cliptext)
+    }
+
     async getTempDir() {
         const tempDir = await fse.mkdtemp("comfyui-dt-grpc-test-data-");
         this.teardownTasks.push(() => fse.remove(tempDir));
@@ -256,3 +271,8 @@ export const test = base.extend<ComfyFixtures>({
         { auto: true },
     ],
 });
+
+function resolveWorkflow(workflow: string) {
+    if (workflow.includes(".json")) return workflow
+    else return join(DEFAULT_WORKFLOW_FOLDER, `${workflow}.json`)
+}

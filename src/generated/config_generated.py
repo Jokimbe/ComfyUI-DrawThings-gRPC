@@ -220,17 +220,29 @@ except:
 class ControlT(object):
 
     # ControlT
-    def __init__(self):
-        self.file = None  # type: str
-        self.weight = 1.0  # type: float
-        self.guidanceStart = 0.0  # type: float
-        self.guidanceEnd = 1.0  # type: float
-        self.noPrompt = False  # type: bool
-        self.globalAveragePooling = True  # type: bool
-        self.downSamplingRate = 1.0  # type: float
-        self.controlMode = 0  # type: int
-        self.targetBlocks = None  # type: List[str]
-        self.inputOverride = 0  # type: int
+    def __init__(
+        self,
+        file = None,
+        weight = 1.0,
+        guidanceStart = 0.0,
+        guidanceEnd = 1.0,
+        noPrompt = False,
+        globalAveragePooling = True,
+        downSamplingRate = 1.0,
+        controlMode = 0,
+        targetBlocks = None,
+        inputOverride = 0,
+    ):
+        self.file = file  # type: Optional[str]
+        self.weight = weight  # type: float
+        self.guidanceStart = guidanceStart  # type: float
+        self.guidanceEnd = guidanceEnd  # type: float
+        self.noPrompt = noPrompt  # type: bool
+        self.globalAveragePooling = globalAveragePooling  # type: bool
+        self.downSamplingRate = downSamplingRate  # type: float
+        self.controlMode = controlMode  # type: int
+        self.targetBlocks = targetBlocks  # type: Optional[List[Optional[str]]]
+        self.inputOverride = inputOverride  # type: int
 
     @classmethod
     def InitFromBuf(cls, buf, pos):
@@ -355,10 +367,15 @@ def LoRAEnd(builder: flatbuffers.Builder) -> int:
 class LoRAT(object):
 
     # LoRAT
-    def __init__(self):
-        self.file = None  # type: str
-        self.weight = 0.6  # type: float
-        self.mode = 0  # type: int
+    def __init__(
+        self,
+        file = None,
+        weight = 0.6,
+        mode = 0,
+    ):
+        self.file = file  # type: Optional[str]
+        self.weight = weight  # type: float
+        self.mode = mode  # type: int
 
     @classmethod
     def InitFromBuf(cls, buf, pos):
@@ -1291,89 +1308,173 @@ except:
 class GenerationConfigurationT(object):
 
     # GenerationConfigurationT
-    def __init__(self):
-        self.id = 0  # type: int
-        self.startWidth = 0  # type: int
-        self.startHeight = 0  # type: int
-        self.seed = 0  # type: int
-        self.steps = 0  # type: int
-        self.guidanceScale = 0.0  # type: float
-        self.strength = 0.0  # type: float
-        self.model = None  # type: str
-        self.sampler = 0  # type: int
-        self.batchCount = 1  # type: int
-        self.batchSize = 1  # type: int
-        self.hiresFix = False  # type: bool
-        self.hiresFixStartWidth = 0  # type: int
-        self.hiresFixStartHeight = 0  # type: int
-        self.hiresFixStrength = 0.7  # type: float
-        self.upscaler = None  # type: str
-        self.imageGuidanceScale = 1.5  # type: float
-        self.seedMode = 0  # type: int
-        self.clipSkip = 1  # type: int
-        self.controls = None  # type: List[ControlT]
-        self.loras = None  # type: List[LoRAT]
-        self.maskBlur = 0.0  # type: float
-        self.faceRestoration = None  # type: str
-        self.clipWeight = 1.0  # type: float
-        self.negativePromptForImagePrior = True  # type: bool
-        self.imagePriorSteps = 5  # type: int
-        self.refinerModel = None  # type: str
-        self.originalImageHeight = 0  # type: int
-        self.originalImageWidth = 0  # type: int
-        self.cropTop = 0  # type: int
-        self.cropLeft = 0  # type: int
-        self.targetImageHeight = 0  # type: int
-        self.targetImageWidth = 0  # type: int
-        self.aestheticScore = 6.0  # type: float
-        self.negativeAestheticScore = 2.5  # type: float
-        self.zeroNegativePrompt = False  # type: bool
-        self.refinerStart = 0.7  # type: float
-        self.negativeOriginalImageHeight = 0  # type: int
-        self.negativeOriginalImageWidth = 0  # type: int
-        self.name = None  # type: str
-        self.fpsId = 5  # type: int
-        self.motionBucketId = 127  # type: int
-        self.condAug = 0.02  # type: float
-        self.startFrameCfg = 1.0  # type: float
-        self.numFrames = 14  # type: int
-        self.maskBlurOutset = 0  # type: int
-        self.sharpness = 0.0  # type: float
-        self.shift = 1.0  # type: float
-        self.stage2Steps = 10  # type: int
-        self.stage2Cfg = 1.0  # type: float
-        self.stage2Shift = 1.0  # type: float
-        self.tiledDecoding = False  # type: bool
-        self.decodingTileWidth = 10  # type: int
-        self.decodingTileHeight = 10  # type: int
-        self.decodingTileOverlap = 2  # type: int
-        self.stochasticSamplingGamma = 0.3  # type: float
-        self.preserveOriginalAfterInpaint = True  # type: bool
-        self.tiledDiffusion = False  # type: bool
-        self.diffusionTileWidth = 16  # type: int
-        self.diffusionTileHeight = 16  # type: int
-        self.diffusionTileOverlap = 2  # type: int
-        self.upscalerScaleFactor = 0  # type: int
-        self.t5TextEncoder = True  # type: bool
-        self.separateClipL = False  # type: bool
-        self.clipLText = None  # type: str
-        self.separateOpenClipG = False  # type: bool
-        self.openClipGText = None  # type: str
-        self.speedUpWithGuidanceEmbed = True  # type: bool
-        self.guidanceEmbed = 3.5  # type: float
-        self.resolutionDependentShift = True  # type: bool
-        self.teaCacheStart = 5  # type: int
-        self.teaCacheEnd = -1  # type: int
-        self.teaCacheThreshold = 0.06  # type: float
-        self.teaCache = False  # type: bool
-        self.separateT5 = False  # type: bool
-        self.t5Text = None  # type: str
-        self.teaCacheMaxSkipSteps = 3  # type: int
-        self.causalInferenceEnabled = False  # type: bool
-        self.causalInference = 3  # type: int
-        self.causalInferencePad = 0  # type: int
-        self.cfgZeroStar = False  # type: bool
-        self.cfgZeroInitSteps = 0  # type: int
+    def __init__(
+        self,
+        id = 0,
+        startWidth = 0,
+        startHeight = 0,
+        seed = 0,
+        steps = 0,
+        guidanceScale = 0.0,
+        strength = 0.0,
+        model = None,
+        sampler = 0,
+        batchCount = 1,
+        batchSize = 1,
+        hiresFix = False,
+        hiresFixStartWidth = 0,
+        hiresFixStartHeight = 0,
+        hiresFixStrength = 0.7,
+        upscaler = None,
+        imageGuidanceScale = 1.5,
+        seedMode = 0,
+        clipSkip = 1,
+        controls = None,
+        loras = None,
+        maskBlur = 0.0,
+        faceRestoration = None,
+        clipWeight = 1.0,
+        negativePromptForImagePrior = True,
+        imagePriorSteps = 5,
+        refinerModel = None,
+        originalImageHeight = 0,
+        originalImageWidth = 0,
+        cropTop = 0,
+        cropLeft = 0,
+        targetImageHeight = 0,
+        targetImageWidth = 0,
+        aestheticScore = 6.0,
+        negativeAestheticScore = 2.5,
+        zeroNegativePrompt = False,
+        refinerStart = 0.7,
+        negativeOriginalImageHeight = 0,
+        negativeOriginalImageWidth = 0,
+        name = None,
+        fpsId = 5,
+        motionBucketId = 127,
+        condAug = 0.02,
+        startFrameCfg = 1.0,
+        numFrames = 14,
+        maskBlurOutset = 0,
+        sharpness = 0.0,
+        shift = 1.0,
+        stage2Steps = 10,
+        stage2Cfg = 1.0,
+        stage2Shift = 1.0,
+        tiledDecoding = False,
+        decodingTileWidth = 10,
+        decodingTileHeight = 10,
+        decodingTileOverlap = 2,
+        stochasticSamplingGamma = 0.3,
+        preserveOriginalAfterInpaint = True,
+        tiledDiffusion = False,
+        diffusionTileWidth = 16,
+        diffusionTileHeight = 16,
+        diffusionTileOverlap = 2,
+        upscalerScaleFactor = 0,
+        t5TextEncoder = True,
+        separateClipL = False,
+        clipLText = None,
+        separateOpenClipG = False,
+        openClipGText = None,
+        speedUpWithGuidanceEmbed = True,
+        guidanceEmbed = 3.5,
+        resolutionDependentShift = True,
+        teaCacheStart = 5,
+        teaCacheEnd = -1,
+        teaCacheThreshold = 0.06,
+        teaCache = False,
+        separateT5 = False,
+        t5Text = None,
+        teaCacheMaxSkipSteps = 3,
+        causalInferenceEnabled = False,
+        causalInference = 3,
+        causalInferencePad = 0,
+        cfgZeroStar = False,
+        cfgZeroInitSteps = 0,
+    ):
+        self.id = id  # type: int
+        self.startWidth = startWidth  # type: int
+        self.startHeight = startHeight  # type: int
+        self.seed = seed  # type: int
+        self.steps = steps  # type: int
+        self.guidanceScale = guidanceScale  # type: float
+        self.strength = strength  # type: float
+        self.model = model  # type: Optional[str]
+        self.sampler = sampler  # type: int
+        self.batchCount = batchCount  # type: int
+        self.batchSize = batchSize  # type: int
+        self.hiresFix = hiresFix  # type: bool
+        self.hiresFixStartWidth = hiresFixStartWidth  # type: int
+        self.hiresFixStartHeight = hiresFixStartHeight  # type: int
+        self.hiresFixStrength = hiresFixStrength  # type: float
+        self.upscaler = upscaler  # type: Optional[str]
+        self.imageGuidanceScale = imageGuidanceScale  # type: float
+        self.seedMode = seedMode  # type: int
+        self.clipSkip = clipSkip  # type: int
+        self.controls = controls  # type: Optional[List[ControlT]]
+        self.loras = loras  # type: Optional[List[LoRAT]]
+        self.maskBlur = maskBlur  # type: float
+        self.faceRestoration = faceRestoration  # type: Optional[str]
+        self.clipWeight = clipWeight  # type: float
+        self.negativePromptForImagePrior = negativePromptForImagePrior  # type: bool
+        self.imagePriorSteps = imagePriorSteps  # type: int
+        self.refinerModel = refinerModel  # type: Optional[str]
+        self.originalImageHeight = originalImageHeight  # type: int
+        self.originalImageWidth = originalImageWidth  # type: int
+        self.cropTop = cropTop  # type: int
+        self.cropLeft = cropLeft  # type: int
+        self.targetImageHeight = targetImageHeight  # type: int
+        self.targetImageWidth = targetImageWidth  # type: int
+        self.aestheticScore = aestheticScore  # type: float
+        self.negativeAestheticScore = negativeAestheticScore  # type: float
+        self.zeroNegativePrompt = zeroNegativePrompt  # type: bool
+        self.refinerStart = refinerStart  # type: float
+        self.negativeOriginalImageHeight = negativeOriginalImageHeight  # type: int
+        self.negativeOriginalImageWidth = negativeOriginalImageWidth  # type: int
+        self.name = name  # type: Optional[str]
+        self.fpsId = fpsId  # type: int
+        self.motionBucketId = motionBucketId  # type: int
+        self.condAug = condAug  # type: float
+        self.startFrameCfg = startFrameCfg  # type: float
+        self.numFrames = numFrames  # type: int
+        self.maskBlurOutset = maskBlurOutset  # type: int
+        self.sharpness = sharpness  # type: float
+        self.shift = shift  # type: float
+        self.stage2Steps = stage2Steps  # type: int
+        self.stage2Cfg = stage2Cfg  # type: float
+        self.stage2Shift = stage2Shift  # type: float
+        self.tiledDecoding = tiledDecoding  # type: bool
+        self.decodingTileWidth = decodingTileWidth  # type: int
+        self.decodingTileHeight = decodingTileHeight  # type: int
+        self.decodingTileOverlap = decodingTileOverlap  # type: int
+        self.stochasticSamplingGamma = stochasticSamplingGamma  # type: float
+        self.preserveOriginalAfterInpaint = preserveOriginalAfterInpaint  # type: bool
+        self.tiledDiffusion = tiledDiffusion  # type: bool
+        self.diffusionTileWidth = diffusionTileWidth  # type: int
+        self.diffusionTileHeight = diffusionTileHeight  # type: int
+        self.diffusionTileOverlap = diffusionTileOverlap  # type: int
+        self.upscalerScaleFactor = upscalerScaleFactor  # type: int
+        self.t5TextEncoder = t5TextEncoder  # type: bool
+        self.separateClipL = separateClipL  # type: bool
+        self.clipLText = clipLText  # type: Optional[str]
+        self.separateOpenClipG = separateOpenClipG  # type: bool
+        self.openClipGText = openClipGText  # type: Optional[str]
+        self.speedUpWithGuidanceEmbed = speedUpWithGuidanceEmbed  # type: bool
+        self.guidanceEmbed = guidanceEmbed  # type: float
+        self.resolutionDependentShift = resolutionDependentShift  # type: bool
+        self.teaCacheStart = teaCacheStart  # type: int
+        self.teaCacheEnd = teaCacheEnd  # type: int
+        self.teaCacheThreshold = teaCacheThreshold  # type: float
+        self.teaCache = teaCache  # type: bool
+        self.separateT5 = separateT5  # type: bool
+        self.t5Text = t5Text  # type: Optional[str]
+        self.teaCacheMaxSkipSteps = teaCacheMaxSkipSteps  # type: int
+        self.causalInferenceEnabled = causalInferenceEnabled  # type: bool
+        self.causalInference = causalInference  # type: int
+        self.causalInferencePad = causalInferencePad  # type: int
+        self.cfgZeroStar = cfgZeroStar  # type: bool
+        self.cfgZeroInitSteps = cfgZeroInitSteps  # type: int
 
     @classmethod
     def InitFromBuf(cls, buf, pos):

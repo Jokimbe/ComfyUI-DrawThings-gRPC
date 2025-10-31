@@ -25,7 +25,46 @@ export default {
 
     afterConfigureGraph() {
         modelService.updateNodes()
-    }
+    },
+
+    settings: [
+        {
+            id: "drawthings.bridge_mode.enabled",
+            type: "boolean",
+            name: "Enable bridge mode",
+            default: true,
+            category: ["DrawThings", "Bridge mode", "Bridge mode"],
+            sortOrder: 2,
+            tooltip: "With bridge mode enabled, your local models will be hidden and the official models available to DT+ will be listed. Be sure to enable Bridge Mode in your Draw Things API settings (DT+ only)",
+            onChange: (value) => {
+                modelService.updateNodes()
+            },
+        },
+        {
+            id: "drawthings.bridge_mode.community",
+            type: "boolean",
+            name: "Show community models",
+            default: true,
+            category: ["DrawThings", "Bridge mode", "Community"],
+            sortOrder: 1,
+            tooltip: "When bridge mode is enabled, also list community models",
+            onChange: (value) => {
+                modelService.updateNodes()
+            },
+        },
+        {
+            id: "drawthings.bridge_mode.uncurated",
+            type: "boolean",
+            name: "Show uncurated models",
+            default: false,
+            category: ["DrawThings", "Bridge mode", "Uncurated"],
+            sortOrder: 0,
+            tooltip: "When bridge mode is enabled, also list uncurated models",
+            onChange: (value) => {
+                modelService.updateNodes()
+            },
+        },
+    ]
 }
 
 /** @type {import("@comfyorg/litegraph").LGraphNode} */
@@ -163,7 +202,7 @@ const dtModelStandardNodeProto = {
 
             const type = widget?.options?.modelType
 
-            if (!models[type]) {
+            if (!models?.[type]) {
                 widget.options.values = ["Not connected", "Click to retry"]
                 widget.value = "Not connected"
                 continue

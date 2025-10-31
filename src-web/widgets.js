@@ -127,13 +127,6 @@ export function showWidget(node, widgetName, show = false, suffix = "") {
     setTimeout(() => app.canvas.setDirty(true, true), 10)
 }
 
-function showWidgetX(node, widgetName, show = false) {
-    const widget = findWidgetByName(node, widgetName)
-    if (!widget) return
-    widget.hidden = !show
-    // setTimeout(() => app.canvas.setDirty(true, true), 10);
-}
-
 function showWidgets(node, show, ...widgetNames) {
     widgetNames.forEach((w) => showWidget(node, w, show))
 }
@@ -281,7 +274,6 @@ export default {
     },
 }
 
-/** @type {import("@comfyorg/litegraph").LGraphNode} */
 const samplerWidgetsProto = {
     updateDynamicWidgets() {
         updateSamplerWidgets(this)

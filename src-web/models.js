@@ -9,6 +9,7 @@ class ModelService {
 
     async updateNodes() {
         // since many nodes may be configured at once, we will batch calls to updateNodes
+        if (app.configuringGraph || !app.graph) return
         if (!this.#updateNodesPromise) {
             this.#updateNodesPromise = new Promise(res => {
                 setTimeout(() => {
@@ -22,7 +23,7 @@ class ModelService {
     }
 
     async #updateNodes() {
-        const dtModelNodes = app.graph.nodes.filter(n => n.isDtServerNode !== undefined)
+        const dtModelNodes = app.rootGraph.nodes.filter(n => n.isDtServerNode !== undefined)
         const graphServerNodes = dtModelNodes.filter(n => n.isDtServerNode)
 
         if (!graphServerNodes.length) return
@@ -31,17 +32,6 @@ class ModelService {
         /** @type {Map<string, ModelInfo | undefined>} */
         const serverModels = new Map()
 
-        // original version iterated over server nodes, and then recursively traversed its
-        // input nodes and updated any dtModelNodes with matching nodes.
-        // Problem: dtModelNodes can get confused about which version they should filter, if
-        // they their graph touches multiple sampler nodes
-        // So instead of trying to be too smart with this, we'll just...
-        // - iterate over server nodes, and fetch/update their models
-        // - iterate over non-server nodes
-        // - - determine their models list and version by traversing their outputs
-        // - - change version from string to string[]
-        // - - update widgets with the union of their connected samplers
-        // - - - ...maybe the intersection for the models list and union for version
         for (const sn of graphServerNodes) {
             // get fresh models list for the server
             const { server, port, useTls } = sn.getServer()
@@ -127,13 +117,48 @@ export async function getFiles(server, port, useTls) {
     body.append("use_tls", useTls)
 
     const api = window.comfyAPI.api.api
-
     const filesInfoResponse = await api.fetchApi(`/dt_grpc/files_info`, {
         method: "POST",
         body,
     })
 
     return filesInfoResponse
+}
+
+let combinedIncludes = [null, null]
+let combinedBridgeModels = null
+async function getBridgeModels() {
+    const includeCommunity = app.extensionManager.setting.get("drawthings.bridge_mode.community")
+    const includeUncurated = app.extensionManager.setting.get("drawthings.bridge_mode.uncurated")
+    if (combinedBridgeModels
+        && combinedIncludes[0] === includeCommunity
+        && combinedIncludes[1] === includeUncurated) return combinedBridgeModels
+
+    const api = window.comfyAPI.api.api
+    const filesResponse = await api.fetchApi('/dt_grpc/bridge_models')
+    const files = await filesResponse.json()
+
+    const filterFn = includeCommunity
+        ? (m => files.includes(m.file))
+        : (m => files.includes(m.file) && m.official)
+
+    const { default: models } = await import("./models/models.json", { with: { type: "json" } })
+    const { default: uncurated } = await import("./models/uncurated_models.json", { with: { type: "json" } })
+    const { default: controlNets } = await import("./models/controlnets.json", { with: { type: "json" } })
+    const { default: loras } = await import("./models/loras.json", { with: { type: "json" } })
+    const { default: textualInversions } = await import("./models/embeddings.json", { with: { type: "json" } })
+    const { default: upscalers } = await import("./models/upscalers.json", { with: { type: "json" } })
+    console.log(textualInversions)
+    combinedBridgeModels = {
+        models: [...models, ...(includeUncurated ? uncurated : [])].filter(filterFn),
+        controlNets: controlNets.filter(filterFn),
+        loras: loras.filter(filterFn),
+        textualInversions: textualInversions.filter(filterFn),
+        upscalers: upscalers.filter(filterFn),
+    }
+    combinedIncludes = [includeCommunity, includeUncurated]
+
+    return combinedBridgeModels
 }
 
 /* @typedef {{ models: any[], controlNets: any[], loras: any[], upscalers: any[]}} ModelInfo */
@@ -175,8 +200,9 @@ const notConnectedOptions = ["Not connected to sampler node", "Connect to a samp
 
 async function getModels(server, port, useTls) {
     if (!server || !port || useTls === undefined) return
-    const key = modelInfoStoreKey(server, port, useTls)
+    if (app.extensionManager.setting.get("drawthings.bridge_mode.enabled")) return getBridgeModels()
 
+    const key = modelInfoStoreKey(server, port, useTls)
     if (modelInfoRequests.has(key)) {
         const request = modelInfoRequests.get(key)
         await request

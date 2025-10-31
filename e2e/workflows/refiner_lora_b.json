@@ -75,73 +75,6 @@
       "_lastSelectedModel": {}
     },
     {
-      "id": 16,
-      "type": "DrawThingsRefiner",
-      "pos": [
-        1420,
-        1020
-      ],
-      "size": [
-        270,
-        82
-      ],
-      "flags": {},
-      "order": 1,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "REFINER",
-          "type": "DT_REFINER",
-          "links": [
-            29
-          ]
-        }
-      ],
-      "properties": {
-        "cnr_id": "drawthings-grpc",
-        "ver": "1.2.0",
-        "Node name for S&R": "DrawThingsRefiner"
-      },
-      "widgets_values": [
-        {
-          "value": {
-            "text_encoder": "xi_v2_open_clip_vit_bigg14_f16.ckpt",
-            "file": "xi_v2_f16.ckpt",
-            "prefix": "",
-            "upcast_attention": false,
-            "default_scale": 16,
-            "autoencoder": "sdxl_vae_v1.0_f16.ckpt",
-            "modifier": "none",
-            "clip_encoder": "xi_v2_clip_vit_l14_f16.ckpt",
-            "name": "xi_v2",
-            "version": "sdxl_base_v0.9"
-          },
-          "content": "xi_v2 (SDXL)",
-          "disabled": false
-        },
-        0.35000000000000003
-      ],
-      "_lastSelectedModel": {
-        "refiner_model": {
-          "value": {
-            "text_encoder": "xi_v2_open_clip_vit_bigg14_f16.ckpt",
-            "file": "xi_v2_f16.ckpt",
-            "prefix": "",
-            "upcast_attention": false,
-            "default_scale": 16,
-            "autoencoder": "sdxl_vae_v1.0_f16.ckpt",
-            "modifier": "none",
-            "clip_encoder": "xi_v2_clip_vit_l14_f16.ckpt",
-            "name": "xi_v2",
-            "version": "sdxl_base_v0.9"
-          },
-          "content": "xi_v2 (SDXL)",
-          "disabled": false
-        }
-      }
-    },
-    {
       "id": 11,
       "type": "DrawThingsPrompt",
       "pos": [
@@ -153,7 +86,7 @@
         200
       ],
       "flags": {},
-      "order": 2,
+      "order": 1,
       "mode": 0,
       "inputs": [],
       "outputs": [
@@ -181,250 +114,6 @@
       "_lastSelectedModel": {}
     },
     {
-      "id": 15,
-      "type": "DrawThingsSampler",
-      "pos": [
-        1770,
-        490
-      ],
-      "size": [
-        312.08984375,
-        1046
-      ],
-      "flags": {},
-      "order": 4,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "image",
-          "shape": 7,
-          "type": "IMAGE",
-          "link": null
-        },
-        {
-          "name": "mask",
-          "shape": 7,
-          "type": "MASK",
-          "link": null
-        },
-        {
-          "color_off": "#EF5350",
-          "color_on": "#EF5350",
-          "name": "positive",
-          "shape": 7,
-          "type": "STRING",
-          "link": 26
-        },
-        {
-          "color_off": "#EF5350",
-          "color_on": "#EF5350",
-          "name": "negative",
-          "shape": 7,
-          "type": "STRING",
-          "link": 27
-        },
-        {
-          "name": "lora",
-          "shape": 7,
-          "type": "DT_LORA",
-          "link": 30
-        },
-        {
-          "name": "control_net",
-          "shape": 7,
-          "type": "DT_CNET",
-          "link": null
-        },
-        {
-          "name": "upscaler",
-          "shape": 7,
-          "type": "DT_UPSCALER",
-          "link": null
-        },
-        {
-          "name": "refiner",
-          "shape": 7,
-          "type": "DT_REFINER",
-          "link": 29
-        }
-      ],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [
-            28
-          ]
-        }
-      ],
-      "properties": {
-        "cnr_id": "drawthings-grpc",
-        "ver": "3663115d699768a923ebd9cff7e2fb9f7b461033",
-        "Node name for S&R": "DrawThingsSampler"
-      },
-      "widgets_values": [
-        "All",
-        "localhost",
-        "7859",
-        true,
-        {
-          "value": {
-            "autoencoder": "sdxl_vae_v1.0_f16.ckpt",
-            "version": "sdxl_base_v0.9",
-            "file": "foxaiponyfantastic_v2_f16.ckpt",
-            "name": "foxaiPONYFantastic_v2",
-            "upcast_attention": false,
-            "default_scale": 16,
-            "modifier": "none",
-            "clip_encoder": "foxaiponyfantastic_v2_clip_vit_l14_f16.ckpt",
-            "prefix": "",
-            "text_encoder": "foxaiponyfantastic_v2_open_clip_vit_bigg14_f16.ckpt"
-          },
-          "content": "foxaiPONYFantastic_v2 (SDXL)"
-        },
-        1,
-        355907647,
-        "fixed",
-        "ScaleAlike",
-        768,
-        768,
-        8,
-        14,
-        3,
-        true,
-        4.5,
-        true,
-        4.5,
-        "Euler A Trailing",
-        1,
-        false,
-        1,
-        1,
-        5,
-        127,
-        0.02,
-        1,
-        0,
-        0,
-        2,
-        0,
-        0,
-        0,
-        true,
-        false,
-        512,
-        384,
-        0.7,
-        true,
-        640,
-        640,
-        128,
-        false,
-        512,
-        512,
-        64,
-        false,
-        5,
-        2,
-        0.2,
-        3,
-        false,
-        "",
-        false,
-        ""
-      ],
-      "nodePackVersion": "1.5.0",
-      "widget_values_keyed": {
-        "settings": "All",
-        "server": "localhost",
-        "port": "7859",
-        "use_tls": true,
-        "model": {
-          "value": {
-            "autoencoder": "sdxl_vae_v1.0_f16.ckpt",
-            "version": "sdxl_base_v0.9",
-            "file": "foxaiponyfantastic_v2_f16.ckpt",
-            "name": "foxaiPONYFantastic_v2",
-            "upcast_attention": false,
-            "default_scale": 16,
-            "modifier": "none",
-            "clip_encoder": "foxaiponyfantastic_v2_clip_vit_l14_f16.ckpt",
-            "prefix": "",
-            "text_encoder": "foxaiponyfantastic_v2_open_clip_vit_bigg14_f16.ckpt"
-          },
-          "content": "foxaiPONYFantastic_v2 (SDXL)"
-        },
-        "strength": 1,
-        "seed": 355907647,
-        "control_after_generate": "fixed",
-        "seed_mode": "ScaleAlike",
-        "width": 768,
-        "height": 768,
-        "steps": 8,
-        "num_frames": 14,
-        "cfg": 3,
-        "cfg_zero_star": true,
-        "cfg_zero_star_init_steps": 4.5,
-        "speed_up": true,
-        "guidance_embed": 4.5,
-        "sampler_name": "Euler A Trailing",
-        "stochastic_sampling_gamma": 1,
-        "res_dpt_shift": false,
-        "shift": 1,
-        "batch_size": 1,
-        "fps": 5,
-        "motion_scale": 127,
-        "guiding_frame_noise": 0.02,
-        "start_frame_guidance": 1,
-        "causal_inference": 0,
-        "causal_inference_pad": 0,
-        "clip_skip": 2,
-        "sharpness": 0,
-        "mask_blur": 0,
-        "mask_blur_outset": 0,
-        "preserve_original": true,
-        "high_res_fix": false,
-        "high_res_fix_start_width": 512,
-        "high_res_fix_start_height": 384,
-        "high_res_fix_strength": 0.7,
-        "tiled_decoding": true,
-        "decoding_tile_width": 640,
-        "decoding_tile_height": 640,
-        "decoding_tile_overlap": 128,
-        "tiled_diffusion": false,
-        "diffusion_tile_width": 512,
-        "diffusion_tile_height": 512,
-        "diffusion_tile_overlap": 64,
-        "tea_cache": false,
-        "tea_cache_start": 5,
-        "tea_cache_end": 2,
-        "tea_cache_threshold": 0.2,
-        "tea_cache_max_skip_steps": 3,
-        "separate_clip_l": false,
-        "clip_l_text": "",
-        "separate_open_clip_g": false,
-        "open_clip_g_text": "",
-        "$$canvas-image-preview": ""
-      },
-      "_lastSelectedModel": {
-        "model": {
-          "value": {
-            "autoencoder": "sdxl_vae_v1.0_f16.ckpt",
-            "version": "sdxl_base_v0.9",
-            "file": "foxaiponyfantastic_v2_f16.ckpt",
-            "name": "foxaiPONYFantastic_v2",
-            "upcast_attention": false,
-            "default_scale": 16,
-            "modifier": "none",
-            "clip_encoder": "foxaiponyfantastic_v2_clip_vit_l14_f16.ckpt",
-            "prefix": "",
-            "text_encoder": "foxaiponyfantastic_v2_open_clip_vit_bigg14_f16.ckpt"
-          },
-          "content": "foxaiPONYFantastic_v2 (SDXL)"
-        }
-      }
-    },
-    {
       "id": 17,
       "type": "DrawThingsLoRA",
       "pos": [
@@ -436,7 +125,7 @@
         290
       ],
       "flags": {},
-      "order": 3,
+      "order": 2,
       "mode": 0,
       "inputs": [
         {
@@ -448,7 +137,7 @@
       ],
       "outputs": [
         {
-          "name": "LORA",
+          "name": "lora_stack",
           "type": "DT_LORA",
           "links": [
             30
@@ -570,7 +259,387 @@
         "lora_8": null
       },
       "loraCount": 3,
-      "showMode": true
+      "showMode": true,
+      "nodePackVersion": "1.7.4",
+      "widget_values_keyed": {
+        "buttons": "",
+        "lora": {
+          "value": {
+            "is_lo_ha": false,
+            "file": "dmd2_sdxl_4_step_lora_f16.ckpt",
+            "name": "DMD2 SDXL 4-Step",
+            "prefix": "",
+            "version": "sdxl_base_v0.9",
+            "weight": {
+              "upper_bound": 2.5,
+              "value": 1,
+              "lower_bound": -1.5
+            }
+          },
+          "content": "DMD2 SDXL 4-Step (SDXL)",
+          "disabled": false
+        },
+        "weight": 0.25000000000000006,
+        "mode": "All",
+        "lora_2": {
+          "value": {
+            "name": "Hyper SDXL 8-Step",
+            "version": "sdxl_base_v0.9",
+            "is_lo_ha": false,
+            "prefix": "",
+            "file": "hyper_sdxl_8_step_lora_f16.ckpt",
+            "is_consistency_model": true
+          },
+          "content": "Hyper SDXL 8-Step (SDXL)",
+          "disabled": false
+        },
+        "weight_2": 0.5000000000000001,
+        "mode_2": "All",
+        "lora_3": {
+          "value": {
+            "file": "weight_slider_lora_f16.ckpt",
+            "version": "sdxl_base_v0.9",
+            "is_lo_ha": false,
+            "name": "Weight Slider",
+            "prefix": ""
+          },
+          "content": "Weight Slider (SDXL)",
+          "disabled": false
+        },
+        "weight_3": -3.0000000000000004,
+        "mode_3": "Refiner",
+        "lora_4": null,
+        "weight_4": 1,
+        "mode_4": "All",
+        "lora_5": null,
+        "weight_5": 1,
+        "mode_5": "All",
+        "lora_6": null,
+        "weight_6": 1,
+        "mode_6": "All",
+        "lora_7": null,
+        "weight_7": 1,
+        "mode_7": "All",
+        "lora_8": null,
+        "weight_8": 1,
+        "mode_8": "All"
+      }
+    },
+    {
+      "id": 15,
+      "type": "DrawThingsSampler",
+      "pos": [
+        1770,
+        490
+      ],
+      "size": [
+        312.08984375,
+        842
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "mask",
+          "shape": 7,
+          "type": "MASK",
+          "link": null
+        },
+        {
+          "color_off": "#EF5350",
+          "color_on": "#EF5350",
+          "name": "positive",
+          "shape": 7,
+          "type": "STRING",
+          "link": 26
+        },
+        {
+          "color_off": "#EF5350",
+          "color_on": "#EF5350",
+          "name": "negative",
+          "shape": 7,
+          "type": "STRING",
+          "link": 27
+        },
+        {
+          "name": "lora",
+          "shape": 7,
+          "type": "DT_LORA",
+          "link": 30
+        },
+        {
+          "name": "control_net",
+          "shape": 7,
+          "type": "DT_CNET",
+          "link": null
+        },
+        {
+          "name": "upscaler",
+          "shape": 7,
+          "type": "DT_UPSCALER",
+          "link": null
+        },
+        {
+          "name": "refiner",
+          "shape": 7,
+          "type": "DT_REFINER",
+          "link": 29
+        },
+        {
+          "name": "hints",
+          "shape": 7,
+          "type": "DT_HINTS",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            28
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "drawthings-grpc",
+        "ver": "3663115d699768a923ebd9cff7e2fb9f7b461033",
+        "Node name for S&R": "DrawThingsSampler"
+      },
+      "widgets_values": [
+        "All",
+        "localhost",
+        "7859",
+        true,
+        {
+          "value": {
+            "upcast_attention": false,
+            "prefix": "",
+            "text_encoder": "dixar_open_clip_vit_bigg14_f16.ckpt",
+            "autoencoder": "sdxl_vae_v1.0_f16.ckpt",
+            "clip_encoder": "dixar_clip_vit_l14_f16.ckpt",
+            "default_scale": 16,
+            "version": "sdxl_base_v0.9",
+            "name": "Dixar",
+            "modifier": "none",
+            "file": "dixar_f16.ckpt"
+          },
+          "content": "Dixar (SDXL)"
+        },
+        1,
+        355907647,
+        "fixed",
+        "ScaleAlike",
+        768,
+        768,
+        8,
+        14,
+        3,
+        true,
+        5,
+        true,
+        4.5,
+        "Euler A Trailing",
+        1,
+        false,
+        1,
+        1,
+        5,
+        127,
+        0.02,
+        1,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        true,
+        false,
+        512,
+        384,
+        0.7,
+        true,
+        640,
+        640,
+        128,
+        false,
+        512,
+        512,
+        64,
+        false,
+        5,
+        2,
+        0.2,
+        3,
+        false,
+        "",
+        false,
+        ""
+      ],
+      "nodePackVersion": "1.7.4",
+      "widget_values_keyed": {
+        "settings": "All",
+        "server": "localhost",
+        "port": "7859",
+        "use_tls": true,
+        "model": {
+          "value": {
+            "upcast_attention": false,
+            "prefix": "",
+            "text_encoder": "dixar_open_clip_vit_bigg14_f16.ckpt",
+            "autoencoder": "sdxl_vae_v1.0_f16.ckpt",
+            "clip_encoder": "dixar_clip_vit_l14_f16.ckpt",
+            "default_scale": 16,
+            "version": "sdxl_base_v0.9",
+            "name": "Dixar",
+            "modifier": "none",
+            "file": "dixar_f16.ckpt"
+          },
+          "content": "Dixar (SDXL)"
+        },
+        "strength": 1,
+        "seed": 355907647,
+        "control_after_generate": "fixed",
+        "seed_mode": "ScaleAlike",
+        "width": 768,
+        "height": 768,
+        "steps": 8,
+        "num_frames": 14,
+        "cfg": 3,
+        "cfg_zero_star": true,
+        "cfg_zero_star_init_steps": 5,
+        "speed_up": true,
+        "guidance_embed": 4.5,
+        "sampler_name": "Euler A Trailing",
+        "stochastic_sampling_gamma": 1,
+        "res_dpt_shift": false,
+        "shift": 1,
+        "batch_size": 1,
+        "fps": 5,
+        "motion_scale": 127,
+        "guiding_frame_noise": 0.02,
+        "start_frame_guidance": 1,
+        "causal_inference": 0,
+        "causal_inference_pad": 0,
+        "clip_skip": 2,
+        "sharpness": 0,
+        "mask_blur": 0,
+        "mask_blur_outset": 0,
+        "preserve_original": true,
+        "high_res_fix": false,
+        "high_res_fix_start_width": 512,
+        "high_res_fix_start_height": 384,
+        "high_res_fix_strength": 0.7,
+        "tiled_decoding": true,
+        "decoding_tile_width": 640,
+        "decoding_tile_height": 640,
+        "decoding_tile_overlap": 128,
+        "tiled_diffusion": false,
+        "diffusion_tile_width": 512,
+        "diffusion_tile_height": 512,
+        "diffusion_tile_overlap": 64,
+        "tea_cache": false,
+        "tea_cache_start": 5,
+        "tea_cache_end": 2,
+        "tea_cache_threshold": 0.2,
+        "tea_cache_max_skip_steps": 3,
+        "separate_clip_l": false,
+        "clip_l_text": "",
+        "separate_open_clip_g": false,
+        "open_clip_g_text": ""
+      },
+      "_lastSelectedModel": {
+        "model": {
+          "value": {
+            "upcast_attention": false,
+            "prefix": "",
+            "text_encoder": "dixar_open_clip_vit_bigg14_f16.ckpt",
+            "autoencoder": "sdxl_vae_v1.0_f16.ckpt",
+            "clip_encoder": "dixar_clip_vit_l14_f16.ckpt",
+            "default_scale": 16,
+            "version": "sdxl_base_v0.9",
+            "name": "Dixar",
+            "modifier": "none",
+            "file": "dixar_f16.ckpt"
+          },
+          "content": "Dixar (SDXL)"
+        }
+      }
+    },
+    {
+      "id": 16,
+      "type": "DrawThingsRefiner",
+      "pos": [
+        1420,
+        1020
+      ],
+      "size": [
+        270,
+        82
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "REFINER",
+          "type": "DT_REFINER",
+          "links": [
+            29
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "drawthings-grpc",
+        "ver": "1.2.0",
+        "Node name for S&R": "DrawThingsRefiner"
+      },
+      "widgets_values": [
+        {
+          "value": {
+            "autoencoder": "sdxl_vae_v1.0_f16.ckpt",
+            "default_scale": 16,
+            "prefix": "",
+            "version": "sdxl_base_v0.9",
+            "upcast_attention": false,
+            "name": "RealVisXL v4.0",
+            "modifier": "none",
+            "clip_encoder": "realvisxl_v4.0_clip_vit_l14_f16.ckpt",
+            "text_encoder": "realvisxl_v4.0_open_clip_vit_bigg14_f16.ckpt",
+            "file": "realvisxl_v4.0_f16.ckpt"
+          },
+          "content": "RealVisXL v4.0 (SDXL)",
+          "disabled": false
+        },
+        0.35000000000000003
+      ],
+      "_lastSelectedModel": {
+        "refiner_model": {
+          "value": {
+            "autoencoder": "sdxl_vae_v1.0_f16.ckpt",
+            "default_scale": 16,
+            "prefix": "",
+            "version": "sdxl_base_v0.9",
+            "upcast_attention": false,
+            "name": "RealVisXL v4.0",
+            "modifier": "none",
+            "clip_encoder": "realvisxl_v4.0_clip_vit_l14_f16.ckpt",
+            "text_encoder": "realvisxl_v4.0_open_clip_vit_bigg14_f16.ckpt",
+            "file": "realvisxl_v4.0_f16.ckpt"
+          },
+          "content": "RealVisXL v4.0 (SDXL)",
+          "disabled": false
+        }
+      }
     }
   ],
   "links": [
@@ -619,13 +688,13 @@
   "config": {},
   "extra": {
     "ds": {
-      "scale": 0.9849732675807655,
+      "scale": 0.6981423390161234,
       "offset": [
-        -1114.9413818496296,
-        -705.5859807330041
+        -1072.172984705014,
+        -354.303539326771
       ]
     },
-    "frontendVersion": "1.23.4",
+    "frontendVersion": "1.28.8",
     "VHS_latentpreview": false,
     "VHS_latentpreviewrate": 0,
     "VHS_MetadataImage": true,
