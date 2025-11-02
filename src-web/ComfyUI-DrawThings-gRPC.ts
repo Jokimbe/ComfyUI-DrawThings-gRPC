@@ -8,7 +8,7 @@ import { DtModelTypeHandler } from "./models.js";
 import { checkVersion } from "./upgrade.js";
 import { setCallback, updateProto } from "./util.js";
 
-export const nodePackVersion = "1.8.0";
+export const nodePackVersion = "1.8.1";
 let previewMethod: string | undefined = undefined;
 
 export default {
