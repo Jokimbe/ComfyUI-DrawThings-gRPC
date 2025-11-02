@@ -100,12 +100,6 @@ export const samplerProto: Partial<DTSampler> = {
         setTimeout(() => checkVersion(), 2000);
     },
 
-    onMouseDown(_e, _pos, _canvas) {
-        // this exists for easier debugging in devtools
-        console.debug("Click!", this);
-        return true;
-    },
-
     onSerialize(serialised: unknown) {
         const ser = serialised as Record<string, unknown>;
         ser.nodePackVersion = nodePackVersion;

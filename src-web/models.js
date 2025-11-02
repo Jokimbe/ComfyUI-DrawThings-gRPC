@@ -142,13 +142,16 @@ async function getBridgeModels() {
         ? (m => files.includes(m.file))
         : (m => files.includes(m.file) && m.official)
 
-    const { default: models } = await import("./models/models.json", { with: { type: "json" } })
-    const { default: uncurated } = await import("./models/uncurated_models.json", { with: { type: "json" } })
-    const { default: controlNets } = await import("./models/controlnets.json", { with: { type: "json" } })
-    const { default: loras } = await import("./models/loras.json", { with: { type: "json" } })
-    const { default: textualInversions } = await import("./models/embeddings.json", { with: { type: "json" } })
-    const { default: upscalers } = await import("./models/upscalers.json", { with: { type: "json" } })
-    console.log(textualInversions)
+    const bridgeModeModelsModules = await import("./models/index")
+    const bridgeModeModels = await bridgeModeModelsModules.getBridgeModeModels()
+
+    const models = bridgeModeModels.models
+    const uncurated = bridgeModeModels.uncurated
+    const controlNets = bridgeModeModels.controlNets
+    const loras = bridgeModeModels.loras
+    const textualInversions = bridgeModeModels.textualInversions
+    const upscalers = bridgeModeModels.upscalers
+
     combinedBridgeModels = {
         models: [...models, ...(includeUncurated ? uncurated : [])].filter(filterFn),
         controlNets: controlNets.filter(filterFn),
