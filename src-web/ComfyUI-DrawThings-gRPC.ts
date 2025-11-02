@@ -8,7 +8,7 @@ import { DtModelTypeHandler } from "./models.js";
 import { checkVersion } from "./upgrade.js";
 import { setCallback, updateProto } from "./util.js";
 
-export const nodePackVersion = "1.8.0";
+export const nodePackVersion = "1.8.1";
 let previewMethod: string | undefined = undefined;
 
 export default {
@@ -98,12 +98,6 @@ export const samplerProto: Partial<DTSampler> = {
         }
 
         setTimeout(() => checkVersion(), 2000);
-    },
-
-    onMouseDown(_e, _pos, _canvas) {
-        // this exists for easier debugging in devtools
-        console.debug("Click!", this);
-        return true;
     },
 
     onSerialize(serialised: unknown) {

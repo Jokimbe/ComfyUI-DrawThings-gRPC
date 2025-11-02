@@ -1,9 +1,10 @@
 import { defineConfig } from "tsup";
 
 export default defineConfig({
-    entry: ["src-web/extension.js"],
+    entry: ["src-web/extension.js", "src-web/models/index.ts"],
     splitting: false,
     sourcemap: true,
+    minify: true,
     clean: true,
     outDir: "web",
     format: "esm",
@@ -14,7 +15,12 @@ export default defineConfig({
         };
     },
     external: [
-        "../../scripts/app.js", // <- tell tsup/esbuild to leave this import alone
+        "../../scripts/app.js",
     ],
-    publicDir: "src-web/public"
+    esbuildOptions(options, context) {
+        options.loader = {
+            // ".json": "copy",
+        }
+    },
+    publicDir: "src-web/public",
 });
