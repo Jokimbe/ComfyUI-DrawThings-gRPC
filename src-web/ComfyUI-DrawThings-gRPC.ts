@@ -7,7 +7,6 @@ import { DtButtonsTypeHandler } from "./lora.js";
 import { DtModelTypeHandler } from "./models.js";
 import { checkVersion } from "./upgrade.js";
 import { setCallback, updateProto } from "./util.js";
-
 export const nodePackVersion = "1.8.1";
 let previewMethod: string | undefined = undefined;
 
@@ -226,7 +225,7 @@ export const samplerProto: Partial<DTSampler> = {
                 for (const w of this.widgets ?? []) {
                     const prop = findPropertyPython(w.name);
                     if (!prop) continue;
-                    prop.export(w, this, config);
+                    prop.export(w as any, this, config);
                 }
                 config.loras = [];
                 config.control = [];

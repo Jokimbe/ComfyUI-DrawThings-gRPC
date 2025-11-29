@@ -1,7 +1,7 @@
-import * as App from "../../scripts/app.js"
+import type { ComfyApp } from "@comfyorg/comfyui-frontend-types";
 
-/** @type {import("@comfyorg/comfyui-frontend-types").ComfyApp} */
-const app = App.app
+// @ts-ignore
+import { app } from "../../scripts/app.js";
 
 const dataPath = "./drawthings-grpc/data.json"
 
@@ -24,12 +24,12 @@ export async function checkVersion() {
     }
 }
 
-async function getAnnounced() {
+async function getAnnounced(): Promise<string[]> {
     const data = await getUserData()
     return data?.announced ?? []
 }
 
-async function saveAnnounced(version) {
+async function saveAnnounced(version: string) {
     const data = await getUserData()
     if (!data?.announced || !Array.isArray(data?.announced))
         data.announced = []
@@ -37,7 +37,7 @@ async function saveAnnounced(version) {
     await app.api.storeUserData(dataPath, data)
 }
 
-async function getUserData() {
+async function getUserData(): Promise<{ announced: string[] }> {
     try {
         const response = await app.api.getUserData(dataPath)
         if (response.status === 200) {
@@ -98,7 +98,7 @@ const announcements = [
  * @param {string} versionA
  * @param {string} versionB
  */
-function compareVersions(versionA, versionB) {
+function compareVersions(versionA: string, versionB: string) {
     const a = versionA.split('.')
     const b = versionB.split('.')
 

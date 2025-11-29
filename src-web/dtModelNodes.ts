@@ -1,20 +1,21 @@
 import { setCallback } from "./dynamicInputs.js"
 import { modelService, getMenuItem } from "./models.js"
 import { updateProto } from "./util.js"
+import type { LGraphNode, IWidget } from "@comfyorg/litegraph";
+import type { ComfyExtension } from "@comfyorg/comfyui-frontend-types";
 
 export const dtModelNodeTypes = ["DrawThingsSampler", "DrawThingsControlNet", "DrawThingsLoRA", "DrawThingsUpscaler", "DrawThingsRefiner", "DrawThingsPrompt"]
 export const dtServerNodeTypes = ["DrawThingsSampler"]
 
-/** @type {import("@comfyorg/comfyui-frontend-types").ComfyExtension} */
-export default {
+const extension: ComfyExtension = {
     name: "modelNodes",
 
     beforeRegisterNodeDef: (nodeType, nodeData, app) => {
-        if (dtModelNodeTypes.includes(nodeType.comfyClass)) {
+        if (dtModelNodeTypes.includes((nodeType as any).comfyClass)) {
             updateProto(nodeType, dtModelNodeProto)
-            if (dtServerNodeTypes.includes(nodeType.comfyClass)) {
+            if (dtServerNodeTypes.includes((nodeType as any).comfyClass)) {
                 updateProto(nodeType, dtServerNodeProto)
-            } else if (nodeType.comfyClass === "DrawThingsPrompt") {
+            } else if ((nodeType as any).comfyClass === "DrawThingsPrompt") {
                 updateProto(nodeType, dtModelPromptNodeProto)
             }
             else {
@@ -32,7 +33,7 @@ export default {
             id: "drawthings.bridge_mode.enabled",
             type: "boolean",
             name: "Enable bridge mode",
-            default: true,
+            defaultValue: true,
             category: ["DrawThings", "Bridge mode", "Bridge mode"],
             sortOrder: 2,
             tooltip: "With bridge mode enabled, your local models will be hidden and the official models available to DT+ will be listed. Be sure to enable Bridge Mode in your Draw Things API settings (DT+ only)",
@@ -44,7 +45,7 @@ export default {
             id: "drawthings.bridge_mode.community",
             type: "boolean",
             name: "Show community models",
-            default: true,
+            defaultValue: true,
             category: ["DrawThings", "Bridge mode", "Community"],
             sortOrder: 1,
             tooltip: "When bridge mode is enabled, also list community models",
@@ -56,7 +57,7 @@ export default {
             id: "drawthings.bridge_mode.uncurated",
             type: "boolean",
             name: "Show uncurated models",
-            default: false,
+            defaultValue: false,
             category: ["DrawThings", "Bridge mode", "Uncurated"],
             sortOrder: 0,
             tooltip: "When bridge mode is enabled, also list uncurated models",
@@ -67,11 +68,20 @@ export default {
     ]
 }
 
-/** @type {import("@comfyorg/litegraph").LGraphNode} */
-const dtModelNodeProto = {
-    saveSelectedModels() {
-        const modelWidgets = this.widgets.filter((w) => w.options?.modelType)
-        const selections = modelWidgets.reduce((acc, w) => {
+export default extension;
+
+interface DTModelNode extends LGraphNode {
+    _lastSelectedModel?: Record<string, any>;
+    getModelWidgets: () => IWidget[];
+    findServerNodes: () => LGraphNode[];
+    isDtServerNode: boolean;
+    comfyClass: string;
+}
+
+const dtModelNodeProto: any = {
+    saveSelectedModels(this: DTModelNode) {
+        const modelWidgets = this.widgets?.filter((w) => (w.options as any)?.modelType) || []
+        const selections = modelWidgets.reduce((acc: Record<string, any>, w) => {
             if (typeof (w.value) === "object" || w.value === "(None selected)") acc[w.name] = w.value
             else acc[w.name] = this._lastSelectedModel?.[w.name]
             return acc
@@ -80,41 +90,39 @@ const dtModelNodeProto = {
         this._lastSelectedModel = selections
     },
     lastSelectedModel: {
-        get() {
+        get(this: DTModelNode) {
             return this._lastSelectedModel
         },
         enumerable: true,
     },
     isDtServerNode: {
-        get() {
+        get(this: DTModelNode) {
             return dtServerNodeTypes.includes(this?.comfyClass)
         },
         enumerable: true,
     },
-    onSerialize(serialised) {
+    onSerialize(this: DTModelNode, serialised: any) {
         serialised._lastSelectedModel = JSON.parse(JSON.stringify(this._lastSelectedModel ?? {}))
     },
-    onConfigure(serialised) {
+    onConfigure(this: DTModelNode, serialised: any) {
         this._lastSelectedModel = serialised._lastSelectedModel || {}
     },
-    getModelWidgets() {
-        return this.widgets.filter((w) => w.options?.modelType)
+    getModelWidgets(this: DTModelNode) {
+        return this.widgets?.filter((w) => (w.options as any)?.modelType) || []
     },
     onAdded() {
         modelService.updateNodes()
     },
-    findServerNodes() {
+    findServerNodes(this: DTModelNode) {
         if (dtServerNodeTypes.includes(this.comfyClass)) return [this]
-        if (this.outputs.length !== 1)
+        if (this.outputs?.length !== 1)
             throw new Error('what node is this? Should only have a single output')
 
-        /** @param {import('@comfyorg/litegraph').LGraphNode} node */
-        function searchOutputNodes(node) {
-            /** @type {import('@comfyorg/litegraph').LGraphNode[]} */
-            const serverNodes = []
+        function searchOutputNodes(node: LGraphNode): LGraphNode[] {
+            const serverNodes: LGraphNode[] = []
             const outputNodes = node.getOutputNodes(0) ?? []
             for (const outputNode of outputNodes) {
-                if (outputNode.isDtServerNode) serverNodes.push(outputNode)
+                if ((outputNode as any).isDtServerNode) serverNodes.push(outputNode)
                 else serverNodes.push(...searchOutputNodes(outputNode))
             }
             return serverNodes
@@ -124,46 +132,47 @@ const dtModelNodeProto = {
     },
 }
 
-/** @type {import("@comfyorg/litegraph").LGraphNode} */
-const dtServerNodeProto = {
-    onNodeCreated() {
+interface DTServerNode extends DTModelNode {
+    getServer: () => { server: any, port: any, useTls: any };
+    getModelVersion: () => string | undefined;
+    updateModels: (models: any, version: string) => void;
+}
+
+const dtServerNodeProto: any = {
+    onNodeCreated(this: DTServerNode) {
         // update when server or port changes
-        const serverWidget = this.widgets.find((w) => w.name === "server")
+        const serverWidget = this.widgets?.find((w) => w.name === "server")
         if (serverWidget) setCallback(serverWidget, "callback", () => modelService.updateNodes())
 
-        const portWidget = this.widgets.find((w) => w.name === "port")
+        const portWidget = this.widgets?.find((w) => w.name === "port")
         if (portWidget) setCallback(portWidget, "callback", () => modelService.updateNodes())
 
-        const tlsWidget = this.widgets.find((w) => w.name === "use_tls")
+        const tlsWidget = this.widgets?.find((w) => w.name === "use_tls")
         if (tlsWidget) setCallback(tlsWidget, "callback", () => modelService.updateNodes())
     },
 
-    getServer() {
-        const server = this.widgets.find((w) => w.name === "server")?.value
-        const port = this.widgets.find((w) => w.name === "port")?.value
-        const useTls = this.widgets.find((w) => w.name === "use_tls")?.value
+    getServer(this: DTServerNode) {
+        const server = this.widgets?.find((w) => w.name === "server")?.value
+        const port = this.widgets?.find((w) => w.name === "port")?.value
+        const useTls = this.widgets?.find((w) => w.name === "use_tls")?.value
         return { server, port, useTls }
     },
 
-    getModelVersion() {
-        return this.widgets.find((w) => w.options?.modelType === "models")?.value?.value?.version
+    getModelVersion(this: DTServerNode) {
+        return (this.widgets?.find((w) => (w.options as any)?.modelType === "models")?.value as any)?.value?.version
     },
 
-    /**
-     * @param {import("./models.js").ModelInfo} models
-     * @param {string} version
-     */
-    updateModels(models, version) {
+    updateModels(this: DTServerNode, models: any, version: string) {
         const widgets = this.getModelWidgets()
         for (const widget of widgets) {
             if (!widget) return
             if (models === null) {
-                widget.options.values = ["Not connected", "Click to retry"]
+                if (widget.options) widget.options.values = ["Not connected", "Click to retry"]
                 widget.value = "Not connected"
                 continue
             }
 
-            widget.options.values = ["(None selected)", ...models.models.map(m => getMenuItem(m)).sort((a, b) => a.content.localeCompare(b.content))]
+            if (widget.options) widget.options.values = ["(None selected)", ...models.models.map((m: any) => getMenuItem(m, false)).sort((a: any, b: any) => a.content.localeCompare(b.content))]
 
             if (widget.value === "Click to retry" || widget.value === "Not connected") {
                 if (this._lastSelectedModel?.model) widget.value = this._lastSelectedModel.model
@@ -172,7 +181,7 @@ const dtServerNodeProto = {
 
             if (widget.value?.toString() === "[object Object]") {
                 const value = {
-                    ...widget.value,
+                    ...(widget.value as any),
                     toString() {
                         return this.value.name
                     },
@@ -184,33 +193,27 @@ const dtServerNodeProto = {
 }
 
 // for cnet, lora, upscaler, and refiner
-/** @type {import("@comfyorg/litegraph").LGraphNode} */
-const dtModelStandardNodeProto = {
-    onConnectionsChange(type, index, isConnected, link_info, inputOrOutput) {
+const dtModelStandardNodeProto: any = {
+    onConnectionsChange(type: any, index: any, isConnected: boolean, link_info: any, inputOrOutput: any) {
         if (isConnected) modelService.updateNodes()
     },
 
-    /**
-     * @param {import("./models.js").ModelInfo} models
-     * @param {string[]} versions
-     */
-    updateModels(models, versions = []) {
-        /** @type {import('@comfyorg/litegraph').IWidget} */
+    updateModels(this: DTModelNode, models: any, versions: string[] = []) {
         const widgets = this.getModelWidgets()
         for (const widget of widgets) {
             if (!widget) return
 
-            const type = widget?.options?.modelType
+            const type = (widget?.options as any)?.modelType
 
             if (!models?.[type]) {
-                widget.options.values = ["Not connected", "Click to retry"]
+                if (widget.options) widget.options.values = ["Not connected", "Click to retry"]
                 widget.value = "Not connected"
                 continue
             }
 
-            widget.options.values = ["(None selected)", ...models[type]
-                .map((m) => getMenuItem(m, m.version && versions.length > 0 && !versions.includes(m.version)))
-                .sort((a, b) => {
+            if (widget.options) widget.options.values = ["(None selected)", ...models[type]
+                .map((m: any) => getMenuItem(m, m.version && versions.length > 0 && !versions.includes(m.version)))
+                .sort((a: any, b: any) => {
                     if (a.disabled && !b.disabled) return 1
                     if (!a.disabled && b.disabled) return -1
                     return a.content.toUpperCase().localeCompare(b.content.toUpperCase())
@@ -223,7 +226,7 @@ const dtModelStandardNodeProto = {
 
             if (widget.value?.toString() === "[object Object]") {
                 const value = {
-                    ...widget.value,
+                    ...(widget.value as any),
                     toString() {
                         return this.value.name
                     },
@@ -234,36 +237,34 @@ const dtModelStandardNodeProto = {
     }
 }
 
-const dtModelPromptNodeProto = {
-    onConnectionsChange(type, index, isConnected, link_info, inputOrOutput) {
+const dtModelPromptNodeProto: any = {
+    onConnectionsChange(type: any, index: any, isConnected: boolean, link_info: any, inputOrOutput: any) {
         if (isConnected) modelService.updateNodes()
     },
 
-    updateModels(models, version) {
+    updateModels(this: any, models: any, version: any) {
         this._models = models?.textualInversions || null
         this._version = version
         this.updateOptions()
     },
 
-    updateOptions() {
-        /** @type {import('@comfyorg/litegraph').IWidget} */
+    updateOptions(this: any) {
         const widgets = this.getModelWidgets()
         for (const widget of widgets) {
             if (!widget) return
 
             if (this._models === null) {
-                widget.options.values = ["Not connected", "Click to retry"]
+                if (widget.options) widget.options.values = ["Not connected", "Click to retry"]
                 widget.value = "Not connected"
                 return
             }
 
-            /** @type {string} */
-            const promptText = this.widgets.find((w) => w.name === "prompt")?.value
+            const promptText = this.widgets.find((w: any) => w.name === "prompt")?.value
             const matches = [...promptText.matchAll(/<(.*?)>/gm)]
             const tags = matches.map(m => m[1])
-            widget.options.values = ["...", ...this._models
-                .map((m) => getMenuItem(m, this._version && this._version.length > 0 && !this._version.includes(m.version) && !tags.includes(m.keyword)))
-                .map(m => {
+            if (widget.options) widget.options.values = ["...", ...this._models
+                .map((m: any) => getMenuItem(m, this._version && this._version.length > 0 && !this._version.includes(m.version) && !tags.includes(m.keyword)))
+                .map((m: any) => {
                     Object.defineProperty(m, 'content', {
                         get() {
                             return `${tags.includes(m.value.keyword) ? "✓ " : ""}${m.value.name} (${m.value.version})`
@@ -271,7 +272,7 @@ const dtModelPromptNodeProto = {
                     })
                     return m
                 })
-                .sort((a, b) => {
+                .sort((a: any, b: any) => {
                     if (a.disabled && !b.disabled) return 1
                     if (!a.disabled && b.disabled) return -1
                     return a.content.toUpperCase().localeCompare(b.content.toUpperCase())
@@ -282,7 +283,7 @@ const dtModelPromptNodeProto = {
     },
 }
 
-function fixLabel(value) {
+function fixLabel(value: any) {
     if (value?.toString() === "[object Object]") {
         return {
             ...value,

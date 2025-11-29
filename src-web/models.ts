@@ -1,8 +1,26 @@
-/** @type {import("@comfyorg/comfyui-frontend-types").ComfyApp} */
-const app = window.comfyAPI.app.app
+import type { LGraphNode, IWidget, INodeInputSlot } from "@comfyorg/litegraph";
+import type { ComfyApp } from "@comfyorg/comfyui-frontend-types";
+
+// @ts-ignore
+const app = window.comfyAPI.app.app;
+
+interface DTServerNode extends LGraphNode {
+    isDtServerNode?: boolean;
+    getServer: () => { server: string; port: number | string; useTls: boolean };
+    updateModels?: (models: any, versions?: any) => void;
+    findServerNodes?: () => DTServerNode[];
+    getModelVersion?: () => string;
+}
+
+interface DTModelNode extends LGraphNode {
+    isDtServerNode?: boolean;
+    updateModels?: (models: any, versions?: any) => void;
+    findServerNodes?: () => DTServerNode[];
+    saveSelectedModels?: () => void;
+}
 
 class ModelService {
-    #updateNodesPromise = null
+    #updateNodesPromise: Promise<void> | null = null
 
     constructor() {
     }
@@ -14,7 +32,7 @@ class ModelService {
             this.#updateNodesPromise = new Promise(res => {
                 setTimeout(() => {
                     this.#updateNodesPromise = null
-                    res(this.#updateNodes())
+                    this.#updateNodes().then(() => res())
                 }, 10)
             })
         }
@@ -23,14 +41,14 @@ class ModelService {
     }
 
     async #updateNodes() {
-        const dtModelNodes = app.rootGraph.nodes.filter(n => n.isDtServerNode !== undefined)
-        const graphServerNodes = dtModelNodes.filter(n => n.isDtServerNode)
+        const dtModelNodes = (app.graph as any)._nodes.filter((n: any) => n.isDtServerNode !== undefined) as DTModelNode[]
+        const graphServerNodes = dtModelNodes.filter(n => n.isDtServerNode) as DTServerNode[]
 
         if (!graphServerNodes.length) return
 
         const nodesUpdated = new Map(dtModelNodes.map(n => ([n, false])))
         /** @type {Map<string, ModelInfo | undefined>} */
-        const serverModels = new Map()
+        const serverModels = new Map<string, ModelInfo | undefined>()
 
         for (const sn of graphServerNodes) {
             // get fresh models list for the server
@@ -52,7 +70,7 @@ class ModelService {
 
             // determine the server(s) and version(s) this node is connected to
             /** @type {import('@comfyorg/litegraph').LGraphNode[]?} */
-            const serverNodes = node?.findServerNodes()
+            const serverNodes = node?.findServerNodes?.()
             if (!serverNodes || !serverNodes.length) continue
 
             let mergedModels = {}
@@ -62,7 +80,7 @@ class ModelService {
                 const models = serverModels.get(modelInfoStoreKey(server, port, useTls))
                 mergedModels = mergeModels(mergedModels, models)
             }
-            const versions = serverNodes.map(sn => sn?.getModelVersion()).filter(v => v)
+            const versions = serverNodes.map(sn => sn?.getModelVersion?.()).filter(v => v)
 
             node.updateModels?.(mergedModels, versions)
             nodesUpdated.set(node, true)
@@ -87,20 +105,20 @@ export const modelService = new ModelService()
  * @param inputName {string}
  * @param inputData {["DT_MODEL", {model_type: string}]}
  */
-export function DtModelTypeHandler(node, inputName, inputData, app) {
+export function DtModelTypeHandler(node: DTModelNode, inputName: string, inputData: any, app: ComfyApp) {
     const widget = node.addWidget(
         "combo",
         inputName,
         "(None selected)",
         /** @type WidgetCallback<IWidget<any, any>> */
-        (value, graph, node) => {
+        ((value: any, graph: any, node: any) => {
             node.saveSelectedModels?.()
             modelService.updateNodes()
-        },
+        }) as any,
         {
             values: ["(None selected)"],
             modelType: inputData[1].model_type,
-        }
+        } as any
     )
 
     return { widget }
@@ -110,11 +128,11 @@ export function DtModelTypeHandler(node, inputName, inputData, app) {
  * @param {string} server
  * @param {number | string} port
  */
-export async function getFiles(server, port, useTls) {
+export async function getFiles(server: string, port: number | string, useTls: boolean) {
     const body = new FormData()
     body.append("server", server)
-    body.append("port", port)
-    body.append("use_tls", useTls)
+    body.append("port", String(port))
+    body.append("use_tls", String(useTls))
 
     const api = window.comfyAPI.api.api
     const filesInfoResponse = await api.fetchApi(`/dt_grpc/files_info`, {
@@ -125,8 +143,8 @@ export async function getFiles(server, port, useTls) {
     return filesInfoResponse
 }
 
-let combinedIncludes = [null, null]
-let combinedBridgeModels = null
+let combinedIncludes: [boolean | null, boolean | null] = [null, null]
+let combinedBridgeModels: ModelInfo | null = null
 async function getBridgeModels() {
     const includeCommunity = app.extensionManager.setting.get("drawthings.bridge_mode.community")
     const includeUncurated = app.extensionManager.setting.get("drawthings.bridge_mode.uncurated")
@@ -139,9 +157,10 @@ async function getBridgeModels() {
     const files = await filesResponse.json()
 
     const filterFn = includeCommunity
-        ? (m => files.includes(m.file))
-        : (m => files.includes(m.file) && m.official)
+        ? ((m: any) => files.includes(m.file))
+        : ((m: any) => files.includes(m.file) && m.official)
 
+    // @ts-ignore
     const bridgeModeModelsModules = await import("./models/index")
     const bridgeModeModels = await bridgeModeModelsModules.getBridgeModeModels()
 
@@ -166,42 +185,44 @@ async function getBridgeModels() {
 
 /* @typedef {{ models: any[], controlNets: any[], loras: any[], upscalers: any[]}} ModelInfo */
 
-/**
- * @typedef {Object} Model
- * @property {string} name
- * @property {string} file
- * @property {string} version
- */
+export interface Model {
+    name: string
+    file: string
+    version?: string
+}
 
-/**
- * @typedef {Object} ModelInfo
- * @property {Model[]} models
- * @property {Model[]} controlNets
- * @property {Model[]} loras
- * @property {Model[]} textualInversions
- * @property {Model[]} upscalers
- */
+export interface ModelInfo {
+    models: Model[]
+    controlNets: Model[]
+    loras: Model[]
+    textualInversions: Model[]
+    upscalers: Model[]
+    [key: string]: Model[] // Allow dynamic keys for mergeModels
+}
 
 /** @type Map<string, ModelInfo> */
-const modelInfoStore = new Map()
+const modelInfoStore = new Map<string, ModelInfo | null>()
 /** @type Map<string, Promise<void>> */
-const modelInfoRequests = new Map()
-const modelInfoStoreKey = (server, port, useTls) => `${server}:${port}${useTls ? ":tls" : ""}`
+const modelInfoRequests = new Map<string, Promise<void>>()
+const modelInfoStoreKey = (server?: string, port?: number | string, useTls?: boolean) => `${server}:${port}${useTls ? ":tls" : ""}`
 
 // yes this is kind of hacky :)
 const failedConnectionOptions = ["Couldn't connect to server", "Check server and click to retry"].map((c, i) => ({
     name: c,
+    file: "",
     version: "fail",
     order: i + 1,
-}))
+})) as any[]
+
 const notConnectedOptions = ["Not connected to sampler node", "Connect to a sampler node to list available models"].map(
     (c) => ({
         name: c,
+        file: "",
         version: "fail",
     })
 )
 
-async function getModels(server, port, useTls) {
+async function getModels(server: string, port: number | string, useTls: boolean) {
     if (!server || !port || useTls === undefined) return
     if (app.extensionManager.setting.get("drawthings.bridge_mode.enabled")) return getBridgeModels()
 
@@ -211,7 +232,7 @@ async function getModels(server, port, useTls) {
         await request
     }
     else {
-        const promise = new Promise((resolve) => {
+        const promise = new Promise<void>((resolve) => {
             getFiles(server, port, useTls).then(async (response) => {
                 if (!response.ok) {
                     modelInfoStore.set(key, null)
@@ -228,29 +249,28 @@ async function getModels(server, port, useTls) {
         await promise
     }
 
-    return modelInfoStore.get(key)
+    return modelInfoStore.get(key) || undefined
 }
 
-const failedConnectionInfo = {
+const failedConnectionInfo: ModelInfo = {
     models: failedConnectionOptions,
     controlNets: notConnectedOptions,
     loras: notConnectedOptions,
     upscalers: notConnectedOptions,
     textualInversions: notConnectedOptions,
-    isNotConnected: true,
 }
 
 modelInfoStore.set(modelInfoStoreKey(), failedConnectionInfo)
 
 /** @param node {LGraphNode} */
-function getInputNodes(node) {
-    return node.inputs.map((input, i) => ([i, input]))
+function getInputNodes(node: LGraphNode) {
+    return node.inputs.map((input, i) => ([i, input] as [number, INodeInputSlot]))
         .filter(([index, input]) => input.link !== null)
-        .map(([index, input]) => node.getInputNode(index))
+        .map(([index, input]) => node.getInputNode(Number(index)))
 }
 
 
-export function getMenuItem(model, disabled) {
+export function getMenuItem(model: Model, disabled: boolean) {
     return {
         value: model,
         content: model.version && model.version !== "fail" ? `${model.name} (${getVersionAbbrev(model.version)})` : model.name,
@@ -264,7 +284,7 @@ export function getMenuItem(model, disabled) {
         // type?: string;
         // slot?: IFoundSlot;
         // callback(this: ContextMenuDivElement<TValue>, value?: TCallbackValue, options?: unknown, event?: MouseEvent, previous_menu?: ContextMenu<TValue>, extra?: TExtra) {
-        callback(...args) {
+        callback(...args: any[]) {
             return false
         },
     }
@@ -275,22 +295,22 @@ export function getMenuItem(model, disabled) {
  * @param {ModelInfo?} modelInfoA
  * @param {ModelInfo?} modelInfoB
  */
-function mergeModels(modelInfoA, modelInfoB) {
+function mergeModels(modelInfoA: ModelInfo | undefined | null | {}, modelInfoB: ModelInfo | undefined | null) {
     /** @type {ModelInfo} */
-    const merged = {}
+    const merged: ModelInfo = {} as any
     /** @type {Set<keyof ModelInfo>} */
     const types = new Set(Object.keys(modelInfoA ?? {}).concat(Object.keys(modelInfoB ?? {})))
     for (const type of types.values()) {
-        merged[type] = modelInfoA[type] ?? []
-        const modelFiles = merged[type].map(m => m.file)
-        const extras = (modelInfoB[type] ?? []).filter(m => !modelFiles.includes(m.file))
-        merged[type] = merged[type].concat(extras)
+        (merged as any)[type] = (modelInfoA as any)[type] ?? []
+        const modelFiles = (merged as any)[type].map((m: any) => m.file)
+        const extras: any[] = ((modelInfoB as any)[type] ?? []).filter((m: any) => !modelFiles.includes(m.file))
+        ;(merged as any)[type] = (merged as any)[type].concat(extras)
     }
     return merged
 }
 
 
-const versionNames = {
+const versionNames: Record<string, string> = {
     v1: 'SD',
     v2: 'SD2',
     'kandinsky2.1': 'Kan',
@@ -313,14 +333,14 @@ const versionNames = {
 }
 
 
-function getVersionAbbrev(version) {
+function getVersionAbbrev(version: string) {
     return versionNames[version] ?? version
 }
 
-function testHack(models) {
+function testHack(models: ModelInfo) {
     // horrible hacky test assist
     try {
-        if (new URL(document.location).searchParams.has("dtgrpctesthack")) {
+        if (new URL(document.location.href).searchParams.has("dtgrpctesthack")) {
             if (Array.isArray(models?.models)) {
                 models.models.push({
                     "file": "fake_qwen.ckpt",
@@ -337,5 +357,3 @@ function testHack(models) {
     } catch { }
 }
 
-
-/** @import { LGraphNode, WidgetCallback, IWidget, IComboWidget } from "@comfyorg/litegraph"; */

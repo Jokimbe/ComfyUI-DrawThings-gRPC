@@ -1,5 +1,5 @@
-import { LGraphNode } from "@comfyorg/litegraph";
-import {
+import type { LGraphNode } from "@comfyorg/litegraph";
+import type {
     IBaseWidget,
     IWidgetOptions
 } from "@comfyorg/litegraph/dist/types/widgets";
@@ -29,7 +29,7 @@ export function importConfig(sampler: DTSampler) {
                     if (!widget) {
                         continue;
                     }
-                    await prop.import(k, v, widget, sampler, config);
+                    await prop.import(k, v, widget as any, sampler as any, config);
                 }
                 sampler.coerceWidgetValues();
                 sampler.updateDynamicWidgets?.();
@@ -122,11 +122,11 @@ function applyConfig(node: LGraphNode, config: Record<string, unknown>) {
     const nodeProps = findPropertiesByNode(node.type);
     for (const nodeProp of nodeProps) {
         const widget = node.widgets?.find((w) => w.name === nodeProp.python);
-        if (!widget) continue;
+        if (!widget || !nodeProp.json) continue;
         nodeProp.import(
             nodeProp.json,
             config[nodeProp.json],
-            widget,
+            widget as any,
             node,
             config
         );

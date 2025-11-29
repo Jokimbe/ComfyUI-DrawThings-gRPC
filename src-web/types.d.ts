@@ -1,6 +1,6 @@
-import { ComfyApi, ComfyApp } from "@comfyorg/comfyui-frontend-types";
-import { LGraphNode } from "@comfyorg/litegraph";
-import { DTSamplerExtensions } from "./ComfyUI-DrawThings-gRPC";
+import type { ComfyApi, ComfyApp } from "@comfyorg/comfyui-frontend-types";
+import type { LGraphNode } from "@comfyorg/litegraph";
+import type { DTSamplerExtensions } from "./ComfyUI-DrawThings-gRPC";
 
 declare global {
     interface Window {

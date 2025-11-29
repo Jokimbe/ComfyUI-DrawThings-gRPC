@@ -1,4 +1,5 @@
 import { modelService } from "./models.js"
+import type { IWidget, LGraphNode } from "@comfyorg/litegraph";
 
 export const samplers = [
     "DPM++ 2M Karras",
@@ -25,7 +26,7 @@ export const samplers = [
 export const seedModes = ["Legacy", "TorchCpuCompatible", "ScaleAlike", "NvidiaGpuCompatible"]
 
 // From flux-auto-workflow.js
-export function calcShift(h, w) {
+export function calcShift(h: number, w: number) {
     const step1 = (h * w) / 256
     const step2 = (1.15 - 0.5) / (4096 - 256)
     const step3 = (step1 - 256) * step2
@@ -34,22 +35,20 @@ export function calcShift(h, w) {
     return Math.round(result * 100) / 100
 }
 
-/** @typedef {"v1" | "v2" | "kandinsky2.1" | "sdxl_base_v0.9" | "sdxl_refiner_v0.9" | "ssd_1b" | "svd_i2v"} _Models_A */
-/** @typedef {"wurstchen_v3.0_stage_c" | "wurstchen_v3.0_stage_b" | "sd3" | "pixart" | "auraflow" | "flux1" } _Models_B */
-/** @typedef {"sd3_large" | "hunyuan_video" | "wan_v2.1_1.3b" | "wan_v2.1_14b" | "hidream_i1" | "qwen_image" } _Models_C */
+type _Models_A = "v1" | "v2" | "kandinsky2.1" | "sdxl_base_v0.9" | "sdxl_refiner_v0.9" | "ssd_1b" | "svd_i2v";
+type _Models_B = "wurstchen_v3.0_stage_c" | "wurstchen_v3.0_stage_b" | "sd3" | "pixart" | "auraflow" | "flux1";
+type _Models_C = "sd3_large" | "hunyuan_video" | "wan_v2.1_1.3b" | "wan_v2.1_14b" | "hidream_i1" | "qwen_image";
 
-/** @typedef {_Models_A | _Models_B | _Models_C | "Other"} ModelVersion */
+export type ModelVersion = _Models_A | _Models_B | _Models_C | "Other";
 
-/** @typedef {Record<ModelVersion, any>} ModelMap */
+export type ModelMap = Record<ModelVersion, any>;
 
-/** @type ModelMap */
-const numFramesMaxMap = { "wan_v2.1_1.3b": 129, "wan_v2.1_14b": 129, hunyuan_video: 201, svd_i2v: 25 }
-const numFramesDefMap = { "wan_v2.1_1.3b": 81, "wan_v2.1_14b": 81, hunyuan_video: 129, svd_i2v: 14 }
+const numFramesMaxMap: Partial<Record<ModelVersion, number>> = { "wan_v2.1_1.3b": 129, "wan_v2.1_14b": 129, hunyuan_video: 201, svd_i2v: 25 }
+const numFramesDefMap: Partial<Record<ModelVersion, number>> = { "wan_v2.1_1.3b": 81, "wan_v2.1_14b": 81, hunyuan_video: 129, svd_i2v: 14 }
 
 /** [ config.fbs name, comfy widget name, the node it belongs to, the property name in DT's json config] */
 // prettier-ignore
-/** @type {[fbs: string, comfy: string, nodeType: string, json: string, type: string, defaultValue: unknown, ...unknown][]} */
-export const propertyData = [
+export const propertyData: [fbs: string, comfy: string | null, nodeType: string | null, json?: string | null, type?: string, defaultValue?: any, ...rest: any[]][] = [
     ['start_width', 'width', 'DrawThingsSampler', 'width', 'int', 512, 128, 2048, 64, 'roundTo64'],
     ['start_height', 'height', 'DrawThingsSampler', 'height', 'int', 512, 128, 2048, 64, 'roundTo64'],
     ['seed', 'seed', 'DrawThingsSampler', 'seed', 'int', -1, -1, null, 1, 'modulo=4294967295'],
@@ -149,25 +148,28 @@ export const propertyData = [
 ]
 // prettier-ignore-end
 
-/** @typedef {{ fbs: string, python: string, node: string, json: string }} DTProperty */
-
-function roundBy64(value) {
+function roundBy64(value: number) {
     return Math.round(value / 64) * 64
 }
 
-/** @type {Record<string, (key, value, widget: import('@comfyorg/litegraph').IWidget, node, config) => void>} */
-const importers = {
+type ImportFunc = (key: string, value: any, widget: IWidget, node: LGraphNode, config: any) => void | Promise<void>;
+type ExportFunc = (widget: IWidget, node: LGraphNode, config: any) => void | Promise<void>;
+
+const importers: Record<string, ImportFunc> = {
     model: async (k, v, w, n, c) => {
         await modelService.updateNodes()
-        const matchingOption = w?.options?.values?.find((ov) => ov.value?.file === v)
+        const values = w?.options?.values as any[] | undefined;
+        const matchingOption = values?.find((ov: any) => ov.value?.file === v)
         if (matchingOption) w.value = matchingOption
     },
     refiner_model: (k, v, w) => {
-        const matchingOption = w?.options?.values?.find(wv => wv.value?.file === v)
+        const values = w?.options?.values as any[] | undefined;
+        const matchingOption = values?.find((wv: any) => wv.value?.file === v)
         if (matchingOption) w.value = matchingOption
     },
     upscaler: (k, v, w) => {
-        const matchingOption = w?.options?.values?.find(wv => wv.value?.file === v)
+        const values = w?.options?.values as any[] | undefined;
+        const matchingOption = values?.find((wv: any) => wv.value?.file === v)
         if (matchingOption) w.value = matchingOption
     },
     start_width: (k, v, w) => {
@@ -233,15 +235,15 @@ const importers = {
     resolution_dependent_shift: (k, v, w, n, c) => {
         if (w) w.value = v
         if (v) {
-            const shiftWidget = n.widgets.find((w) => w.name === "shift")
-            const width = c.width || n.widgets.find((w) => w.name === "width")?.value
-            const height = c.height || n.widgets.find((w) => w.name === "height")?.value
-            if (shiftWidget && width && height) shiftWidget.value = calcShift(width, height)
+            const shiftWidget = n.widgets?.find((w) => w.name === "shift")
+            const width = c.width || n.widgets?.find((w) => w.name === "width")?.value
+            const height = c.height || n.widgets?.find((w) => w.name === "height")?.value
+            if (shiftWidget && width && height) shiftWidget.value = calcShift(width as number, height as number)
         }
     },
     causal_inference: function (k, v, w, n, c) {
         if (Number.isFinite(v)) w.value = v * 4 - 3
-        else w.value = this.defaultValue
+        else w.value = 0 // Default value
     },
     causal_inference_pad: (k, v, w, n, c) => {
         if (w && typeof v === "number") w.value = v * 4
@@ -256,15 +258,16 @@ const importers = {
         if (typeof v === "number")
             w.value = Math.min(1, Math.max(0, v))
         else
-            w.value = this.defaultValue
+            w.value = 0.85 // Default value
     }
 }
 
-const exporters = {
+const exporters: Record<string, ExportFunc> = {
     // start_width: {},
     // start_height: {},
     model: async (w, n, c) => {
-        if (w && w.value && w.value.value) c.model = w.value.value.file ?? w.value.value.name
+        const val = w.value as any;
+        if (w && val && val.value) c.model = val.value.file ?? val.value.name
     },
     sampler: (w, n, c) => {
         if (w && typeof w.value === "string") c.sampler = samplers.indexOf(w.value)
@@ -291,8 +294,20 @@ const exporters = {
     },
 }
 
-class DTProperty {
-    constructor(fbs, python, node, json, type, defaultValue, ...rest) {
+export class DTProperty {
+    fbs: string;
+    python: string | null;
+    node: string | null;
+    json: string | null | undefined;
+    type: string | undefined;
+    defaultValue: any;
+    min?: number;
+    max?: number | string | Partial<Record<ModelVersion, number>>;
+    step?: number;
+    spec?: string;
+    values?: any[];
+
+    constructor(fbs: string, python: string | null, node: string | null, json?: string | null, type?: string, defaultValue?: any, ...rest: any[]) {
         this.fbs = fbs
         this.python = python
         this.node = node
@@ -321,10 +336,10 @@ class DTProperty {
         }
     }
 
-    customImport = undefined;
-    customExport = undefined;
+    customImport: ImportFunc | undefined = undefined;
+    customExport: ExportFunc | undefined = undefined;
 
-    async import(jsonKey, jsonValue, widget, node, config) {
+    async import(jsonKey: string, jsonValue: any, widget: IWidget, node: LGraphNode, config: any) {
         if (!widget || !node) return
         if (this.customImport) await this.customImport(jsonKey, jsonValue, widget, node, config)
         else {
@@ -332,18 +347,18 @@ class DTProperty {
         }
     }
 
-    async export(widget, node, config) {
+    async export(widget: IWidget, node: LGraphNode, config: any) {
         if (this.customExport) await this.customExport(widget, node, config)
         else {
             if (this.json && widget && widget.value !== undefined) config[this.json] = widget.value
         }
     }
 
-    coerce(value) {
+    coerce(value: any) {
         if (this.type === "int" || this.type === "float") {
             if (typeof value !== "number") return this.defaultValue || 0
-            if (Number.isFinite(this.min) && value < this.min) return this.min
-            if (Number.isFinite(this.max) && value > this.max) return this.max
+            if (typeof this.min === 'number' && Number.isFinite(this.min) && value < this.min) return this.min
+            if (typeof this.max === 'number' && Number.isFinite(this.max) && value > this.max) return this.max
             return this.type === "int" ? Math.round(value) : value;;
         }
 
@@ -358,33 +373,32 @@ class DTProperty {
         }
 
         if (this.type === "index") {
-            if (typeof value === "number" && value >= 0 && value < this.values.length) return this.values[value]
-            if (typeof value === "string" && this.values.includes(value)) return value
-            return this.values[this.defaultValue]
+            if (typeof value === "number" && value >= 0 && this.values && value < this.values.length) return this.values[value]
+            if (typeof value === "string" && this.values && this.values.includes(value)) return value
+            return this.values ? this.values[this.defaultValue] : undefined
         }
 
         return value
     }
 
-    getRequiredNodes(value, config) {
+    getRequiredNodes(value: any, config: any): string[] {
         if (this.node) return [this.node]
         return []
     }
 }
 
-/** @type {DTProperty[]} */
-export const properties = propertyData.map(([fbs, ...rest]) => {
+export const properties: DTProperty[] = propertyData.map(([fbs, ...rest]) => {
     const prop = new DTProperty(fbs, ...rest)
     prop.customImport = importers[fbs]
     prop.customExport = exporters[fbs]
     return prop
 })
 
-export function findPropertyJson(name) {
+export function findPropertyJson(name: string) {
     return properties.find((p) => p.json === name)
 }
 
-export function findPropertyPython(name) {
+export function findPropertyPython(name: string) {
     return properties.find((p) => p.python === name)
 }
 
@@ -392,42 +406,42 @@ export function findPropertyPython(name) {
  * @param {string} nodeType
  * @returns DTProperty[]
  */
-export function findPropertiesByNode(nodeType) {
+export function findPropertiesByNode(nodeType: string) {
     return properties.filter(p => p.node === nodeType)
 }
 
-patchProp("loras", "getRequiredNodes", (value) => {
+patchProp("loras", "getRequiredNodes", (value: any) => {
     if (Array.isArray(value) && value.length > 0)
         return Array(Math.ceil(value.length / 8)).fill("DrawThingsLoRA")
     else
         return []
 })
 
-patchProp("controls", "getRequiredNodes", (value) => {
+patchProp("controls", "getRequiredNodes", (value: any) => {
     if (Array.isArray(value))
         return value.map((_) => "DrawThingsControlNet")
     else
         return []
 })
 
-patchProp("upscaler", "getRequiredNodes", (value) => {
+patchProp("upscaler", "getRequiredNodes", (value: any) => {
     if (value)
         return ["DrawThingsUpscaler"]
     return []
 })
 patchProp("upscaler_scale_factor", "getRequiredNodes", () => ([]))
 
-patchProp("refinerModel", "getRequiredNodes", (value) => {
+patchProp("refinerModel", "getRequiredNodes", (value: any) => {
     if (value)
         return ["DrawThingsRefiner"]
     return []
 })
 patchProp("refinerStart", "getRequiredNodes", () => ([]))
 
-function patchProp(jsonName, funcName, func) {
+function patchProp(jsonName: string, funcName: keyof DTProperty, func: any) {
     const prop = findPropertyJson(jsonName)
     if (prop)
-        prop[funcName] = func
+        (prop as any)[funcName] = func
 }
 
 

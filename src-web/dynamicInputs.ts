@@ -1,24 +1,27 @@
-/** @type {import("@comfyorg/comfyui-frontend-types").ComfyExtension} */
-export default {
+import type { LGraphNode, IWidget } from "@comfyorg/litegraph";
+import type { ComfyExtension } from "@comfyorg/comfyui-frontend-types";
+
+const extension: ComfyExtension = {
     name: "dynamicInputs",
 
     beforeRegisterNodeDef(nodeType, nodeData, app) {
-        if (nodeType.comfyClass === "DrawThingsLoRA") {
+        if ((nodeType as any).comfyClass === "DrawThingsLoRA") {
             // update inputs when a new node is added
-            setCallback(nodeType.prototype, "onAdded", function (graph) {
+            setCallback(nodeType.prototype, "onAdded", function (this: any, graph: any) {
                 updateInputs(this)
             })
 
             // or when the model changes
-            setCallback(nodeType.prototype, "onWidgetChanged", function (name, value, old_Value, widget) {
+            setCallback(nodeType.prototype, "onWidgetChanged", function (this: any, name: string, value: any, old_Value: any, widget: any) {
                 updateInputs(this)
             })
         }
     },
 }
 
-/** @param {LGraphNode} node */
-function updateInputs(node) {
+export default extension;
+
+function updateInputs(node: LGraphNode) {
     const s = saveSize(node)
 
     // the first input should always be lora
@@ -29,9 +32,9 @@ function updateInputs(node) {
         node.addInput("lora", "DT_LORA")
     }
 
-    const modelWidget = node?.widgets?.find((w) => w.options?.modelType)
+    const modelWidget = node?.widgets?.find((w) => (w.options as any)?.modelType)
     if (!modelWidget) return
-    const modifier = modelWidget.value?.value?.modifier
+    const modifier = (modelWidget.value as any)?.value?.modifier
 
     if (modifier) {
         if (node.inputs.length < 2 || node.inputs[1]?.type !== "IMAGE") {
@@ -46,27 +49,17 @@ function updateInputs(node) {
     s()
 }
 
-/** @param {LGraphNode} node */
-function saveSize(node) {
+function saveSize(node: LGraphNode) {
     const width = node.width
     return () => node.setSize([width, node.computeSize()[1]])
 }
 
-/**
- * @template {Object} T
- * @template {keyof T} K
- * @param {T} target
- * @param {K} callbackName
- * @param {T[K]} callback
- */
-export function setCallback(target, callbackName, callback) {
+export function setCallback<T extends object, K extends keyof T>(target: T, callbackName: K, callback: T[K]) {
     const originalCallback = target[callbackName]
-    target[callbackName] = function (...args) {
-        const r = originalCallback?.apply(this, args)
-        callback?.apply(this, args)
+    target[callbackName] = function (this: any, ...args: any[]) {
+        const r = (originalCallback as any)?.apply(this, args)
+        ;(callback as any)?.apply(this, args)
         return r
-    }
+    } as any
 }
 
-/** @import { ComfyApi, ComfyApp } from "@comfyorg/comfyui-frontend-types"; */
-/** @import { LGraphNode } from "@comfyorg/litegraph" */

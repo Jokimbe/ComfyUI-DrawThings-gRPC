@@ -1,38 +1,47 @@
 import { updateProto } from "./util.js";
+import { LGraphCanvas } from "@comfyorg/litegraph";
+import type { LGraphNode, IWidget, LLink, INodeOutputSlot, IContextMenuItem } from "@comfyorg/litegraph";
+import type { ComfyExtension } from "@comfyorg/comfyui-frontend-types";
 
-/** @type {import("@comfyorg/litegraph").LGraphNode} */
-const promptProto = {
-    onWidgetChanged(name, value, old_Value, widget) {
+interface PromptNode extends LGraphNode {
+    updateOptions: () => void;
+}
+
+const promptProto: any = {
+    onWidgetChanged(this: PromptNode, name: string, value: any, old_Value: any, widget: IWidget) {
         if (name === "insert_textual_inversion") {
             const keyword = value?.value?.keyword;
             if (!keyword) return;
             const tag = `<${keyword}>`;
 
-            const textWidget = this.widgets.find((w) => w.name === "prompt");
+            const textWidget = this.widgets?.find((w) => w.name === "prompt");
             const text = textWidget?.value ?? "";
 
-            if (text.includes(tag)) {
-                textWidget.value = text.replaceAll(tag, "");
-            } else {
-                textWidget.value = `<${keyword}> ${text}`;
+            if (typeof text === 'string' && textWidget) {
+                if (text.includes(tag)) {
+                    textWidget.value = text.split(tag).join("");
+                } else {
+                    textWidget.value = `<${keyword}> ${text}`;
+                }
             }
 
             widget.value = "...";
         }
     },
 
-    onConnectionsChange(type, index, isConnected, link_info, inputOrOutput) {
+    onConnectionsChange(this: PromptNode, type: number, index: number, isConnected: boolean, link_info: LLink, inputOrOutput: INodeOutputSlot) {
         if (app.extensionManager.setting.get("drawthings.node.color_prompts") === false) return;
 
         let isPositive = false;
         let isNegative = false;
 
-        for (const linkId of this.outputs[0]?.links ?? []) {
-            const link = this.graph.getLink(linkId);
-            const targetId = link?.target_id;
-            const targetNode = this.graph.getNodeById(targetId);
-            if (targetNode?.comfyClass === "DrawThingsSampler") {
-                const input = targetNode.inputs[link.target_slot];
+        for (const linkId of this.outputs?.[0]?.links ?? []) {
+            const link = this.graph?.getLink(linkId);
+            if (!link) continue;
+            const targetId = link.target_id;
+            const targetNode = this.graph?.getNodeById(targetId);
+            if ((targetNode as any)?.comfyClass === "DrawThingsSampler") {
+                const input = targetNode?.inputs?.[link.target_slot];
                 if (input?.name === "positive") isPositive = true;
                 if (input?.name === "negative") isNegative = true;
             }
@@ -53,18 +62,22 @@ const promptProto = {
         }
     },
 
-    onNodeCreated() {
-        const output = this.outputs.find((output) => output.name == "PROMPT");
-        output.color_on = output.color_off = app.canvas.default_connection_color_byType["CONDITIONING"];
+    onNodeCreated(this: PromptNode) {
+        const output = this.outputs?.find((output) => output.name == "PROMPT");
+        if (output) {
+            (output as any).color_on = (output as any).color_off = app.canvas.default_connection_color_byType["CONDITIONING"];
+        }
 
-        const promptWidget = this.widgets.find((w) => w.name === "prompt");
+        const promptWidget = this.widgets?.find((w) => w.name === "prompt");
         const promptNode = this;
-        promptWidget.element.addEventListener("change", () => {
-            promptNode.updateOptions();
-        });
+        if ((promptWidget as any)?.element) {
+            (promptWidget as any).element.addEventListener("change", () => {
+                promptNode.updateOptions();
+            });
+        }
     },
 
-    getExtraMenuOptions(canvas, options) {
+    getExtraMenuOptions(this: PromptNode, canvas: LGraphCanvas, options: IContextMenuItem[]) {
         const promptColors = app.extensionManager.setting.get("drawthings.node.color_prompts")
         options.push(
             ...[
@@ -80,17 +93,16 @@ const promptProto = {
                     },
                 },
                 null,
-            ]
+            ] as any
         );
     },
 };
 
-/** @type {import("@comfyorg/comfyui-frontend-types").ComfyExtension}*/
-export default {
+const extension: ComfyExtension = {
     name: "promptNode",
 
     beforeRegisterNodeDef(nodeType, nodeData, app) {
-        if (nodeType.comfyClass === "DrawThingsPrompt") {
+        if ((nodeType as any).comfyClass === "DrawThingsPrompt") {
             updateProto(nodeType, promptProto);
         }
     },
@@ -100,17 +112,19 @@ export default {
             id: "drawthings.node.color_prompts",
             type: "boolean",
             name: "Change prompt node colors when connections change",
-            default: true,
+            defaultValue: true,
             category: ["DrawThings", "Nodes", "Change prompt"],
-            onChange: (newVal, oldVal) => {
+            onChange: (newVal: boolean, oldVal: boolean) => {
                 if (oldVal === false && newVal === true) {
                     app.graph.nodes
                         .filter((n) => n.type === "DrawThingsPrompt")
                         .forEach((n) => {
-                            setTimeout(() => n.onConnectionsChange(), 10)
+                            setTimeout(() => (n as any).onConnectionsChange(), 10)
                         })
                 }
             },
         },
     ],
 };
+
+export default extension;
