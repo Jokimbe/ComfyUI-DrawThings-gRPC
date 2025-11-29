@@ -195,6 +195,8 @@ def apply_control(config: Config, configT: GenerationConfigurationT):
 
         if cnet.global_average_pooling and "global_average_pooling" in control:
             controlT.globalAveragePooling = control["global_average_pooling"]
+        if not cnet.global_average_pooling:
+            controlT.globalAveragePooling = False
         if cnet.target_blocks and "target_blocks" in control:
             controlT.targetBlocks = cnet.get_target_blocks(control["target_blocks"])
 

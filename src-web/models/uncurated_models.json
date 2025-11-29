@@ -107,7 +107,7 @@
     "high_precision_autoencoder": true,
     "hires_fix_scale": 24,
     "modifier": "none",
-    "name": "8Steps_Creart_Hyper_Flux_v26Hyper_Dev_Fp8Unet (8-bit)",
+    "name": "8Steps_Creart_Hyper_Flux_v26Hyper_Dev_Fp8Unet",
     "noise_discretization": {
       "rf": {
         "_0": {
@@ -548,6 +548,120 @@
     "version": "sdxl_base_v0.9",
     "autoencoder": "sdxl_vae_v1.0_f16.ckpt",
     "upcast_attention": false
+  },
+  {
+    "name": "AniSora v2 I2V Wan 2.1 14B",
+    "version": "wan_v2.1_14b",
+    "modifier": "inpainting",
+    "autoencoder": "wan_v2.1_video_vae_f16.ckpt",
+    "prefix": "",
+    "default_scale": 12,
+    "hires_fix_scale": 16,
+    "file": "anisora_v2_i2v_wan_2.1_14b_q8p.ckpt",
+    "upcast_attention": false,
+    "text_encoder": "umt5_xxl_encoder_q8p.ckpt",
+    "clip_encoder": "open_clip_xlm_roberta_large_vit_h14_f16.ckpt",
+    "high_precision_autoencoder": false,
+    "objective": {
+      "u": {
+        "condition_scale": 1000
+      }
+    },
+    "frames_per_second": 16,
+    "tea_cache_coefficients": [
+      8107.0546,
+      2133.93892,
+      -372.934672,
+      16.6203073,
+      -0.0417769401
+    ],
+    "note": "[AniSora v2](https://huggingface.co/IndexTeam/Index-anisora) is a state-of-the-art image-to-video model fine-tuned by Bilibili for anime generation."
+  },
+  {
+    "name": "AniSora v2 I2V Wan 2.1 14B (6-bit, SVDQuant)",
+    "version": "wan_v2.1_14b",
+    "modifier": "inpainting",
+    "autoencoder": "wan_v2.1_video_vae_f16.ckpt",
+    "prefix": "",
+    "default_scale": 12,
+    "hires_fix_scale": 16,
+    "file": "anisora_v2_i2v_wan_2.1_14b_q6p_svd.ckpt",
+    "upcast_attention": false,
+    "text_encoder": "umt5_xxl_encoder_q8p.ckpt",
+    "clip_encoder": "open_clip_xlm_roberta_large_vit_h14_f16.ckpt",
+    "high_precision_autoencoder": false,
+    "objective": {
+      "u": {
+        "condition_scale": 1000
+      }
+    },
+    "frames_per_second": 16,
+    "tea_cache_coefficients": [
+      8107.0546,
+      2133.93892,
+      -372.934672,
+      16.6203073,
+      -0.0417769401
+    ],
+    "note": "[AniSora v2](https://huggingface.co/IndexTeam/Index-anisora) is a state-of-the-art image-to-video model fine-tuned by Bilibili for anime generation.",
+    "builtin_lora": true
+  },
+  {
+    "name": "AniSora v3.1 I2V Wan 2.1 14B",
+    "version": "wan_v2.1_14b",
+    "modifier": "inpainting",
+    "autoencoder": "wan_v2.1_video_vae_f16.ckpt",
+    "prefix": "",
+    "default_scale": 12,
+    "hires_fix_scale": 16,
+    "file": "anisora_v3.1_i2v_wan_2.1_14b_q8p.ckpt",
+    "upcast_attention": false,
+    "text_encoder": "umt5_xxl_encoder_q8p.ckpt",
+    "clip_encoder": "open_clip_xlm_roberta_large_vit_h14_f16.ckpt",
+    "high_precision_autoencoder": false,
+    "objective": {
+      "u": {
+        "condition_scale": 1000
+      }
+    },
+    "frames_per_second": 16,
+    "tea_cache_coefficients": [
+      8107.0546,
+      2133.93892,
+      -372.934672,
+      16.6203073,
+      -0.0417769401
+    ],
+    "note": "[AniSora v3.1](https://huggingface.co/IndexTeam/Index-anisora) is a state-of-the-art image-to-video model fine-tuned by Bilibili for anime generation."
+  },
+  {
+    "name": "AniSora v3.1 I2V Wan 2.1 14B (6-bit, SVDQuant)",
+    "version": "wan_v2.1_14b",
+    "modifier": "inpainting",
+    "autoencoder": "wan_v2.1_video_vae_f16.ckpt",
+    "prefix": "",
+    "default_scale": 12,
+    "hires_fix_scale": 16,
+    "file": "anisora_v3.1_i2v_wan_2.1_14b_q6p_svd.ckpt",
+    "upcast_attention": false,
+    "text_encoder": "umt5_xxl_encoder_q8p.ckpt",
+    "clip_encoder": "open_clip_xlm_roberta_large_vit_h14_f16.ckpt",
+    "high_precision_autoencoder": false,
+    "objective": {
+      "u": {
+        "condition_scale": 1000
+      }
+    },
+    "frames_per_second": 16,
+    "tea_cache_coefficients": [
+      8107.0546,
+      2133.93892,
+      -372.934672,
+      16.6203073,
+      -0.0417769401
+    ],
+    "note": "[AniSora v3.1](https://huggingface.co/IndexTeam/Index-anisora) is a state-of-the-art image-to-video model fine-tuned by Bilibili for anime generation.",
+    "builtin_lora": true
   },
   {
     "text_encoder": "artofura_furry_mix_open_clip_vit_bigg14_f16.ckpt",
@@ -2979,6 +3093,62 @@
     "modifier": "none"
   },
   {
+    "name": "CyberRealistic Flux v2.5",
+    "version": "flux1",
+    "autoencoder": "flux_1_vae_f16.ckpt",
+    "prefix": "",
+    "default_scale": 16,
+    "hires_fix_scale": 24,
+    "upcast_attention": false,
+    "text_encoder": "t5_xxl_encoder_q6p.ckpt",
+    "clip_encoder": "clip_vit_l14_f16.ckpt",
+    "high_precision_autoencoder": true,
+    "guidance_embed": true,
+    "padded_text_encoding_length": 512,
+    "objective": {
+      "u": {
+        "condition_scale": 1000
+      }
+    },
+    "tea_cache_coefficients": [
+      498.651651,
+      -283.781631,
+      55.8554382,
+      -3.82021401,
+      0.264230861
+    ],
+    "file": "cyberrealistic_flux_v2.5_f16.ckpt",
+    "modifier": "none"
+  },
+  {
+    "name": "CyberRealistic Flux v2.5",
+    "version": "flux1",
+    "autoencoder": "flux_1_vae_f16.ckpt",
+    "prefix": "",
+    "default_scale": 16,
+    "hires_fix_scale": 24,
+    "upcast_attention": false,
+    "text_encoder": "t5_xxl_encoder_q6p.ckpt",
+    "clip_encoder": "clip_vit_l14_f16.ckpt",
+    "high_precision_autoencoder": true,
+    "guidance_embed": true,
+    "padded_text_encoding_length": 512,
+    "objective": {
+      "u": {
+        "condition_scale": 1000
+      }
+    },
+    "tea_cache_coefficients": [
+      498.651651,
+      -283.781631,
+      55.8554382,
+      -3.82021401,
+      0.264230861
+    ],
+    "file": "cyberrealistic_flux_v2.5_q8p.ckpt",
+    "modifier": "none"
+  },
+  {
     "name": "CyberRealistic_Pony_v8_1346181",
     "upcast_attention": false,
     "autoencoder": "sdxl_vae_v1.0_f16.ckpt",
@@ -4168,6 +4338,34 @@
     "version": "flux1"
   },
   {
+    "name": "getphat FLUX Reality NSFW v11 Softcore",
+    "version": "flux1",
+    "autoencoder": "flux_1_vae_f16.ckpt",
+    "prefix": "",
+    "default_scale": 16,
+    "hires_fix_scale": 24,
+    "upcast_attention": false,
+    "text_encoder": "t5_xxl_encoder_q6p.ckpt",
+    "clip_encoder": "clip_vit_l14_f16.ckpt",
+    "high_precision_autoencoder": true,
+    "guidance_embed": true,
+    "padded_text_encoding_length": 512,
+    "objective": {
+      "u": {
+        "condition_scale": 1000
+      }
+    },
+    "tea_cache_coefficients": [
+      498.651651,
+      -283.781631,
+      55.8554382,
+      -3.82021401,
+      0.264230861
+    ],
+    "modifier": "none",
+    "file": "getphat_flux_reality_nsfw_v11_softcore_q8p.ckpt"
+  },
+  {
     "autoencoder": "flux_1_vae_f16.ckpt",
     "clip_encoder": "clip_vit_l14_f16.ckpt",
     "default_scale": 16,
@@ -4436,6 +4634,30 @@
     "prefix": ""
   },
   {
+    "autoencoder": "sdxl_vae_v1.0_f16.ckpt",
+    "default_scale": 16,
+    "prefix": "",
+    "version": "sdxl_base_v0.9",
+    "upcast_attention": false,
+    "name": "Illustrij-GENv1",
+    "modifier": "none",
+    "file": "illustrij_genv1_f16.ckpt",
+    "clip_encoder": "illustrij_genv1_clip_vit_l14_f16.ckpt",
+    "text_encoder": "illustrij_genv1_open_clip_vit_bigg14_f16.ckpt"
+  },
+  {
+    "autoencoder": "sdxl_vae_v1.0_f16.ckpt",
+    "default_scale": 16,
+    "prefix": "",
+    "version": "sdxl_base_v0.9",
+    "upcast_attention": false,
+    "name": "Illustrij-GENv1 (8-bit)",
+    "modifier": "none",
+    "file": "illustrij_genv1_q6p_q8p.ckpt",
+    "clip_encoder": "illustrij_genv1_clip_vit_l14_f16.ckpt",
+    "text_encoder": "illustrij_genv1_open_clip_vit_bigg14_f16.ckpt"
+  },
+  {
     "prefix": "",
     "name": "Illustrious-Black-Magic-Illustrious-Noob-More",
     "autoencoder": "sdxl_vae_v1.0_f16.ckpt",
@@ -4494,6 +4716,54 @@
     "upcast_attention": false,
     "file": "illustrious_xl_personal_merge_noob_v_pred0.5_test_merge_updated_f16.ckpt",
     "clip_encoder": "illustrious_xl_personal_merge_noob_v_pred0.5_test_merge_updated_clip_vit_l14_f16.ckpt"
+  },
+  {
+    "autoencoder": "sdxl_vae_v1.0_f16.ckpt",
+    "default_scale": 16,
+    "prefix": "",
+    "version": "sdxl_base_v0.9",
+    "upcast_attention": false,
+    "name": "Inbetweij — No.04",
+    "modifier": "none",
+    "clip_encoder": "inbetweij___no.04_clip_vit_l14_f16.ckpt",
+    "file": "inbetweij___no.04_f16.ckpt",
+    "text_encoder": "inbetweij___no.04_open_clip_vit_bigg14_f16.ckpt"
+  },
+  {
+    "autoencoder": "sdxl_vae_v1.0_f16.ckpt",
+    "default_scale": 16,
+    "prefix": "",
+    "version": "sdxl_base_v0.9",
+    "upcast_attention": false,
+    "name": "Inbetweij — No.04",
+    "modifier": "none",
+    "clip_encoder": "inbetweij___no.04_clip_vit_l14_f16.ckpt",
+    "file": "inbetweij___no.04_f16.ckpt",
+    "text_encoder": "inbetweij___no.04_open_clip_vit_bigg14_f16.ckpt"
+  },
+  {
+    "autoencoder": "sdxl_vae_v1.0_f16.ckpt",
+    "default_scale": 16,
+    "prefix": "",
+    "version": "sdxl_base_v0.9",
+    "upcast_attention": false,
+    "name": "Inbetweij — No.04 (8-bit)",
+    "modifier": "none",
+    "clip_encoder": "inbetweij___no.04_clip_vit_l14_f16.ckpt",
+    "file": "inbetweij___no.04_q6p_q8p.ckpt",
+    "text_encoder": "inbetweij___no.04_open_clip_vit_bigg14_f16.ckpt"
+  },
+  {
+    "autoencoder": "sdxl_vae_v1.0_f16.ckpt",
+    "default_scale": 16,
+    "prefix": "",
+    "version": "sdxl_base_v0.9",
+    "upcast_attention": false,
+    "name": "Inbetweij — No.04 (8-bit)",
+    "modifier": "none",
+    "clip_encoder": "inbetweij___no.04_clip_vit_l14_f16.ckpt",
+    "file": "inbetweij___no.04_q6p_q8p.ckpt",
+    "text_encoder": "inbetweij___no.04_open_clip_vit_bigg14_f16.ckpt"
   },
   {
     "prefix": "",
@@ -6286,6 +6556,30 @@
     "upcast_attention": false,
     "modifier": "none",
     "clip_encoder": "photonic_fusion_sdxl_clip_vit_l14_f16.ckpt"
+  },
+  {
+    "autoencoder": "sdxl_vae_v1.0_f16.ckpt",
+    "default_scale": 16,
+    "prefix": "",
+    "version": "sdxl_base_v0.9",
+    "upcast_attention": false,
+    "name": "Pikon_Realism_v2_alt",
+    "modifier": "none",
+    "file": "pikon_realism_v2_alt_f16.ckpt",
+    "clip_encoder": "pikon_realism_v2_alt_clip_vit_l14_f16.ckpt",
+    "text_encoder": "pikon_realism_v2_alt_open_clip_vit_bigg14_f16.ckpt"
+  },
+  {
+    "autoencoder": "sdxl_vae_v1.0_f16.ckpt",
+    "default_scale": 16,
+    "prefix": "",
+    "version": "sdxl_base_v0.9",
+    "upcast_attention": false,
+    "name": "Pikon_Realism_v2_alt (8-bit)",
+    "modifier": "none",
+    "file": "pikon_realism_v2_alt_q6p_q8p.ckpt",
+    "clip_encoder": "pikon_realism_v2_alt_clip_vit_l14_f16.ckpt",
+    "text_encoder": "pikon_realism_v2_alt_open_clip_vit_bigg14_f16.ckpt"
   },
   {
     "autoencoder": "flux_1_vae_f16.ckpt",

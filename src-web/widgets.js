@@ -214,7 +214,8 @@ function updateSamplerWidgets(node) {
         showWidgets(node, isSvd, "fps", "motion_scale", "guiding_frame_noise", "start_frame_guidance")
 
         // causal_inference (just for wan I think)
-        const causalInferenceAvailable = ["wan_v2.1_1.3b", "wan_v2.1_14b"].includes(version)
+        // const causalInferenceAvailable = ["wan_v2.1_1.3b", "wan_v2.1_14b"].includes(version)
+        const causalInferenceAvailable = version.toLowerCase().startsWith("wan")
         showWidget(node, "causal_inference", causalInferenceAvailable)
         showWidget(node, "causal_inference_pad", causalInferenceAvailable)
 

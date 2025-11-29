@@ -1,6 +1,6 @@
 import cp from "child_process"
 import fse from "fs-extra"
-import { join } from 'path'
+import { compileOfficialModels } from "./specParser.mjs"
 
 async function updateConfig() {
     console.log('Fetching latest config.fbs')
@@ -102,20 +102,6 @@ async function fixImports() {
     }
 }
 
-async function compileOfficialModels(name) {
-    const res = await fetch(
-        `https://api.github.com/repos/drawthingsai/draw-things-community/contents/Libraries/ModelZoo/Sources/${name}Zoo.swift`
-    )
-    const src = Buffer.from((await res.json()).content, "base64").toString(
-        "utf-8"
-    )
-
-    const specs = extractSpecifications(src)
-    const extract = specs.map(s => extractData(s)).filter(s => !!s).map(s => ({ ...s, official: true }))
-    return extract
-    // await fse.writeJSON(`./web/models/official.json`, extract, { spaces: 2 })
-}
-
 async function cloneCommunityModels() {
     console.log("removing old generated files")
     fse.emptyDirSync("./models")
@@ -125,9 +111,6 @@ async function cloneCommunityModels() {
 
 async function compileModelData() {
     console.log("compiling model data")
-
-    fse.ensureDir("./web/models")
-    fse.emptyDirSync("./web/models")
 
     await compileModelType("models", 'Model')
     await compileModelType("uncurated_models")
@@ -148,9 +131,9 @@ async function compileModelType(type, official) {
 
         models.sort((a, b) => a.name.localeCompare(b.name))
 
-        await fse.writeJSON(`./web/models/${type}.json`, models, { spaces: 2 })
-        // await fse.copyFile(`./models/community-models/${type}.json`, `./web/models/${type}.json`)
-        // await fse.copyFile(`./models/community-models/${type}_sha256.json`, `./web/models/${type}_sha256.json`)
+        models.forEach(m => { m.version = versionMap(m.version) })
+
+        await fse.writeJSON(`./src-web/models/${type}.json`, models, { spaces: 2 })
     } catch (e) {
         console.error("couldn't compile", type)
         console.error(e)
@@ -214,7 +197,7 @@ function extractData(spec) {
     const data = {
         name: extractValue(spec, "name"),
         file: extractValue(spec, "file"),
-        version: extractDotValue(spec, "version"),
+        version: versionMap(extractDotValue(spec, "version")),
         modifier: extractDotValue(spec, "modifier") ?? undefined
     }
     if (data.name && data.file && data.version) return data
@@ -236,4 +219,51 @@ function extractDotValue(spec, key) {
         return spec.match(/\bversion:\s+?\.(\w+)/)?.[1]
     if (key === "modifier")
         return spec.match(/\bmodifier:\s+?\.(\w+)/)?.[1]
+}
+
+function versionMap(version) {
+    switch (version) {
+        case "v1":
+            return "v1"
+        case "v2":
+            return "v2"
+        case "kandinsky21":
+            return "kandinsky2.1"
+        case "sdxlBase":
+            return "sdxl_base_v0.9"
+        case "sdxlRefiner":
+            return "sdxl_refiner_v0.9"
+        case "ssd1b":
+            return "ssd_1b"
+        case "svdI2v":
+            return "svd_i2v"
+        case "wurstchenStageC":
+            return "wurstchen_v3.0_stage_c"
+        case "wurstchenStageB":
+            return "wurstchen_v3.0_stage_b"
+        case "sd3":
+            return "sd3"
+        case "pixart":
+            return "pixart"
+        case "auraflow":
+            return "auraflow"
+        case "flux1":
+            return "flux1"
+        case "sd3Large":
+            return "sd3_large"
+        case "hunyuanVideo":
+            return "hunyuan_video"
+        case "wan21_1_3b":
+            return "wan_v2.1_1.3b"
+        case "wan21_14b":
+            return "wan_v2.1_14b"
+        case "hiDreamI1":
+            return "hidream_i1"
+        case "qwenImage":
+            return "qwen_image"
+        case "wan22_5b":
+            return "wan_v2.2_5b"
+        default:
+            return version
+    }
 }

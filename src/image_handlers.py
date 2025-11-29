@@ -254,7 +254,7 @@ def decode_preview(preview, version):
             bytes_array.reshape((image_height, image_width, 4)), "RGBA"
         )
 
-    if version[:5] == "wan21" or version[:4] == "qwen":
+    if version[:6] == "wan2.1" or version[:4] == "qwen":
         bytes_array = np.zeros((image_height * image_width * 4,), dtype=np.uint8)
         for i in range(image_height * image_width):
             v0, v1, v2, v3, v4, v5, v6, v7, v8, v9, v10, v11, v12, v13, v14, v15 = fp16[
@@ -324,7 +324,7 @@ def decode_preview(preview, version):
             bytes_array[i * 4 + 3] = 255
         image = Image.frombytes("RGBA", (image_width, image_height), bytes_array)
 
-    if version[:5] == "wan22":
+    if version[:6] == "wan2.2":
         bytes_array = np.zeros((image_height * image_width * 4,), dtype=np.uint8)
 
         for i in range(image_height * image_width):

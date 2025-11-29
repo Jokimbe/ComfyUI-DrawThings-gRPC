@@ -257,27 +257,33 @@ def build_override(inputs):
     models = [inputs["model_info"]]
     if "refiner" in inputs and "refiner_model" in inputs["refiner"]:
         models.append(inputs["refiner"]["refiner_model"])
-    models_json = json.dumps(models)
-    models_buf = models_json.encode("utf-8")
+    models = list(filter(lambda m: "official" not in m, models))
+    models_json = json.dumps(models) if len(models) > 0 else None
+    models_buf = models_json.encode("utf-8") if models_json is not None else None
 
     controls = None
     if "control_net" in inputs and len(inputs["control_net"]) > 0:
         controls = []
         for cnet in inputs["control_net"]:
-            if "model" in cnet:
+            if "model" in cnet and "official" not in cnet["model"]:
                 controls.append(cnet["model"])
-    control_json = json.dumps(controls) if controls is not None else None
+    control_json = (
+        json.dumps(controls) if controls is not None and len(controls) > 0 else None
+    )
     control_buf = control_json.encode("utf-8") if control_json is not None else None
 
     loras = None
     if "lora" in inputs and len(inputs["lora"]) > 0:
         loras = []
         for lora in inputs["lora"]:
-            if "model" in lora:
+            if "model" in lora and "official" not in lora["model"]:
                 loras.append(lora["model"])
-    loras_json = json.dumps(loras) if loras is not None else None
+    loras_json = json.dumps(loras) if loras is not None and len(loras) > 0 else None
+    print(loras_json)
     loras_buf = loras_json.encode("utf-8") if loras_json is not None else None
 
-    override = imageService_pb2.MetadataOverride(models=models_buf, controlNets=control_buf, loras=loras_buf)
+    override = imageService_pb2.MetadataOverride(
+        models=models_buf, controlNets=control_buf, loras=loras_buf
+    )
 
     return override
