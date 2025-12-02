@@ -1,8 +1,13 @@
 import fse from 'fs-extra'
 
-// const models = await compileOfficialModels("ControlNet")
-// await fse.writeFile(`specout.txt`, models, { encoding: "utf-8" })
-
+/**
+ * Downloads the most recent ModelZoo file for the model type from the community repo
+ * And parses the model Specifications into JS
+ * It is expected that some Specifications will not parse properly (because they aren't models)
+ * Also, this is potentially dangerious because it uses eval
+ * @param {"Model" | "ControlNet" | "LoRA" | "TextualInversion"} name
+ * @returns
+ */
 export async function compileOfficialModels(name) {
     const res = await fetch(
         `https://api.github.com/repos/drawthingsai/draw-things-community/contents/Libraries/ModelZoo/Sources/${name}Zoo.swift`
@@ -19,7 +24,15 @@ export async function compileOfficialModels(name) {
     return parsed
 }
 
-/** @param spec {string} */
+/**
+ * Since the swift objects are mostly compatible with JS code, we just touch up or remove
+ * any of the parts that aren't compatible (i'm not familiar with swift but they seem to be
+ * enums or function calls).
+ *
+ * uses eval()
+ * @param {string} spec
+ * @returns
+ */
 function toJS(spec) {
     const json = spec
         .replace(/^\s+/gm, "")
@@ -44,6 +57,7 @@ function toJS(spec) {
         return obj
         // return JSON.parse(json)
     } catch (e) {
+        if (e?.message?.includes("Unexpected identifier 'specification'")) return null
         console.log(e)
         return null
     }
@@ -124,7 +138,7 @@ function extractDotValue(spec, key) {
         return spec.match(/\bmodifier:\s+?\.(\w+)/)?.[1]
 }
 
-function versionMap(version) {
+export function versionMap(version) {
     switch (version) {
         case "v1":
             return "v1"
