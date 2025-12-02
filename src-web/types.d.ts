@@ -1,5 +1,5 @@
 import type { ComfyApi, ComfyApp } from "@comfyorg/comfyui-frontend-types";
-import type { LGraphNode } from "@comfyorg/litegraph";
+import type { LGraphNode, LGraphCanvas } from "@comfyorg/litegraph";
 import type { DTSamplerExtensions } from "./ComfyUI-DrawThings-gRPC";
 
 declare global {
@@ -10,6 +10,7 @@ declare global {
                 api: ComfyApi;
             };
         };
+        LGraphCanvas: typeof LGraphCanvas;
     }
 
     const app: ComfyApp;

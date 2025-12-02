@@ -161,7 +161,7 @@ async function getBridgeModels() {
         : ((m: any) => files.includes(m.file) && m.official)
 
     // @ts-ignore
-    const bridgeModeModelsModules = await import("./models/index")
+    const bridgeModeModelsModules = await import("./models/index.esm.js")
     const bridgeModeModels = await bridgeModeModelsModules.getBridgeModeModels()
 
     const models = bridgeModeModels.models

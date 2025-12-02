@@ -17,11 +17,8 @@ export default defineConfig({
     },
     external: [
         "../../scripts/app.js",
+        "./models/index.esm.js", // Keep dynamic import external
     ],
-    esbuildOptions(options, context) {
-        options.loader = {
-            // ".json": "copy",
-        }
-    },
+    treeshake: true,
     publicDir: "src-web/public",
 });

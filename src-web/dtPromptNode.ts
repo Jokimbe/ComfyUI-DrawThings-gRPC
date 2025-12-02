@@ -1,6 +1,5 @@
 import { updateProto } from "./util.js";
-import { LGraphCanvas } from "@comfyorg/litegraph";
-import type { LGraphNode, IWidget, LLink, INodeOutputSlot, IContextMenuItem } from "@comfyorg/litegraph";
+import type { LGraphNode, IWidget, LLink, INodeOutputSlot, IContextMenuItem, LGraphCanvas } from "@comfyorg/litegraph";
 import type { ComfyExtension } from "@comfyorg/comfyui-frontend-types";
 
 interface PromptNode extends LGraphNode {
@@ -48,14 +47,14 @@ const promptProto: any = {
         }
 
         if (isPositive && isNegative) {
-            this.color = LGraphCanvas.node_colors.purple.color;
-            this.bgcolor = LGraphCanvas.node_colors.purple.bgcolor;
+            this.color = window.LGraphCanvas.node_colors.purple.color;
+            this.bgcolor = window.LGraphCanvas.node_colors.purple.bgcolor;
         } else if (isPositive) {
-            this.color = LGraphCanvas.node_colors.green.color;
-            this.bgcolor = LGraphCanvas.node_colors.green.bgcolor;
+            this.color = window.LGraphCanvas.node_colors.green.color;
+            this.bgcolor = window.LGraphCanvas.node_colors.green.bgcolor;
         } else if (isNegative) {
-            this.color = LGraphCanvas.node_colors.red.color;
-            this.bgcolor = LGraphCanvas.node_colors.red.bgcolor;
+            this.color = window.LGraphCanvas.node_colors.red.color;
+            this.bgcolor = window.LGraphCanvas.node_colors.red.bgcolor;
         } else {
             this.color = undefined;
             this.bgcolor = undefined;
