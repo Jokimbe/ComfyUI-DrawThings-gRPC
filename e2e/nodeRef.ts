@@ -436,7 +436,7 @@ export class NodeRef {
 
         await this.page
             .locator("#graph-canvas")
-            .click({ position: { x: clickX, y: clickY }, button: "right" });
+            .click({ position: { x: clickX, y: clickY }, button: "right", force: true });
     }
 
     async getContextMenuOptions() {
@@ -450,7 +450,7 @@ export class NodeRef {
         );
 
         // to close the menu
-        await this.page.locator(".grow").first().click();
+        await this.page.locator('.side-tool-bar-container > .flex.flex-col.h-full').click();
 
         return options;
     }

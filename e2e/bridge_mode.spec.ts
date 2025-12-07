@@ -40,7 +40,7 @@ const [menuBridge, menuCommunity, menuUncurated] = [
 test.beforeEach(async ({ comfy, page }) => {
     // make sure default settings are enabled
     await comfy.goto();
-    await page.locator(".comfyui-logo-wrapper").click();
+    await page.locator('.comfy-menu-button-wrapper').click();
     await page.locator("a").filter({ hasText: "Settings" }).click();
     await page.getByRole("option", { name: "DrawThings" }).click();
     await page.getByRole("switch", { name: "Enable bridge mode " }).uncheck();

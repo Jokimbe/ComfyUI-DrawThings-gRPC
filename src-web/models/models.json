@@ -4339,5 +4339,47 @@
     ],
     "note": "[Wan2.2 High Noise Expert T2V A14B Lightning 250928](https://huggingface.co/lightx2v/Wan2.2-Lightning/tree/main/Wan2.2-T2V-A14B-4steps-250928-dyno) is a fine-tune of Wan v2.2 High Noise Expert model. It can generate more dynamic motions with 4 steps and text guidance 1.0.",
     "builtin_lora": true
+  },
+  {
+    "name": "Z Image Turbo 1.0",
+    "file": "z_image_turbo_1.0_q8p.ckpt",
+    "prefix": "",
+    "version": "zImage",
+    "defaultScale": 16,
+    "textEncoder": "qwen_3_vl_4b_instruct_q8p.ckpt",
+    "autoencoder": "flux_1_vae_f16.ckpt",
+    "hiresFixScale": 24,
+    "note": "[Z Image Turbo](https://huggingface.co/Tongyi-MAI/Z-Image-Turbo) is is a powerful and highly efficient image generation model with 6B parameters. It is Apache 2.0-licensed and commercially friendly. The model is trained at multiple resolutions using a Flow Matching objective; trailing samplers yield the best results, with 8 sampling steps recommended.",
+    "copyright": "© 2025 Alibaba"
+  },
+  {
+    "name": "Z Image Turbo 1.0 (6-bit)",
+    "file": "z_image_turbo_1.0_q6p.ckpt",
+    "prefix": "",
+    "version": "zImage",
+    "defaultScale": 16,
+    "textEncoder": "qwen_3_vl_4b_instruct_q8p.ckpt",
+    "autoencoder": "flux_1_vae_f16.ckpt",
+    "hiresFixScale": 24,
+    "note": "[Z Image Turbo](https://huggingface.co/Tongyi-MAI/Z-Image-Turbo) is is a powerful and highly efficient image generation model with 6B parameters. It is Apache 2.0-licensed and commercially friendly. The model is trained at multiple resolutions using a Flow Matching objective; trailing samplers yield the best results, with 8 sampling steps recommended.",
+    "copyright": "© 2025 Alibaba"
+  },
+  {
+    "name": "Z Image Turbo 1.0 (Exact)",
+    "version": "z_image",
+    "autoencoder": "flux_1_vae_f16.ckpt",
+    "prefix": "",
+    "default_scale": 16,
+    "hires_fix_scale": 24,
+    "file": "z_image_turbo_1.0_f16.ckpt",
+    "upcast_attention": false,
+    "text_encoder": "qwen_3_vl_4b_instruct_f16.ckpt",
+    "high_precision_autoencoder": false,
+    "objective": {
+      "u": {
+        "condition_scale": 1000
+      }
+    },
+    "note": "[Z Image Turbo](https://huggingface.co/Tongyi-MAI/Z-Image-Turbo) is is a powerful and highly efficient image generation model with 6B parameters. It is Apache 2.0-licensed and commercially friendly. The model is trained at multiple resolutions using a Flow Matching objective; trailing samplers yield the best results, with 8 sampling steps recommended."
   }
 ]

@@ -4,7 +4,8 @@ import { NodeRef } from "./nodeRef";
 import fse from "fs-extra";
 import { join } from "path";
 
-if (!process.env.PLAYWRIGHT_TEST_URL) throw new Error("PLAYWRIGHT_TEST_URL is not set");
+if (!process.env.PLAYWRIGHT_TEST_URL)
+    throw new Error("PLAYWRIGHT_TEST_URL is not set");
 export const DEFAULT_WORKFLOW_FOLDER = "./e2e/workflows";
 
 export class ComfyPage {
@@ -34,6 +35,13 @@ export class ComfyPage {
         }
         await this.page.goto(url.toString());
         this.gotoCalled = true;
+
+        const banner = this.page.getByRole("button").nth(1);
+        await banner.waitFor({ state: "visible" });
+        if (await banner.isVisible()) {
+            console.log("button");
+            await banner.click();
+        } else console.log("no banner");
     }
 
     async openWorkflow(workflowPath: string) {
@@ -46,21 +54,22 @@ export class ComfyPage {
 
         const fileChooserPromise = this.page.waitForEvent("filechooser");
 
-        await this.page.getByRole("img", { name: "ComfyUI Logo" }).click();
+        await this.page.locator("#graph-canvas").press("Control+o");
+        // await this.page.locator(".comfy-menu-button-wrapper").click();
 
-        // some times this works with hover, and sometimes it takes a click
-        await this.page
-            .getByRole("menuitem", { name: "File" })
-            .locator("a")
-            .hover();
-        // await this.page.locator('a').filter({ hasText: 'File' }).click();
-        if (!(await this.page.getByText("OpenCtrl + o").isVisible()))
-            await this.page
-                .getByRole("menuitem", { name: "File" })
-                .locator("a")
-                .click();
+        // // some times this works with hover, and sometimes it takes a click
+        // await this.page
+        //     .getByRole("menuitem", { name: "File" })
+        //     .locator("a")
+        //     .hover();
+        // // await this.page.locator('a').filter({ hasText: 'File' }).click();
+        // if (!(await this.page.getByText("OpenCtrl + o").isVisible()))
+        //     await this.page
+        //         .getByRole("menuitem", { name: "File" })
+        //         .locator("a")
+        //         .click();
 
-        await this.page.getByText("OpenCtrl + o").click();
+        // await this.page.getByText("OpenCtrl + o").click();
 
         const fileChooser = await fileChooserPromise;
         await fileChooser.setFiles(resolveWorkflow(workflowPath));
@@ -222,14 +231,14 @@ export class ComfyPage {
 
     async setClipboard(data: string | Record<string, unknown>) {
         const cliptext = typeof data === "string" ? data : JSON.stringify(data);
-         await this.page.addInitScript((text) => {
-                Object.defineProperty(navigator, "clipboard", {
-                    value: {
-                        readText: () => Promise.resolve(text),
-                        writeText: (t: string) => Promise.resolve(), // optional stub
-                    },
-                });
-         }, cliptext)
+        await this.page.addInitScript((text) => {
+            Object.defineProperty(navigator, "clipboard", {
+                value: {
+                    readText: () => Promise.resolve(text),
+                    writeText: (t: string) => Promise.resolve(), // optional stub
+                },
+            });
+        }, cliptext);
     }
 
     async getTempDir() {
@@ -249,8 +258,11 @@ export class ComfyPage {
     }
 
     async clearUserData() {
-        const dir = join(process.env.TEST_COMFYUI_DIR, "user/default/drawthings-grpc");
-        await fse.emptyDir(dir)
+        const dir = join(
+            process.env.TEST_COMFYUI_DIR,
+            "user/default/drawthings-grpc"
+        );
+        await fse.emptyDir(dir);
     }
 }
 
@@ -273,6 +285,6 @@ export const test = base.extend<ComfyFixtures>({
 });
 
 function resolveWorkflow(workflow: string) {
-    if (workflow.includes(".json")) return workflow
-    else return join(DEFAULT_WORKFLOW_FOLDER, `${workflow}.json`)
+    if (workflow.includes(".json")) return workflow;
+    else return join(DEFAULT_WORKFLOW_FOLDER, `${workflow}.json`);
 }
