@@ -1,6 +1,8 @@
 import { nodePackVersion } from "./ComfyUI-DrawThings-gRPC.js"
 import { updateProto } from "./util.js"
 import { showWidget } from "./widgets.js"
+import type { LGraphNode, IWidget } from "@comfyorg/litegraph";
+import type { ComfyExtension, ComfyApp } from "@comfyorg/comfyui-frontend-types";
 
 /**
  * so I don't really see an official way to remove widgets other than .splice
@@ -24,12 +26,7 @@ import { showWidget } from "./widgets.js"
  * code, event listeners attached by the type handler
  */
 
-/**
- * @param node {LGraphNode}
- * @param inputName {string}
- * @param inputData {["DT_MODEL", {model_type: string}]}
- */
-export function DtButtonsTypeHandler(node, inputName, inputData, app) {
+export function DtButtonsTypeHandler(node: any, inputName: string, inputData: any, app: ComfyApp) {
     const { container, buttons } = createButtons([
         {
             label: "Show Mode",
@@ -56,7 +53,7 @@ export function DtButtonsTypeHandler(node, inputName, inputData, app) {
     const options = {
         hideOnZoom: false,
         getValue: () => undefined,
-        setValue: (value) => {},
+        setValue: (value: any) => {},
         getMinHeight: () => 36,
         getMaxHeight: () => 36,
         getHeight: () => 36,
@@ -68,38 +65,46 @@ export function DtButtonsTypeHandler(node, inputName, inputData, app) {
     return { widget };
 }
 
-/** @type {import("@comfyorg/litegraph").LGraphNode} */
-const loraProto = {
-    onNodeCreated(graph) {
+interface LoraNode extends LGraphNode {
+    loraCount: number;
+    showMode: boolean;
+    _loraCount: number;
+    _showMode: boolean;
+    updateWidgets: () => void;
+    widget_values_keyed?: Record<string, any>;
+}
+
+const loraProto: any = {
+    onNodeCreated(this: LoraNode, graph: any) {
         this.loraCount = 1;
         this.showMode = false;
     },
 
-    onConfigure(serialised) {
+    onConfigure(this: LoraNode, serialised: any) {
         if ("loraCount" in serialised) this.loraCount = serialised.loraCount;
 
         if ("showMode" in serialised) this.showMode = serialised.showMode;
 
-        if (serialised.widget_values_keyed) {
+        if (serialised.widget_values_keyed && this.widgets) {
             for (const [name, value] of Object.entries(serialised.widget_values_keyed)) {
                 const widget = this.widgets.find((w) => w.name === name);
-                if (widget) widget.value = value;
+                if (widget) widget.value = value as any;
             }
-        } else if (serialised.widgets_values && serialised.widgets_values.length === 2) {
+        } else if (serialised.widgets_values && serialised.widgets_values.length === 2 && this.widgets) {
             // if keyed values are missing, then values from a previous version
             // have been incorrectly loaded
             // widget_values for all previous version are [ loraModel, weight ]
 
             // buttons widget, value should be null (None)
-            this.widgets[0].value = null;
+            this.widgets[0].value = null as any;
 
             // model
             const modelWidget = this.widgets.find((w) => w.name === "lora");
-            modelWidget.value = serialised.widgets_values[0];
+            if (modelWidget) modelWidget.value = serialised.widgets_values[0];
 
             // weight
             const weightWidget = this.widgets.find((w) => w.name === "weight");
-            weightWidget.value = serialised.widgets_values[1];
+            if (weightWidget) weightWidget.value = serialised.widgets_values[1];
 
             // if loading a previous version, inputs need to be fixed
             const inputs = this.inputs
@@ -109,65 +114,72 @@ const loraProto = {
 
             // move lora nodes to correct input slot, disconnect all others
             for (const { node, input, slot } of inputNodes) {
-                if (node.type === "DrawThingsLoRA") {
+                if (node && node.type === "DrawThingsLoRA" && input.link !== null) {
                     this.disconnectInput(slot)
-                    this.graph.removeLink(input.link)
+                    this.graph?.removeLink(input.link)
                     node.connect(0, this, 0)
                 }
-                else {
+                else if (input.link !== null) {
                     this.disconnectInput(slot)
-                    this.graph.removeLink(input.link)
+                    this.graph?.removeLink(input.link)
                 }
             }
 
             // lastly, remove the image input
             const imageInput = this.inputs.findIndex(input => input.name === 'control_image')
-            if (imageInput) this.removeInput(imageInput)
+            if (imageInput !== -1) this.removeInput(imageInput)
         }
 
         delete this.widget_values_keyed;
     },
 
-    onSerialize(serialised) {
+    onSerialize(this: LoraNode, serialised: any) {
         serialised.loraCount = this._loraCount;
         serialised.showMode = this._showMode;
         serialised.nodePackVersion = nodePackVersion;
-        serialised.widget_values_keyed = Object.fromEntries(this.widgets.map((w) => [w.name, w.value]));
+        if (this.widgets) {
+            serialised.widget_values_keyed = Object.fromEntries(this.widgets.map((w) => [w.name, w.value]));
+        }
     },
 
     loraCount: {
-        get() {
+        get(this: LoraNode) {
             return this._loraCount;
         },
-        set(count) {
+        set(this: LoraNode, count: number) {
             if (this._loraCount === count) return;
             this._loraCount = Math.max(0, Math.min(count, 8));
             this.updateWidgets();
 
-            const buttons = this.widgets[0]._buttonElements;
-            buttons[1].disabled = this._loraCount <= 1;
-            buttons[2].disabled = this._loraCount >= 8;
+            const buttons = (this.widgets?.[0] as any)?._buttonElements;
+            if (buttons) {
+                buttons[1].disabled = this._loraCount <= 1;
+                buttons[2].disabled = this._loraCount >= 8;
+            }
         },
         enumerable: true,
     },
 
     showMode: {
-        get() {
+        get(this: LoraNode) {
             return this._showMode;
         },
-        set(value) {
+        set(this: LoraNode, value: boolean) {
             if (this._showMode === value) return;
             this._showMode = value;
             this.updateWidgets();
 
             /** @type {HTMLButtonElement[]} */
-            const buttons = this.widgets[0]._buttonElements;
-            buttons[0].textContent = value ? "Hide Mode" : "Show Mode";
+            const buttons = (this.widgets?.[0] as any)?._buttonElements;
+            if (buttons) {
+                buttons[0].textContent = value ? "Hide Mode" : "Show Mode";
+            }
         },
         enumerable: true,
     },
 
-    updateWidgets() {
+    updateWidgets(this: LoraNode) {
+        if (!this.widgets) return;
         for (let i = 0; i < 8; i++) {
             const modelIndex = i * 3 + 1;
             const weightIndex = i * 3 + 2;
@@ -184,37 +196,36 @@ const loraProto = {
                 showWidget(this, this.widgets[weightIndex].name, false);
                 showWidget(this, this.widgets[modeIndex].name, false);
 
-                this.widgets[modelIndex].value = null;
+                this.widgets[modelIndex].value = null as any;
             }
         }
     },
 };
 
-/** @type {import("@comfyorg/comfyui-frontend-types").ComfyExtension}*/
-export default {
+const extension: ComfyExtension = {
     name: "loraNode",
 
     beforeRegisterNodeDef(nodeType, nodeData, app) {
-        if (nodeType.comfyClass === "DrawThingsLoRA") {
+        if ((nodeType as any).comfyClass === "DrawThingsLoRA") {
             updateProto(nodeType, loraProto);
         }
     },
 };
 
-/**
- * @typedef ButtonDef
- * @property {string?} label
- * @property {node => void} callback
- * @property {string?} style
- * @property {string[]?} classList
- * @property {string?} dataTestId
- */
+export default extension;
 
-/** @param {ButtonDef[]} buttonsDefs */
-function createButtons(buttonsDefs) {
+interface ButtonDef {
+    label?: string;
+    callback: () => void;
+    style?: string;
+    classList?: string[];
+    dataTestId?: string;
+}
+
+function createButtons(buttonsDefs: ButtonDef[]) {
     const container = document.createElement("div");
     container.classList.add("dt-buttons-container");
-    const buttons = [];
+    const buttons: HTMLButtonElement[] = [];
 
     for (const buttonDef of buttonsDefs) {
         const button = document.createElement("button");

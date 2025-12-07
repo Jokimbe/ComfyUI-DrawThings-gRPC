@@ -112,6 +112,30 @@
     "version": "sdxl_base_v0.9"
   },
   {
+    "name": "ChronoEdit 14B Step Distill",
+    "prefix": "",
+    "is_lo_ha": false,
+    "version": "wan_v2.1_14b",
+    "file": "chronoedit_14b_step_distill_lora_f16.ckpt",
+    "weight": {
+      "value": 1,
+      "lower_bound": -1.5,
+      "upper_bound": 2.5
+    }
+  },
+  {
+    "name": "ChronoEdit 14B Upsample",
+    "prefix": "",
+    "is_lo_ha": false,
+    "version": "wan_v2.1_14b",
+    "file": "chronoedit_14b_upsample_lora_f16.ckpt",
+    "weight": {
+      "value": 1,
+      "lower_bound": -1.5,
+      "upper_bound": 2.5
+    }
+  },
+  {
     "version": "v1",
     "file": "crazy_expressions_lora_f16.ckpt",
     "prefix": "crazy face ",
@@ -196,23 +220,23 @@
   {
     "name": "Fooocus Inpaint v2.6",
     "file": "fooocus_inpaint_v2.6_lora_f16.ckpt",
-    "version": "sdxlBase",
-    "modifier": "inpainting",
-    "official": true
+    "prefix": "",
+    "version": "sdxl_base_v0.9",
+    "modifier": "inpainting"
   },
   {
     "name": "Fooocus Inpaint v2.6 (8-bit)",
     "file": "fooocus_inpaint_v2.6_lora_q8p.ckpt",
-    "version": "sdxlBase",
-    "modifier": "inpainting",
-    "official": true
+    "prefix": "",
+    "version": "sdxl_base_v0.9",
+    "modifier": "inpainting"
   },
   {
     "name": "Foreground to Blending",
     "file": "layer_xl_fg2ble_v1.0_lora_f16.ckpt",
-    "version": "sdxlBase",
-    "modifier": "inpainting",
-    "official": true
+    "prefix": "",
+    "version": "sdxl_base_v0.9",
+    "modifier": "inpainting"
   },
   {
     "name": "Ghibli Cartoon Art",
@@ -455,14 +479,16 @@
   {
     "name": "LCM SDXL Base (1.0)",
     "file": "lcm_sd_xl_base_1.0_lora_f16.ckpt",
-    "version": "sdxlBase",
-    "official": true
+    "prefix": "",
+    "version": "sdxl_base_v0.9",
+    "isConsistencyModel": true
   },
   {
     "name": "LCM SDXL Refiner (1.0)",
     "file": "lcm_sd_xl_refiner_1.0_lora_f16.ckpt",
-    "version": "sdxlRefiner",
-    "official": true
+    "prefix": "",
+    "version": "sdxl_refiner_v0.9",
+    "isConsistencyModel": true
   },
   {
     "version": "ssd_1b",
@@ -473,8 +499,9 @@
   {
     "name": "LCM Stable Diffusion v1.5",
     "file": "lcm_sd_v1.5_lora_f16.ckpt",
+    "prefix": "",
     "version": "v1",
-    "official": true
+    "isConsistencyModel": true
   },
   {
     "name": "Long Hair Slider",
@@ -546,6 +573,73 @@
     "is_lo_ha": false,
     "file": "pixel_art_xl_v1.1_lora_f16.ckpt",
     "version": "sdxl_base_v0.9"
+  },
+  {
+    "name": "Pony: People’s Works v8_Illusv 2.0 Stable",
+    "prefix": "",
+    "is_lo_ha": false,
+    "version": "sdxl_base_v0.9",
+    "file": "pony__people_s_works_v8_illusv_2.0_stable_lora_f16.ckpt"
+  },
+  {
+    "name": "Qwen Edit 2509 Anything2Real",
+    "prefix": "",
+    "is_lo_ha": false,
+    "version": "qwen_image",
+    "file": "qwen_edit_2509_anything2real_lora_f16.ckpt",
+    "weight": {
+      "value": 0.9,
+      "lower_bound": -1.5,
+      "upper_bound": 2.5
+    }
+  },
+  {
+    "name": "Qwen Edit 2509 Fusion",
+    "prefix": "",
+    "is_lo_ha": false,
+    "version": "qwen_image",
+    "file": "qwen_edit_2509_fusion_lora_f16.ckpt",
+    "weight": {
+      "value": 1,
+      "lower_bound": -1.5,
+      "upper_bound": 2.5
+    }
+  },
+  {
+    "name": "Qwen Edit 2509 Multiple Angles",
+    "prefix": "",
+    "is_lo_ha": false,
+    "version": "qwen_image",
+    "file": "qwen_edit_2509_multiple_angles_lora_f16.ckpt",
+    "weight": {
+      "value": 1,
+      "lower_bound": -1.5,
+      "upper_bound": 2.5
+    }
+  },
+  {
+    "name": "Qwen Edit 2509 Relight",
+    "prefix": "",
+    "is_lo_ha": false,
+    "version": "qwen_image",
+    "file": "qwen_edit_2509_relight_lora_f16.ckpt",
+    "weight": {
+      "value": 1,
+      "lower_bound": -1.5,
+      "upper_bound": 2.5
+    }
+  },
+  {
+    "name": "Qwen Edit 2509 White to Scene",
+    "prefix": "",
+    "is_lo_ha": false,
+    "version": "qwen_image",
+    "file": "qwen_edit_2509_white_to_scene_lora_f16.ckpt",
+    "weight": {
+      "value": 1,
+      "lower_bound": -1.5,
+      "upper_bound": 2.5
+    }
   },
   {
     "name": "Qwen Image 1.0 Lightning 4-Step v1.0",
@@ -676,8 +770,8 @@
   {
     "name": "SDXL Offset (1.0)",
     "file": "sdxl_offset_v1.0_lora_f16.ckpt",
-    "version": "sdxlBase",
-    "official": true
+    "prefix": "",
+    "version": "sdxl_base_v0.9"
   },
   {
     "version": "v1",
@@ -703,14 +797,16 @@
   {
     "name": "TCD SDXL Base (1.0)",
     "file": "tcd_sd_xl_base_1.0_lora_f16.ckpt",
-    "version": "sdxlBase",
-    "official": true
+    "prefix": "",
+    "version": "sdxl_base_v0.9",
+    "isConsistencyModel": true
   },
   {
     "name": "TCD Stable Diffusion v1.5",
     "file": "tcd_sd_v1.5_lora_f16.ckpt",
+    "prefix": "",
     "version": "v1",
-    "official": true
+    "isConsistencyModel": true
   },
   {
     "version": "v1",
@@ -739,14 +835,18 @@
   {
     "name": "Transparent Image",
     "file": "layer_flux_1_transparent_lora_f16.ckpt",
+    "prefix": "",
     "version": "flux1",
-    "official": true
+    "alternativeDecoder": "flux_1_transparent_vae_decoder_f16.ckpt",
+    "alternativeDecoderVersion": "transparent"
   },
   {
     "name": "Transparent Image (Attention Injection)",
     "file": "layer_xl_transparent_attn_v1.0_lora_f16.ckpt",
-    "version": "sdxlBase",
-    "official": true
+    "prefix": "",
+    "version": "sdxl_base_v0.9",
+    "alternativeDecoder": "transparent_vae_decoder_v1.0_f16.ckpt",
+    "alternativeDecoderVersion": "transparent"
   },
   {
     "name": "Transparent Image FLUX.1 [dev]",
@@ -824,6 +924,18 @@
     }
   },
   {
+    "name": "Wan 2.2 A14B Lightning High Noise Expert I2V 251022",
+    "prefix": "",
+    "is_lo_ha": false,
+    "version": "wan_v2.1_14b",
+    "file": "wan_v2.2_a14b_hne_i2v_lightning_251022_lora_f16.ckpt",
+    "weight": {
+      "value": 1,
+      "lower_bound": -1.5,
+      "upper_bound": 2.5
+    }
+  },
+  {
     "name": "Wan 2.2 A14B Lightning High Noise Expert I2V v1.0",
     "prefix": "",
     "is_lo_ha": false,
@@ -841,6 +953,30 @@
     "is_lo_ha": false,
     "version": "wan_v2.1_14b",
     "file": "wan_v2.2_a14b_hne_t2v_lightning_v1.1_lora_f16.ckpt",
+    "weight": {
+      "value": 1,
+      "lower_bound": -1.5,
+      "upper_bound": 2.5
+    }
+  },
+  {
+    "name": "Wan 2.2 A14B Lightning High Noise Expert T2V v2.0",
+    "prefix": "",
+    "is_lo_ha": false,
+    "version": "wan_v2.1_14b",
+    "file": "wan_v2.2_a14b_hne_t2v_lightning_v2.0_lora_f16.ckpt",
+    "weight": {
+      "value": 1,
+      "lower_bound": -1.5,
+      "upper_bound": 2.5
+    }
+  },
+  {
+    "name": "Wan 2.2 A14B Lightning Low Noise Expert I2V 251022",
+    "prefix": "",
+    "is_lo_ha": false,
+    "version": "wan_v2.1_14b",
+    "file": "wan_v2.2_a14b_lne_i2v_lightning_251022_lora_f16.ckpt",
     "weight": {
       "value": 1,
       "lower_bound": -1.5,
@@ -877,6 +1013,18 @@
     "is_lo_ha": false,
     "version": "wan_v2.1_14b",
     "file": "wan_v2.2_a14b_lne_t2v_lightning_v1.1_lora_f16.ckpt",
+    "weight": {
+      "value": 1,
+      "lower_bound": -1.5,
+      "upper_bound": 2.5
+    }
+  },
+  {
+    "name": "Wan 2.2 A14B Lightning Low Noise Expert T2V v2.0",
+    "prefix": "",
+    "is_lo_ha": false,
+    "version": "wan_v2.1_14b",
+    "file": "wan_v2.2_a14b_lne_t2v_lightning_v2.0_lora_f16.ckpt",
     "weight": {
       "value": 1,
       "lower_bound": -1.5,

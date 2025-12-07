@@ -1,4 +1,4 @@
-import { LGraphNode } from '@comfyorg/litegraph';
+import type { LGraphNode } from '@comfyorg/litegraph';
 
 type MethodKeys<T> = {
     [K in keyof T]: T[K] extends (...args: any[]) => any ? K : never;

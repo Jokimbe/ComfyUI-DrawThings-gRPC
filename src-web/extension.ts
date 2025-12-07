@@ -4,53 +4,52 @@ import dtModelNodes from "./dtModelNodes.js"
 import dtPrompt from "./dtPromptNode.js"
 import loraNode from "./lora.js"
 import dtWidgets from "./widgets.js"
+import type { ComfyApp, ComfyExtension } from "@comfyorg/comfyui-frontend-types";
 
-import * as App from "../../scripts/app.js"
+// @ts-ignore
+import { app } from "../../scripts/app.js";
 
-/** @type {import("@comfyorg/comfyui-frontend-types").ComfyApp} */
-const app = App.app
-
-const modules = [dtCore, dtPrompt, dtModelNodes, /* dtDynamicInputs, */ dtWidgets, loraNode, controlNetNode]
+const modules: ComfyExtension[] = [dtCore, dtPrompt, dtModelNodes, /* dtDynamicInputs, */ dtWidgets, loraNode, controlNetNode]
 
 // different features of the nodepack extension are implemented in different modules
 // here we combine them and register a single extension
 app.registerExtension({
     name: "DrawThings-gRPC",
 
-    getCustomWidgets(...args) {
-        return dtCore.getCustomWidgets(...args)
+    getCustomWidgets(...args: any[]) {
+        return dtCore.getCustomWidgets ? dtCore.getCustomWidgets.apply(dtCore, args as any) : {}
     },
 
-    beforeConfigureGraph(...args) {
+    beforeConfigureGraph(...args: any[]) {
         for (const module of modules) {
-            try { module.beforeConfigureGraph?.(...args) }
+            try { module.beforeConfigureGraph?.apply(module, args as any) }
             catch (e) {
                 console.error(`Error in ${module.name} beforeConfigureGraph:`, e)
             }
         }
     },
 
-    beforeRegisterNodeDef(...args) {
+    beforeRegisterNodeDef(...args: any[]) {
         for (const module of modules) {
-            try { module.beforeRegisterNodeDef?.(...args) }
+            try { module.beforeRegisterNodeDef?.apply(module, args as any) }
             catch (e) {
                 console.error(`Error in ${module.name} beforeConfigureGraph:`, e)
             }
         }
     },
 
-    afterConfigureGraph(...args) {
+    afterConfigureGraph(...args: any[]) {
         for (const module of modules) {
-            try { module.afterConfigureGraph?.(...args) }
+            try { module.afterConfigureGraph?.apply(module, args as any) }
             catch (e) {
                 console.error(`Error in ${module.name} afterConfigureGraph:`, e)
             }
         }
     },
 
-    setup(...args) {
+    setup(...args: any[]) {
         for (const module of modules) {
-            try { module.setup?.(...args) }
+            try { module.setup?.apply(module, args as any) }
             catch (e) {
                 console.error(`Error in ${module.name} beforeConfigureGraph:`, e)
             }
@@ -75,11 +74,11 @@ app.registerExtension({
  * This was copied from rgthree
  *
  */
-export function injectCss(href) {
+export function injectCss(href: string) {
     if (document.querySelector(`link[href^="${href}"]`)) {
         return Promise.resolve()
     }
-    return new Promise((resolve) => {
+    return new Promise<void>((resolve) => {
         const link = document.createElement("link")
         link.setAttribute("rel", "stylesheet")
         link.setAttribute("type", "text/css")

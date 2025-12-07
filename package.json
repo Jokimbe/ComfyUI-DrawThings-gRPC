@@ -1,6 +1,6 @@
 {
     "name": "comfyui-drawthings-grpc",
-    "version": "1.8.1",
+    "version": "1.8.2",
     "description": "Connect to any Draw Things [gRPCServerCLI](https://github.com/drawthingsai/draw-things-community/tree/main?tab=readme-ov-file#self-host-grpcservercli-from-packaged-binaries) and let ComfyUI generate and provide DT with images for ControlNet without needing to set them in DT itself.",
     "main": "index.js",
     "directories": {

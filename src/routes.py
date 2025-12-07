@@ -63,6 +63,29 @@ async def handle_bridge_models_request(request):
             status=500,
         )
 
+@routes.get("/dt_grpc/files_exist")
+async def handle_files_exist_request(request):
+    """
+    Checks if provided filenames exist on server
+    """
+    try:
+        async with grpc.aio.secure_channel('compute.drawthings.ai:443', grpc.ssl_channel_credentials()) as channel:
+            stub = imageService_pb2_grpc.ImageGenerationServiceStub(channel)
+            post = await request.post()
+            files = post.get("files")
+            response = await stub.FilesExist(imageService_pb2.FileListRequest(files=files))
+            response_json = json.loads(MessageToJson(response))
+            file_existence = response_json['files']
+            return web.json_response(file_existence)
+    except Exception as e:
+        print(e)
+        return web.json_response(
+            {
+                "error": "Could not connect to Draw Things+ server."
+            },
+            status=500,
+        )
+
 
 @routes.post("/dt_grpc/preview")
 async def handle_preview_request(request):

@@ -1,11 +1,13 @@
 import { nodePackVersion } from './ComfyUI-DrawThings-gRPC.js'
 import { findWidgetByName, updateProto } from "./util.js"
 import { showWidget } from './widgets.js'
+import type { LGraphNode, IWidget } from "@comfyorg/litegraph";
+import type { ComfyExtension } from "@comfyorg/comfyui-frontend-types";
 
-/** @param {import("@comfyorg/litegraph").LGraphNode} node */
-function updateControlWidgets(node) {
+function updateControlWidgets(node: LGraphNode) {
     const widget = findWidgetByName(node, "control_name")
-    const modelInfo = widget?.value?.value
+    const val = widget?.value as any;
+    const modelInfo = val?.value
     const isModelSelected = !!modelInfo
     const modifier = modelInfo?.modifier
     const cnetType = modelInfo?.type
@@ -26,7 +28,8 @@ function updateControlWidgets(node) {
     // down_sampling_rate, hide by default
     // visible if control_input_type or modifier is lowquality, blur, tile
     const downSampleTypes = ["lowquality", "blur", "tile"]
-    const showDownsample = downSampleTypes.includes(modifier) || downSampleTypes.includes(inputTypeNode?.value?.toLowerCase())
+    const inputTypeValue = inputTypeNode?.value as string | undefined;
+    const showDownsample = downSampleTypes.includes(modifier) || (inputTypeValue ? downSampleTypes.includes(inputTypeValue.toLowerCase()) : false)
     showWidget(node, "down_sampling_rate", showDownsample)
 
     // target_blocks, hide by default
@@ -36,31 +39,39 @@ function updateControlWidgets(node) {
     showWidget(node, "target_blocks", showTargetBlocks)
 }
 
-/** @type {import("@comfyorg/litegraph").LGraphNode} */
-const controlNetProto = {
-    updateDynamicWidgets() {
+interface ControlNetNode extends LGraphNode {
+    updateDynamicWidgets: () => void;
+    widget_values_keyed?: Record<string, any>;
+}
+
+// Using any for the proto object to avoid strict type checks against LGraphNode
+// since this is a mixin object
+const controlNetProto: any = {
+    updateDynamicWidgets(this: ControlNetNode) {
         try {
             updateControlWidgets(this)
         } catch (error) {
             console.error(error)
         }
     },
-    onNodeCreated() {
+    onNodeCreated(this: ControlNetNode) {
         this.updateDynamicWidgets()
     },
-    onSerialize(serialised) {
+    onSerialize(this: ControlNetNode, serialised: any) {
         serialised.nodePackVersion = nodePackVersion
-        serialised.widget_values_keyed = Object.fromEntries(this.widgets.map(w => ([w.name, w.value])))
+        if (this.widgets) {
+            serialised.widget_values_keyed = Object.fromEntries(this.widgets.map(w => ([w.name, w.value]))) as Record<string, any>
+        }
     },
-    onConfigure(data) {
-        if (data.widget_values_keyed) {
+    onConfigure(this: ControlNetNode, data: any) {
+        if (data.widget_values_keyed && this.widgets) {
             for (const [name, value] of Object.entries(data.widget_values_keyed)) {
                 const widget = this.widgets.find((w) => w.name === name)
-                if (widget) widget.value = value
+                if (widget) widget.value = value as any
             }
         }
 
-        else if (data.widgets_values && data.widgets_values.length === 8) {
+        else if (data.widgets_values && data.widgets_values.length === 8 && this.widgets) {
             const widgetNames = [
                 "control_name",
                 "control_input_type",
@@ -80,12 +91,13 @@ const controlNetProto = {
 
         this.updateDynamicWidgets()
     },
-    onWidgetChanged(name, value, old_Value, widget) {
+    onWidgetChanged(this: ControlNetNode, name: string, value: any, old_Value: any, widget: IWidget) {
         if (name === "control_name") {
             const modifier = value?.value?.modifier
             const inputWidget = findWidgetByName(this, "control_input_type")
-            if (modifier && inputWidget?.value !== capitalize(modifier))
-                inputWidget.value = capitalize(modifier)
+            if (modifier && inputWidget?.value !== capitalize(modifier)) {
+                if (inputWidget) inputWidget.value = capitalize(modifier)
+            }
         }
 
         this.updateDynamicWidgets()
@@ -93,17 +105,18 @@ const controlNetProto = {
 }
 
 
-/** @type {import("@comfyorg/comfyui-frontend-types").ComfyExtension}*/
-export default {
+const extension: ComfyExtension = {
     name: "controlNetNode",
 
     beforeRegisterNodeDef(nodeType, nodeData, app) {
-        if (nodeType.comfyClass === "DrawThingsControlNet") {
+        if ((nodeType as any).comfyClass === "DrawThingsControlNet") {
             updateProto(nodeType, controlNetProto)
         }
     }
 }
 
-function capitalize(text) {
+export default extension;
+
+function capitalize(text: string) {
     return text.charAt(0).toUpperCase() + text.slice(1)
 }

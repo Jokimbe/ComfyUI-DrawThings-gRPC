@@ -44,44 +44,51 @@
   {
     "name": "Canny Edge Map (SD v1.x, ControlNet 1.0)",
     "file": "controlnet_canny_1.x_f16.ckpt",
-    "version": "v1",
     "modifier": "canny",
-    "official": true
+    "version": "v1",
+    "type": "controlnet",
+    "deprecated": true
   },
   {
     "name": "Canny Edge Map (SD v1.x, ControlNet 1.1)",
     "file": "controlnet_canny_1.x_v1.1_f16.ckpt",
-    "version": "v1",
     "modifier": "canny",
-    "official": true
+    "version": "v1",
+    "type": "controlnet"
   },
   {
     "name": "Canny Edge Map (SD v1.x, T2I Adapter)",
     "file": "t2iadapter_canny_1.x_f16.ckpt",
-    "version": "v1",
     "modifier": "canny",
-    "official": true
+    "version": "v1",
+    "type": "t2iadapter"
   },
   {
     "name": "Canny Edge Map (SD v2.x, ControlNet)",
     "file": "controlnet_canny_2.x_f16.ckpt",
-    "version": "v2",
     "modifier": "canny",
-    "official": true
+    "version": "v2",
+    "type": "controlnet"
   },
   {
     "name": "Canny Edge Map (SDXL, ControlNet, Diffusers 1.0 Mid)",
     "file": "controlnet_canny_sdxl_v1.0_mid_f16.ckpt",
-    "version": "sdxlBase",
     "modifier": "canny",
-    "official": true
+    "version": "sdxl_base_v0.9",
+    "type": "controlnet",
+    "transformerBlocks": [
+      0,
+      0,
+      1,
+      1
+    ]
   },
   {
     "name": "Color Palette (SD v1.x, T2I Adapter)",
     "file": "t2iadapter_color_1.x_f16.ckpt",
-    "version": "v1",
     "modifier": "color",
-    "official": true
+    "version": "v1",
+    "type": "t2iadapter"
   },
   {
     "version": "sdxl_base_v0.9",
@@ -104,37 +111,44 @@
   {
     "name": "Depth Map (SD v1.x, ControlNet 1.0)",
     "file": "controlnet_depth_1.x_f16.ckpt",
-    "version": "v1",
     "modifier": "depth",
-    "official": true
+    "version": "v1",
+    "type": "controlnet",
+    "deprecated": true
   },
   {
     "name": "Depth Map (SD v1.x, ControlNet 1.1)",
     "file": "controlnet_depth_1.x_v1.1_f16.ckpt",
-    "version": "v1",
     "modifier": "depth",
-    "official": true
+    "version": "v1",
+    "type": "controlnet"
   },
   {
     "name": "Depth Map (SD v1.x, T2I Adapter)",
     "file": "t2iadapter_depth_1.x_f16.ckpt",
-    "version": "v1",
     "modifier": "depth",
-    "official": true
+    "version": "v1",
+    "type": "t2iadapter"
   },
   {
     "name": "Depth Map (SD v2.x, ControlNet)",
     "file": "controlnet_depth_2.x_f16.ckpt",
-    "version": "v2",
     "modifier": "depth",
-    "official": true
+    "version": "v2",
+    "type": "controlnet"
   },
   {
     "name": "Depth Map (SDXL, ControlNet, Diffusers 1.0 Mid)",
     "file": "controlnet_depth_sdxl_v1.0_mid_f16.ckpt",
-    "version": "sdxlBase",
     "modifier": "depth",
-    "official": true
+    "version": "sdxl_base_v0.9",
+    "type": "controlnet",
+    "transformerBlocks": [
+      0,
+      0,
+      1,
+      1
+    ]
   },
   {
     "version": "flux1",
@@ -183,16 +197,16 @@
   {
     "name": "Inpainting (SD v1.x, ControlNet 1.1)",
     "file": "controlnet_inpaint_1.x_v1.1_f16.ckpt",
-    "version": "v1",
     "modifier": "inpaint",
-    "official": true
+    "version": "v1",
+    "type": "controlnet"
   },
   {
     "name": "Instruct Pix2Pix (SD v1.x, ControlNet 1.1)",
     "file": "controlnet_ip2p_1.x_v1.1_f16.ckpt",
-    "version": "v1",
     "modifier": "ip2p",
-    "official": true
+    "version": "v1",
+    "type": "controlnet"
   },
   {
     "version": "sdxl_base_v0.9",
@@ -237,9 +251,10 @@
   {
     "name": "IP Adapter Full Face (SD v1.x)",
     "file": "ip_adapter_full_face_sd_v1.x_open_clip_h14_f16.ckpt",
-    "version": "v1",
     "modifier": "shuffle",
-    "official": true
+    "version": "v1",
+    "type": "ipadapterfull",
+    "imageEncoder": "open_clip_vit_h14_vision_model_f16.ckpt"
   },
   {
     "version": "sdxl_base_v0.9",
@@ -263,30 +278,34 @@
   {
     "name": "IP Adapter Plus (SD v1.x)",
     "file": "ip_adapter_plus_sd_v1.x_open_clip_h14_f16.ckpt",
-    "version": "v1",
     "modifier": "shuffle",
-    "official": true
+    "version": "v1",
+    "type": "ipadapterplus",
+    "imageEncoder": "open_clip_vit_h14_vision_model_f16.ckpt"
   },
   {
     "name": "IP Adapter Plus (SDXL Base)",
     "file": "ip_adapter_plus_xl_base_open_clip_h14_f16.ckpt",
-    "version": "sdxlBase",
     "modifier": "shuffle",
-    "official": true
+    "version": "sdxl_base_v0.9",
+    "type": "ipadapterplus",
+    "imageEncoder": "open_clip_vit_h14_vision_model_f16.ckpt"
   },
   {
     "name": "IP Adapter Plus Face (SD v1.x)",
     "file": "ip_adapter_plus_face_sd_v1.x_open_clip_h14_f16.ckpt",
-    "version": "v1",
     "modifier": "shuffle",
-    "official": true
+    "version": "v1",
+    "type": "ipadapterplus",
+    "imageEncoder": "open_clip_vit_h14_vision_model_f16.ckpt"
   },
   {
     "name": "IP Adapter Plus Face (SDXL Base)",
     "file": "ip_adapter_plus_face_xl_base_open_clip_h14_f16.ckpt",
-    "version": "sdxlBase",
     "modifier": "shuffle",
-    "official": true
+    "version": "sdxl_base_v0.9",
+    "type": "ipadapterplus",
+    "imageEncoder": "open_clip_vit_h14_vision_model_f16.ckpt"
   },
   {
     "version": "flux1",
@@ -303,16 +322,16 @@
   {
     "name": "LineArt (SD v1.x, ControlNet 1.1)",
     "file": "controlnet_lineart_1.x_v1.1_f16.ckpt",
-    "version": "v1",
     "modifier": "lineart",
-    "official": true
+    "version": "v1",
+    "type": "controlnet"
   },
   {
     "name": "LineArt Anime (SD v1.x, ControlNet 1.1)",
     "file": "controlnet_lineart_anime_1.x_v1.1_f16.ckpt",
-    "version": "v1",
     "modifier": "lineart",
-    "official": true
+    "version": "v1",
+    "type": "controlnet"
   },
   {
     "version": "hunyuan_video",
@@ -328,16 +347,16 @@
   {
     "name": "MLSD Hough Map (SD v1.x, ControlNet 1.1)",
     "file": "controlnet_mlsd_1.x_v1.1_f16.ckpt",
-    "version": "v1",
     "modifier": "mlsd",
-    "official": true
+    "version": "v1",
+    "type": "controlnet"
   },
   {
     "name": "Normal Map (SD v1.x, ControlNet 1.1)",
     "file": "controlnet_normalbae_1.x_v1.1_f16.ckpt",
-    "version": "v1",
     "modifier": "normalbae",
-    "official": true
+    "version": "v1",
+    "type": "controlnet"
   },
   {
     "version": "sdxl_base_v0.9",
@@ -360,30 +379,31 @@
   {
     "name": "Pose (SD v1.x, ControlNet 1.0)",
     "file": "controlnet_openpose_1.x_f16.ckpt",
-    "version": "v1",
     "modifier": "pose",
-    "official": true
+    "version": "v1",
+    "type": "controlnet",
+    "deprecated": true
   },
   {
     "name": "Pose (SD v1.x, ControlNet 1.1)",
     "file": "controlnet_openpose_1.x_v1.1_f16.ckpt",
-    "version": "v1",
     "modifier": "pose",
-    "official": true
+    "version": "v1",
+    "type": "controlnet"
   },
   {
     "name": "Pose (SD v1.x, T2I Adapter)",
     "file": "t2iadapter_openpose_1.x_f16.ckpt",
-    "version": "v1",
     "modifier": "pose",
-    "official": true
+    "version": "v1",
+    "type": "t2iadapter"
   },
   {
     "name": "Pose (SD v2.x, ControlNet)",
     "file": "controlnet_openpose_2.x_f16.ckpt",
-    "version": "v2",
     "modifier": "pose",
-    "official": true
+    "version": "v2",
+    "type": "controlnet"
   },
   {
     "version": "flux1",
@@ -408,65 +428,71 @@
   {
     "name": "QR Code (SD v1.x, ControlNet Monster 2.0)",
     "file": "controlnet_qr_code_monster_1.x_v2.0_f16.ckpt",
-    "version": "v1",
     "modifier": "scribble",
-    "official": true
+    "version": "v1",
+    "type": "controlnet"
   },
   {
     "name": "Scribble (SD v1.x, ControlNet 1.0)",
     "file": "controlnet_scribble_1.x_f16.ckpt",
-    "version": "v1",
     "modifier": "scribble",
-    "official": true
+    "version": "v1",
+    "type": "controlnet",
+    "preprocessor": "hed_f16.ckpt",
+    "deprecated": true
   },
   {
     "name": "Scribble (SD v1.x, ControlNet 1.1)",
     "file": "controlnet_scribble_1.x_v1.1_f16.ckpt",
-    "version": "v1",
     "modifier": "scribble",
-    "official": true
+    "version": "v1",
+    "type": "controlnet",
+    "preprocessor": "hed_f16.ckpt"
   },
   {
     "name": "Scribble (SD v1.x, T2I Adapter)",
     "file": "t2iadapter_sketch_1.x_f16.ckpt",
-    "version": "v1",
     "modifier": "scribble",
-    "official": true
+    "version": "v1",
+    "type": "t2iadapter"
   },
   {
     "name": "Scribble (SD v2.x, ControlNet)",
     "file": "controlnet_scribble_2.x_f16.ckpt",
-    "version": "v2",
     "modifier": "scribble",
-    "official": true
+    "version": "v2",
+    "type": "controlnet",
+    "preprocessor": "hed_f16.ckpt"
   },
   {
     "name": "Segmentation (SD v1.x, ControlNet 1.1)",
     "file": "controlnet_seg_1.x_v1.1_f16.ckpt",
-    "version": "v1",
     "modifier": "seg",
-    "official": true
+    "version": "v1",
+    "type": "controlnet"
   },
   {
     "name": "Shuffle (SD v1.x, ControlNet 1.1)",
     "file": "controlnet_shuffle_1.x_v1.1_f16.ckpt",
-    "version": "v1",
     "modifier": "shuffle",
-    "official": true
+    "version": "v1",
+    "type": "controlnet",
+    "globalAveragePooling": true
   },
   {
     "name": "Soft Edge (SD v1.x, ControlNet 1.1)",
     "file": "controlnet_softedge_1.x_v1.1_f16.ckpt",
-    "version": "v1",
     "modifier": "softedge",
-    "official": true
+    "version": "v1",
+    "type": "controlnet",
+    "preprocessor": "hed_f16.ckpt"
   },
   {
     "name": "Tile (SD v1.x, ControlNet 1.1)",
     "file": "controlnet_tile_1.x_v1.1_f16.ckpt",
-    "version": "v1",
     "modifier": "tile",
-    "official": true
+    "version": "v1",
+    "type": "controlnet"
   },
   {
     "version": "flux1",
@@ -515,30 +541,30 @@
   {
     "name": "VACE (Wan 2.1, 1.3B)",
     "file": "wan_v2.1_1.3b_vace_480p_f16.ckpt",
-    "version": "wan21_1_3b",
     "modifier": "shuffle",
-    "official": true
+    "version": "wan_v2.1_1.3b",
+    "type": "controlnet"
   },
   {
     "name": "VACE (Wan 2.1, 1.3B) (8-bit)",
     "file": "wan_v2.1_1.3b_vace_480p_q8p.ckpt",
-    "version": "wan21_1_3b",
     "modifier": "shuffle",
-    "official": true
+    "version": "wan_v2.1_1.3b",
+    "type": "controlnet"
   },
   {
     "name": "VACE (Wan 2.1, 14B)",
     "file": "wan_v2.1_14b_vace_720p_f16.ckpt",
-    "version": "wan21_14b",
     "modifier": "shuffle",
-    "official": true
+    "version": "wan_v2.1_14b",
+    "type": "controlnet"
   },
   {
     "name": "VACE (Wan 2.1, 14B) (8-bit)",
     "file": "wan_v2.1_14b_vace_720p_q8p.ckpt",
-    "version": "wan21_14b",
     "modifier": "shuffle",
-    "official": true
+    "version": "wan_v2.1_14b",
+    "type": "controlnet"
   },
   {
     "version": "sdxl_base_v0.9",
