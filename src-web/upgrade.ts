@@ -93,7 +93,7 @@ const announcements = [
 - Draw Things config import has been improved. Configs that use additional nodes (LoRA, ControlNet, Upscaler, or Refiner) will apply their values to existing, connected nodes. If the node isn't available, a message will be displayed listing the missing nodes.`
     },
     {
-        version: "1.8.3",
+        version: "1.8.4",
         title: "DrawThings-gRPC",
         detail: `This node has has been deprecated and will no longer be updated. Please uninstall and switch to the official Draw Things ComfyUI Extension\n\nhttps://github.com/drawthingsai/draw-things-comfyui`
     }

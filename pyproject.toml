@@ -1,7 +1,7 @@
 [project]
 name = "drawthings-grpc"
-version = "1.8.3"
-description = "This node has been deprecated. Please uninstall and switch to the new, official [Draw Things ComfyUI extension](https://github.com/drawthingsai/draw-things-comfyui)."
+version = "1.8.4"
+description = "This node has been deprecated. Please uninstall and switch to the official Draw Things ComfyUI Extension at https://github.com/drawthingsai/draw-things-comfyui"
 authors = [{ name = "Jokimbe" }, { name = "kcjerrell" }]
 readme = "README.md"
 license = { text = "GNU General Public License v3" }
