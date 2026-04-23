@@ -10,18 +10,18 @@ export async function checkVersion() {
     // - only consider the latest version
     // - record the version numbers that have been announced
     // - if the latest announcement isn't in the lsit of versions, show it and record
-    const announced = await getAnnounced()
+    // const announced = await getAnnounced()
     const latestAnnouncement = announcements[announcements.length - 1]
-    if (!announced.includes(latestAnnouncement.version)) {
-        await saveAnnounced(latestAnnouncement.version)
+    // if (!announced.includes(latestAnnouncement.version)) {
+    //     await saveAnnounced(latestAnnouncement.version)
 
-        app.extensionManager.toast.add({
-            summary: latestAnnouncement.title,
-            detail: latestAnnouncement.detail,
-            severity: 'success',
-            life: 0
-        })
-    }
+    app.extensionManager.toast.add({
+        summary: latestAnnouncement.title,
+        detail: latestAnnouncement.detail,
+        severity: 'warn',
+        life: 0
+    })
+    // }
 }
 
 async function getAnnounced(): Promise<string[]> {
@@ -91,6 +91,11 @@ const announcements = [
         detail: `- Bridge Mode support: For DT+ subscribers interested in using Bridge Mode, you can now list all official, community, and uncurated models available in Cloud Compute. Right click the sampler node, or go to the Draw Things tab in Settings, to enable. Make sure to enable Bridge Mode in the API settings of your Draw Things app (only available for DT+ subscribers). (User uploaded loras are currently unsupported.)
 - Note: We have no way of knowing if bridge mode is enabled from ComfyUI. Enabling bridge mode in Comfy simply changes the list of models that are shown - it's up to your DT app or CLI how to handle the request.
 - Draw Things config import has been improved. Configs that use additional nodes (LoRA, ControlNet, Upscaler, or Refiner) will apply their values to existing, connected nodes. If the node isn't available, a message will be displayed listing the missing nodes.`
+    },
+    {
+        version: "1.8.3",
+        title: "DrawThings-gRPC",
+        detail: `This node has has been deprecated and will no longer be updated. Please uninstall and switch to the official Draw Things ComfyUI Extension\n\nhttps://github.com/drawthingsai/draw-things-comfyui`
     }
 ]
 

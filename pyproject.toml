@@ -1,24 +1,31 @@
 [project]
 name = "drawthings-grpc"
-version = "1.8.2"
-description = "Connect to any Draw Things gRPCServer and let ComfyUI generate and provide DT with images for ControlNet without needing to set them in DT itself."
-authors = [
-  {name = "Jokimbe"},
-  {name = "kcjerrell"},
-]
+version = "1.8.3"
+description = "This node has been deprecated. Please uninstall and switch to the new, official [Draw Things ComfyUI extension](https://github.com/drawthingsai/draw-things-comfyui)."
+authors = [{ name = "Jokimbe" }, { name = "kcjerrell" }]
 readme = "README.md"
-license = {text = "GNU General Public License v3"}
+license = { text = "GNU General Public License v3" }
 classifiers = []
-dependencies = ["numpy", "pillow", "torch", "torchvision", "grpcio>=1.71.0", "flatbuffers>=25.2.10", "protobuf>=5.29.0", "typing_extensions=>4.12.2", "fpzip"]
+dependencies = [
+    "numpy",
+    "pillow",
+    "torch",
+    "torchvision",
+    "grpcio>=1.71.0",
+    "flatbuffers>=25.2.10",
+    "protobuf>=5.29.0",
+    "typing_extensions=>4.12.2",
+    "fpzip",
+]
 
 [project.optional-dependencies]
 dev = [
     "bump-my-version",
-    "coverage",  # testing
-    "mypy",  # linting
-    "pre-commit", # runs linting on commit
-    "pytest",  # testing
-    "ruff",  # linting,
+    "coverage",        # testing
+    "mypy",            # linting
+    "pre-commit",      # runs linting on commit
+    "pytest",          # testing
+    "ruff",            # linting,
 ]
 
 [project.urls]
@@ -28,13 +35,11 @@ bugs = "https://github.com/Jokimbe/ComfyUI-DrawThings-gRPC/issues"
 
 [tool.comfy]
 PublisherId = "jokimbe"
-DisplayName = "ComfyUI-DrawThings-gRPC"
+DisplayName = "ComfyUI-DrawThings-gRPC (deprecated)"
 Icon = ""
 includes = []
 
 
 [tool.pytest.ini_options]
 minversion = "8.0"
-testpaths = [
-    "tests",
-]
+testpaths = ["tests"]

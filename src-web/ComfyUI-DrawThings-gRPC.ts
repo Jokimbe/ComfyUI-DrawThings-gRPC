@@ -7,7 +7,7 @@ import { DtButtonsTypeHandler } from "./lora.js";
 import { DtModelTypeHandler } from "./models.js";
 import { checkVersion } from "./upgrade.js";
 import { setCallback, updateProto } from "./util.js";
-export const nodePackVersion = "1.8.2";
+export const nodePackVersion = "1.8.3";
 let previewMethod: string | undefined = undefined;
 
 export default {
@@ -89,7 +89,7 @@ export const samplerProto: Partial<DTSampler> = {
                 inputPos.color_off =
                 inputNeg.color_on =
                 inputNeg.color_off =
-                    app.canvas.default_connection_color_byType["CONDITIONING"];
+                app.canvas.default_connection_color_byType["CONDITIONING"];
             app.canvas.default_connection_color_byType["DT_LORA"] =
                 app.canvas.default_connection_color_byType["MODEL"];
             app.canvas.default_connection_color_byType["DT_CNET"] =
